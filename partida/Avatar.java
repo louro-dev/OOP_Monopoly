@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class Avatar {
 
-    //añado comentaario pa que detecte cambios e me deixe facer o push
     //Atributos
     private String id; //Identificador: una letra generada aleatoriamente.
     private String tipo; //Sombrero, Esfinge, Pelota, Coche
@@ -26,7 +25,7 @@ public class Avatar {
     }
 
     //A continuación, tenemos otros métodos útiles para el desarrollo del juego.
-    /*Método que permite mover a un avatar a una casilla concreta. Parámetros:
+    /*Metodo que permite mover a un avatar a una casilla concreta. Parámetros:
     * - Un array con las casillas del tablero. Se trata de un arrayList de arrayList de casillas (uno por lado).
     * - Un entero que indica el numero de casillas a moverse (será el valor sacado en la tirada de los dados).
     * EN ESTA VERSIÓN SUPONEMOS QUE valorTirada siemrpe es positivo.
@@ -34,7 +33,7 @@ public class Avatar {
     public void moverAvatar(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
     }
 
-    /*Método que permite generar un ID para un avatar. Sólo lo usamos en esta clase (por ello es privado).
+    /*Metodo que permite generar un ID para un avatar. Sólo lo usamos en esta clase (por ello es privado).
     * El ID generado será una letra mayúscula. Parámetros:
     * - Un arraylist de los avatares ya creados, con el objetivo de evitar que se generen dos ID iguales.
      */

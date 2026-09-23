@@ -2,13 +2,21 @@ package partida;
 
 
 public class Dado {
-    //añado comentaario pa que detecte cambios e me deixe facer o push
     //El dado solo tiene un atributo en nuestro caso: su valor.
     private int valor;
 
     //Metodo para simular lanzamiento de un dado: devolverá un valor aleatorio entre 1 y 6.
     public int hacerTirada() {
-        return 1;
+        this.valor = (int) (Math.random()*6) + 1; // Genera un valor aleatorio entre 0 y 5 y suma 1 (entre 1 y 6).
+        return this.valor;
+    }
+
+    public void setValor(int numero) {
+        this.valor = numero;
+    }
+
+    public int getValor() {
+        return valor;
     }
 
 }
