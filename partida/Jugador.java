@@ -7,6 +7,7 @@ import monopoly.*;
 
 public class Jugador {
 
+    //añado comentaario pa que detecte cambios e me deixe facer o push
     //Atributos:
     private String nombre; //Nombre del jugador
     private Avatar avatar; //Avatar que tiene en la partida.

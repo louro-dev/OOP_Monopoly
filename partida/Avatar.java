@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class Avatar {
 
+    //añado comentaario pa que detecte cambios e me deixe facer o push
     //Atributos
     private String id; //Identificador: una letra generada aleatoriamente.
     private String tipo; //Sombrero, Esfinge, Pelota, Coche

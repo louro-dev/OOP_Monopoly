@@ -2,6 +2,7 @@ package partida;
 
 
 public class Dado {
+    //añado comentaario pa que detecte cambios e me deixe facer o push
     //El dado solo tiene un atributo en nuestro caso: su valor.
     private int valor;
 
