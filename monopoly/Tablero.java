@@ -43,6 +43,7 @@ public class Tablero {
     //Para imprimir el tablero, modificamos el metodo toString().
     @Override
     public String toString() {
+        System.out.println("tablero");
         return "hola";
     }
     
