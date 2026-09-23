@@ -135,7 +135,12 @@ public class Casilla {
     /*Metodo usado para comprar una casilla determinada. Parámetros:
     * - Jugador que solicita la compra de la casilla.
     * - Banca del monopoly (es el dueño de las casillas no compradas aún).*/
+    //Rodrigo-23/09   SIN ACABAR
     public void comprarCasilla(Jugador solicitante, Jugador banca) {
+        solicitante.sumarGastos(this.valor);
+        banca.sumarFortuna(this.valor);
+        solicitante.sumarFortuna((-1)*this.valor);
+        solicitante.anhadirPropiedad(this);
     }
 
     /*Metodo para añadir valor a una casilla. Utilidad:
