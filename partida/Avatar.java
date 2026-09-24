@@ -21,7 +21,15 @@ public class Avatar {
     * Tipo del avatar, jugador al que pertenece, lugar en el que estará ubicado, y un arraylist con los
     * avatares creados (usado para crear un ID distinto del de los demás avatares).
      */
+    //Rodrigo-23-09
     public Avatar(String tipo, Jugador jugador, Casilla lugar, ArrayList<Avatar> avCreados) {
+        //setteamos todos los atributos con los parametros dados
+        this.tipo= tipo;
+        this.jugador=jugador;
+        this.lugar = lugar;
+        this.id=("plyr"+(avCreados.size()+1));    // creamos nuevo id para el avatar, ej: plyr1
+
+        avCreados.add(this); //metemos el nuevo avatar en la lista de avatares creados
     }
 
     //A continuación, tenemos otros métodos útiles para el desarrollo del juego.

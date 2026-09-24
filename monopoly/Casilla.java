@@ -25,29 +25,104 @@ public class Casilla {
     * Parámetros: nombre casilla, tipo (debe ser solar, serv. o transporte), posición en el tablero, valor y dueño.
      */
     public Casilla(String nombre, String tipo, int posicion, float valor, Jugador duenho) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.posicion = posicion;
+        this.valor = valor;
+        this.duenho = duenho;
+        this.avatares = new ArrayList<>();
     }
 
     /*Constructor utilizado para inicializar las casillas de tipo IMPUESTOS.
     * Parámetros: nombre, posición en el tablero, impuesto establecido y dueño.
      */
     public Casilla(String nombre, int posicion, float impuesto, Jugador duenho) {
+        this.nombre = nombre;
+        this.tipo = "Impuesto";
+        this.posicion = posicion;
+        this.impuesto = impuesto;
+        this.duenho = duenho;
+        this.avatares = new ArrayList<>();
     }
 
     /*Constructor utilizado para crear las otras casillas (Suerte, Caja de comunidad y Especiales):
     * Parámetros: nombre, tipo de la casilla (será uno de los que queda), posición en el tablero y dueño.
      */
     public Casilla(String nombre, String tipo, int posicion, Jugador duenho) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.posicion = posicion;
+        this.duenho = duenho;
+        this.avatares = new ArrayList<>();
     }
 
-    //Método utilizado para añadir un avatar al array de avatares en casilla.
+    // GETTERS
+    public String getNombre() {
+        return nombre;
+    }
+    public String getTipo() {
+        return tipo;
+    }
+    public float getValor() {
+        return valor;
+    }
+    public int getPosicion() {
+        return posicion;
+    }
+    public Jugador getDuenho() {
+        return duenho;
+    }
+    public Grupo getGrupo() {
+        return grupo;
+    }
+    public float getImpuesto() {
+        return impuesto;
+    }
+    public float getHipoteca() {
+        return hipoteca;
+    }
+    public ArrayList<Avatar> getAvatares() {
+        return avatares;
+    }
+
+    // SETTERS
+    public void setNombre(String n) {
+        this.nombre = n;
+    }
+    public void setTipo(String t) {
+        this.tipo = t;
+    }
+    public void setValor(int v) {
+        this.valor = v;
+    }
+    public void setPosicion(int p) {
+        this.posicion = p;
+    }
+    public void setDuenho(Jugador d) {
+        this.duenho = d;
+    }
+    public void setGrupo(Grupo g) {
+        this.grupo = g;
+    }
+    public void setImpuesto(float i) {
+        this.impuesto = i;
+    }
+    public void setHipoteca(float h) {
+        this.hipoteca = h;
+    }
+    public void setAvatares(ArrayList<Avatar> a) {
+        this.avatares = a;
+    }
+
+    //Metodo utilizado para añadir un avatar al array de avatares en casilla.
     public void anhadirAvatar(Avatar av) {
     }
 
-    //Método utilizado para eliminar un avatar del array de avatares en casilla.
+    //Metodo utilizado para eliminar un avatar del array de avatares en casilla.
     public void eliminarAvatar(Avatar av) {
     }
 
-    /*Método para evaluar qué hacer en una casilla concreta. Parámetros:
+    /*Metodo para evaluar qué hacer en una casilla concreta. Parámetros:
     * - Jugador cuyo avatar está en esa casilla.
     * - La banca (para ciertas comprobaciones).
     * - El valor de la tirada: para determinar impuesto a pagar en casillas de servicios.
@@ -57,30 +132,39 @@ public class Casilla {
         return true;
     }
 
-    /*Método usado para comprar una casilla determinada. Parámetros:
+    /*Metodo usado para comprar una casilla determinada. Parámetros:
     * - Jugador que solicita la compra de la casilla.
     * - Banca del monopoly (es el dueño de las casillas no compradas aún).*/
+    //Rodrigo-23/09   SIN ACABAR
     public void comprarCasilla(Jugador solicitante, Jugador banca) {
+        solicitante.sumarGastos(this.valor);
+        banca.sumarFortuna(this.valor);
+        solicitante.sumarFortuna((-1)*this.valor);
+        solicitante.anhadirPropiedad(this);
     }
 
-    /*Método para añadir valor a una casilla. Utilidad:
+    /*Metodo para añadir valor a una casilla. Utilidad:
     * - Sumar valor a la casilla de parking.
     * - Sumar valor a las casillas de solar al no comprarlas tras cuatro vueltas de todos los jugadores.
-    * Este método toma como argumento la cantidad a añadir del valor de la casilla.*/
+    * Este metodo toma como argumento la cantidad a añadir del valor de la casilla.*/
     public void sumarValor(float suma) {
     }
 
-    /*Método para mostrar información sobre una casilla.
+    /*Metodo para mostrar información sobre una casilla.
     * Devuelve una cadena con información específica de cada tipo de casilla.*/
+    /*Está pensado para devolver la información general e identificativa
+    * de cualquier casilla (nombre, tipo, propietario, valor actual, etc.).*/
     public String infoCasilla() {
-        return "odfowm0";
+        return "hola";
     }
 
-    /* Método para mostrar información de una casilla en venta.
+    /* Metodo para mostrar información de una casilla en venta.
      * Valor devuelto: texto con esa información.
      */
+    /*Está pensado para filtrar y formatear la información únicamente de las casillas
+    * que están disponibles para comprar (o mostrar los datos financieros específicos de venta).*/
     public String casEnVenta() {
-        return "pwijfw";
+        return "Hola";
     }
 
 }

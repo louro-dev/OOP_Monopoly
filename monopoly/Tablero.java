@@ -16,7 +16,7 @@ public class Tablero {
     }
 
     
-    //Método para crear todas las casillas del tablero. Formado a su vez por cuatro métodos (1/lado).
+    //Metodo para crear todas las casillas del tablero. Formado a su vez por cuatro métodos (1/lado).
     private void generarCasillas() {
         this.insertarLadoSur();
         this.insertarLadoOeste();
@@ -24,30 +24,30 @@ public class Tablero {
         this.insertarLadoEste();
     }
     
-    //Método para insertar las casillas del lado norte.
+    //Metodo para insertar las casillas del lado norte.
     private void insertarLadoNorte() {
     }
 
-    //Método para insertar las casillas del lado sur.
+    //Metodo para insertar las casillas del lado sur.
     private void insertarLadoSur() {
     }
 
-    //Método que inserta casillas del lado oeste.
+    //Metodo que inserta casillas del lado oeste.
     private void insertarLadoOeste() {
     }
 
-    //Método que inserta las casillas del lado este.
+    //Metodo que inserta las casillas del lado este.
     private void insertarLadoEste() {
     }
 
-    //Para imprimir el tablero, modificamos el método toString().
+    //Para imprimir el tablero, modificamos el metodo toString().
     @Override
     public String toString() {
-        return "ijdo";
+        System.out.println("tablero");
+        return "hola";
     }
     
-    //Método usado para buscar la casilla con el nombre pasado como argumento:
-    public Casilla encontrar_casilla(String nombre){
-        return null;
-    }
+    //Metodo usado para buscar la casilla con el nombre pasado como argumento:
+    /*public Casilla encontrar_casilla(String nombre){
+    }*/
 }
