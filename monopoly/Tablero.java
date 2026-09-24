@@ -15,6 +15,14 @@ public class Tablero {
     public Tablero(Jugador banca) {
     }
 
+    //GETTERS
+    public ArrayList<ArrayList<Casilla>> getPosiciones(){
+        return this.posiciones;
+    }
+    public HashMap<String, Grupo> getGrupos(){
+        return this.grupos;
+    }
+
     
     //Metodo para crear todas las casillas del tablero. Formado a su vez por cuatro métodos (1/lado).
     private void generarCasillas() {

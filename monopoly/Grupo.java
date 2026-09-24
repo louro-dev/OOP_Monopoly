@@ -21,19 +21,27 @@ class Grupo {
     /*Constructor para cuando el grupo está formado por DOS CASILLAS:
     * Requiere como parámetros las dos casillas miembro y el color del grupo.
      */
+    //Rodrigo-23/09 (añadido debaixo comentario)
     public Grupo(Casilla cas1, Casilla cas2, String colorGrupo) {
-        this.miembros = new ArrayList<>();
+        //this.miembros = new ArrayList<>();
         this.colorGrupo = colorGrupo;
         this.numCasillas = 2;
+        //
+        this.miembros = new ArrayList<Casilla>();
+        miembros.add(cas1);miembros.add(cas2);
     }
 
     /*Constructor para cuando el grupo está formado por TRES CASILLAS:
     * Requiere como parámetros las tres casillas miembro y el color del grupo.
      */
+    //Rodrigo-23/09 (añadido debaixo comentario)
     public Grupo(Casilla cas1, Casilla cas2, Casilla cas3, String colorGrupo) {
-        this.miembros = new ArrayList<>();
+        //this.miembros = new ArrayList<>();
         this.colorGrupo = colorGrupo;
         this.numCasillas = 3;
+        //
+        this.miembros = new ArrayList<Casilla>();
+        miembros.add(cas1);miembros.add(cas2);miembros.add(cas3);
     }
 
     // GETTERS
@@ -68,7 +76,16 @@ class Grupo {
     * Parámetro: jugador que se quiere evaluar.
     * Valor devuelto: true si es dueño de todas las casillas del grupo, false en otro caso.
      */
+    //Rodrigo-24/09
     public boolean esDuenhoGrupo(Jugador jugador) {
+        ArrayList<Casilla> miembros = this.getMiembros();
+        for(int c=0; c<miembros.size();c++){
+            Casilla cas = miembros.get(c);
+            String id = cas.getDuenho().getAvatar().getId();
+            if(!jugador.getAvatar().getId().equals(id)){
+                return false;
+            }
+        }
         return true;
     }
 

@@ -47,7 +47,11 @@ public class Menu {
     }
 
     //Metodo que ejecuta todas las acciones relacionadas con el comando 'lanzar dados'.
-    private void lanzarDados() {
+    //Rodrigo-23/09
+    private int lanzarDados() {
+        Dado dado = new Dado();
+        dado.setValor(dado.hacerTirada());
+        return dado.getValor();
     }
 
     /*Metodo que ejecuta todas las acciones realizadas con el comando 'comprar nombre_casilla'.
@@ -57,7 +61,7 @@ public class Menu {
     }
 
     //Metodo que ejecuta todas las acciones relacionadas con el comando 'salir carcel'.
-    private void salirCarcel() {
+    private void salirCarcel(){
     }
 
     // Metodo que realiza las acciones asociadas al comando 'listar enventa'.

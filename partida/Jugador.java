@@ -49,6 +49,31 @@ public class Jugador {
         this.propiedades = new ArrayList<>();
     }
 
+    //GETTERS
+    public String getNombre(){
+        return this.nombre;
+    }
+    //Metodo para sacar el avatar de los jugadores, para poder acceder al Id
+    public Avatar getAvatar() {
+        return this.avatar;
+    }
+    public float getFortuna(){
+        return this.fortuna;
+    }
+    public float getGastos(){
+        return this.gastos;
+    }
+    public boolean isEnCarcel(){
+        return this.enCarcel;
+    }
+    public int getTiradasCarcel(){
+        return this.tiradasCarcel;
+    }
+    public int getVueltas(){
+        return this.vueltas;
+    }
+
+
     //Otros métodos:
     //Metodo para añadir una propiedad al jugador. Como parámetro, la casilla a añadir.
     //Rodrigo-23/09

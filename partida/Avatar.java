@@ -13,6 +13,23 @@ public class Avatar {
     private Jugador jugador; //Un jugador al que pertenece ese avatar.
     private Casilla lugar; //Los avatares se sitúan en casillas del tablero.
 
+
+    //GETTERS
+    public String getId(){
+        return this.id;
+    }
+
+    public String getTipo(){
+        return this.tipo;
+    }
+
+    public Jugador getJugador(){
+        return this.jugador;
+    }
+    public Casilla getCasilla(){
+        return this.lugar;
+    }
+
     //Constructor vacío
     public Avatar() {
     }
@@ -27,7 +44,7 @@ public class Avatar {
         this.tipo= tipo;
         this.jugador=jugador;
         this.lugar = lugar;
-        this.id=("plyr"+(avCreados.size()+1));    // creamos nuevo id para el avatar, ej: plyr1
+        this.id = generarId(avCreados);    // creamos nuevo id para el avatar, ej: plyr1
 
         avCreados.add(this); //metemos el nuevo avatar en la lista de avatares creados
     }
@@ -45,6 +62,9 @@ public class Avatar {
     * El ID generado será una letra mayúscula. Parámetros:
     * - Un arraylist de los avatares ya creados, con el objetivo de evitar que se generen dos ID iguales.
      */
-    private void generarId(ArrayList<Avatar> avCreados) {
+    //Rodrigo-24/09
+    //mal, podense repetir Ids. Buscar outra maneira de facelo
+    private String generarId(ArrayList<Avatar> avCreados) {
+        return ""+('A'+avCreados.size());
     }
 }
