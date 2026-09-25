@@ -14,8 +14,8 @@ class Grupo {
     //Constructor vacío.
     public Grupo() {
         this.miembros = new ArrayList<>();
-        this.colorGrupo = "";
-        this.numCasillas = 0;
+        this.setColorGrupo("");
+        this.setNumCasillas(0);
     }
 
     /*Constructor para cuando el grupo está formado por DOS CASILLAS:
@@ -23,12 +23,10 @@ class Grupo {
      */
     //Rodrigo-23/09 (añadido debaixo comentario)
     public Grupo(Casilla cas1, Casilla cas2, String colorGrupo) {
-        //this.miembros = new ArrayList<>();
-        this.colorGrupo = colorGrupo;
-        this.numCasillas = 2;
-        //
-        this.miembros = new ArrayList<Casilla>();
-        miembros.add(cas1);miembros.add(cas2);
+        this.miembros = new ArrayList<>();
+        this.setColorGrupo(colorGrupo);
+        this.anhadirCasilla(cas1);
+        this.anhadirCasilla(cas2);
     }
 
     /*Constructor para cuando el grupo está formado por TRES CASILLAS:
@@ -36,12 +34,11 @@ class Grupo {
      */
     //Rodrigo-23/09 (añadido debaixo comentario)
     public Grupo(Casilla cas1, Casilla cas2, Casilla cas3, String colorGrupo) {
-        //this.miembros = new ArrayList<>();
-        this.colorGrupo = colorGrupo;
-        this.numCasillas = 3;
-        //
-        this.miembros = new ArrayList<Casilla>();
-        miembros.add(cas1);miembros.add(cas2);miembros.add(cas3);
+        this.miembros = new ArrayList<>();
+        this.setColorGrupo(colorGrupo);
+        this.anhadirCasilla(cas1);
+        this.anhadirCasilla(cas2);
+        this.anhadirCasilla(cas3);
     }
 
     // GETTERS
@@ -70,6 +67,8 @@ class Grupo {
     * Parámetro: casilla que se quiere añadir.
      */
     public void anhadirCasilla(Casilla miembro) {
+        this.miembros.add(miembro);
+        this.setNumCasillas(this.getNumCasillas()+1);
     }
 
     /*Metodo que comprueba si el jugador pasado tiene en su haber todas las casillas del grupo:

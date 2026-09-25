@@ -49,9 +49,9 @@ public class Menu {
     //Metodo que ejecuta todas las acciones relacionadas con el comando 'lanzar dados'.
     //Rodrigo-23/09
     private int lanzarDados() {
-        Dado dado = new Dado();
-        dado.setValor(dado.hacerTirada());
-        return dado.getValor();
+        dado1.setValor(dado1.hacerTirada());
+        dado2.setValor(dado2.hacerTirada());
+        return (dado1.getValor()+dado2.getValor());
     }
 
     /*Metodo que ejecuta todas las acciones realizadas con el comando 'comprar nombre_casilla'.
