@@ -15,6 +15,27 @@ public class Tablero {
     public Tablero(Jugador banca) {
     }
 
+    // GETTERS
+    public ArrayList<ArrayList<Casilla>> getPosiciones() {
+        return posiciones;
+    }
+    public HashMap<String, Grupo> getGrupos() {
+        return grupos;
+    }
+    public Jugador getBanca() {
+        return banca;
+    }
+
+    // SETTERS
+    public void setPosiciones(ArrayList<ArrayList<Casilla>> p) {
+        this.posiciones = p;
+    }
+    public void setGrupos(HashMap<String, Grupo> g) {
+        this.grupos = g;
+    }
+    public void setBanca(Jugador b) {
+        this.banca = b;
+    }
     
     //Metodo para crear todas las casillas del tablero. Formado a su vez por cuatro métodos (1/lado).
     private void generarCasillas() {
@@ -43,7 +64,7 @@ public class Tablero {
     //Para imprimir el tablero, modificamos el metodo toString().
     @Override
     public String toString() {
-        System.out.println("tablero");
+        System.out.println("Tablero");
         return "hola";
     }
     
