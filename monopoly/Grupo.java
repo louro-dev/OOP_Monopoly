@@ -25,6 +25,7 @@ class Grupo {
     public Grupo(Casilla cas1, Casilla cas2, String colorGrupo) {
         this.miembros = new ArrayList<>();
         this.setColorGrupo(colorGrupo);
+        this.setNumCasillas(0);
         this.anhadirCasilla(cas1);
         this.anhadirCasilla(cas2);
     }
@@ -36,6 +37,7 @@ class Grupo {
     public Grupo(Casilla cas1, Casilla cas2, Casilla cas3, String colorGrupo) {
         this.miembros = new ArrayList<>();
         this.setColorGrupo(colorGrupo);
+        this.setNumCasillas(0);
         this.anhadirCasilla(cas1);
         this.anhadirCasilla(cas2);
         this.anhadirCasilla(cas3);
@@ -63,13 +65,18 @@ class Grupo {
         this.numCasillas = n;
     }
 
-    /* Metodo que añade una casilla al array de casillas miembro de un grupo.
+    /* Metodo que anhade una casilla al array de casillas miembro de un grupo.
     * Parámetro: casilla que se quiere añadir.
      */
     public void anhadirCasilla(Casilla miembro) {
         this.miembros.add(miembro);
         this.setNumCasillas(this.getNumCasillas()+1);
     }
+
+    /*Metodo que anhade todas las casillas a la banca, para no tener que llamar
+    *25 veces a anhadecasillas en el programa.
+    * Parametro: ArrayList de todas las casillas
+     */
 
     /*Metodo que comprueba si el jugador pasado tiene en su haber todas las casillas del grupo:
     * Parámetro: jugador que se quiere evaluar.

@@ -44,7 +44,7 @@ public class Avatar {
         this.tipo= tipo;
         this.jugador=jugador;
         this.lugar = lugar;
-        this.id = (String) generarId(avCreados);    // creamos nuevo id para el avatar, ej: plyr1
+        this.generarId(avCreados);
 
         avCreados.add(this); //metemos el nuevo avatar en la lista de avatares creados
     }
@@ -63,11 +63,11 @@ public class Avatar {
     * - Un arraylist de los avatares ya creados, con el objetivo de evitar que se generen dos ID iguales.
      */
     //Rodrigo-25/09
-    private String generarId(ArrayList<Avatar> avCreados) {
+    private void generarId(ArrayList<Avatar> avCreados) {
         String ID;
         do {
             ID =  "A" + (int) (Math.random() * 26);
         } while(avCreados.contains(ID));
-        return ID;
+        this.id=ID;
     }
 }

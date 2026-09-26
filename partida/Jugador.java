@@ -22,12 +22,12 @@ public class Jugador {
         //setteamos valores con os parametros pasados
         this.nombre="banca";
         this.fortuna = Valor.FORTUNA_BANCA;
+        this.propiedades = null;
         //inicializamos variables que ni se modificaran por ser la banca
         this.gastos = 0;
         this.enCarcel=false;
         this.tiradasCarcel=0;
         this.vueltas=0;
-        this.propiedades = null;
     }
 
     /*Constructor principal. Requiere parámetros:
