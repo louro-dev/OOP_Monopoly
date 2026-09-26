@@ -4,7 +4,7 @@ import partida.*;
 import java.util.ArrayList;
 
 
-class Grupo {
+public class Grupo {
 
     //Atributos
     private ArrayList<Casilla> miembros; //Casillas miembros del grupo.
@@ -23,8 +23,10 @@ class Grupo {
      */
     public Grupo(Casilla cas1, Casilla cas2, String colorGrupo) {
         this.miembros = new ArrayList<>();
-        this.colorGrupo = colorGrupo;
-        this.numCasillas = 2;
+        this.setColorGrupo(colorGrupo);
+        this.setNumCasillas(0);
+        this.anhadirCasilla(cas1);
+        this.anhadirCasilla(cas2);
     }
 
     /*Constructor para cuando el grupo está formado por TRES CASILLAS:
@@ -32,8 +34,11 @@ class Grupo {
      */
     public Grupo(Casilla cas1, Casilla cas2, Casilla cas3, String colorGrupo) {
         this.miembros = new ArrayList<>();
-        this.colorGrupo = colorGrupo;
-        this.numCasillas = 3;
+        this.setColorGrupo(colorGrupo);
+        this.setNumCasillas(0);
+        this.anhadirCasilla(cas1);
+        this.anhadirCasilla(cas2);
+        this.anhadirCasilla(cas3);
     }
 
     // GETTERS
@@ -62,6 +67,8 @@ class Grupo {
     * Parámetro: casilla que se quiere añadir.
      */
     public void anhadirCasilla(Casilla miembro) {
+        miembros.add(miembro);
+        setNumCasillas(this.getNumCasillas()+1);
     }
 
     /*Metodo que comprueba si el jugador pasado tiene en su haber todas las casillas del grupo:
@@ -69,6 +76,14 @@ class Grupo {
     * Valor devuelto: true si es dueño de todas las casillas del grupo, false en otro caso.
      */
     public boolean esDuenhoGrupo(Jugador jugador) {
+        ArrayList<Casilla> miembros = this.getMiembros();
+        for(int c=0; c<miembros.size(); c++) {
+            Casilla cas = miembros.get(c);
+            String id = cas.getDuenho().getAvatar().getId();
+            if(!jugador.getAvatar().getId().equals(id)) {
+                return false;
+            }
+        }
         return true;
     }
 

@@ -11,10 +11,12 @@ public class Dado {
         return this.valor;
     }
 
+    // SETTERS
     public void setValor(int numero) {
         this.valor = numero;
     }
 
+    // GETTERS
     public int getValor() {
         return valor;
     }

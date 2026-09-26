@@ -135,11 +135,10 @@ public class Casilla {
     /*Metodo usado para comprar una casilla determinada. Parámetros:
     * - Jugador que solicita la compra de la casilla.
     * - Banca del monopoly (es el dueño de las casillas no compradas aún).*/
-    //Rodrigo-23/09   SIN ACABAR
     public void comprarCasilla(Jugador solicitante, Jugador banca) {
-        solicitante.sumarGastos(this.valor);
-        banca.sumarFortuna(this.valor);
-        solicitante.sumarFortuna((-1)*this.valor);
+        solicitante.sumarGastos(valor);
+        banca.sumarFortuna(valor);
+        solicitante.sumarFortuna((-1)*valor);
         solicitante.anhadirPropiedad(this);
     }
 
@@ -148,6 +147,7 @@ public class Casilla {
     * - Sumar valor a las casillas de solar al no comprarlas tras cuatro vueltas de todos los jugadores.
     * Este metodo toma como argumento la cantidad a añadir del valor de la casilla.*/
     public void sumarValor(float suma) {
+        valor+=suma;
     }
 
     /*Metodo para mostrar información sobre una casilla.
