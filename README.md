@@ -8,3 +8,8 @@ Os metodos nos q toquei algo teñen arriba //Rodrigo-fecha
 
 Cambiei cousas en avatar avatar, jugador, e dado(no editei nada, 
 quitei algun this. q nn facia falta),Casilla
+
+Notas:
+- Poner mínimo 2 jugadores y máximo 4
+- En método encarcelar, en Jugador, falta mover la posición del jugador a la casilla de cárcel
+- Propiedades de la banca (en método Jugador) no pueden ser null
