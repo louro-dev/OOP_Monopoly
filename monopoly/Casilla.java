@@ -17,6 +17,17 @@ public class Casilla {
     private float hipoteca; //Valor otorgado por hipotecar una casilla
     private ArrayList<Avatar> avatares; //Avatares que están situados en la casilla.
 
+    //Atributos adicionales para solares: precios y alquileres de edificaciones (Apéndice I).
+    //No obligatorios para la lógica de esta entrega, pero es obligatorio definir estas cantidades.
+    private float precioCasa;
+    private float precioHotel;
+    private float precioPiscina;
+    private float precioPista;
+    private float alquilerCasa;
+    private float alquilerHotel;
+    private float alquilerPiscina;
+    private float alquilerPista;
+
     //Constructores:
     public Casilla() {
     }//Parámetros vacíos
@@ -84,6 +95,30 @@ public class Casilla {
     public ArrayList<Avatar> getAvatares() {
         return avatares;
     }
+    public float getPrecioCasa() {
+        return precioCasa;
+    }
+    public float getPrecioHotel() {
+        return precioHotel;
+    }
+    public float getPrecioPiscina() {
+        return precioPiscina;
+    }
+    public float getPrecioPista() {
+        return precioPista;
+    }
+    public float getAlquilerCasa() {
+        return alquilerCasa;
+    }
+    public float getAlquilerHotel() {
+        return alquilerHotel;
+    }
+    public float getAlquilerPiscina() {
+        return alquilerPiscina;
+    }
+    public float getAlquilerPista() {
+        return alquilerPista;
+    }
 
     // SETTERS
     public void setNombre(String n) {
@@ -113,9 +148,37 @@ public class Casilla {
     public void setAvatares(ArrayList<Avatar> a) {
         this.avatares = a;
     }
+    public void setPrecioCasa(float p) {
+        this.precioCasa = p;
+    }
+    public void setPrecioHotel(float p) {
+        this.precioHotel = p;
+    }
+    public void setPrecioPiscina(float p) {
+        this.precioPiscina = p;
+    }
+    public void setPrecioPista(float p) {
+        this.precioPista = p;
+    }
+    public void setAlquilerCasa(float a) {
+        this.alquilerCasa = a;
+    }
+    public void setAlquilerHotel(float a) {
+        this.alquilerHotel = a;
+    }
+    public void setAlquilerPiscina(float a) {
+        this.alquilerPiscina = a;
+    }
+    public void setAlquilerPista(float a) {
+        this.alquilerPista = a;
+    }
 
     //Metodo utilizado para añadir un avatar al array de avatares en casilla.
     public void anhadirAvatar(Avatar av) {
+        if(this.avatares == null) {
+            this.avatares = new ArrayList<>();
+        }
+        this.avatares.add(av);
     }
 
     //Metodo utilizado para eliminar un avatar del array de avatares en casilla.
@@ -165,6 +228,16 @@ public class Casilla {
     * que están disponibles para comprar (o mostrar los datos financieros específicos de venta).*/
     public String casEnVenta() {
         return "Hola";
+    }
+
+    public String toString() { // Para imprimir los nombres e ID de las casillas
+        String id = "";
+        if(avatares.size() != 0) {
+            for(int i=0; i<avatares.size(); i++) {
+                id = id + "&" + avatares.get(i).getId();
+            }
+        }
+        return this.nombre + id;
     }
 
 }

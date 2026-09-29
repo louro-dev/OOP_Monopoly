@@ -25,7 +25,7 @@ public class Jugador {
         this.enCarcel = false;
         this.tiradasCarcel = 0;
         this.vueltas = 0;
-        this.propiedades = null; // MAL, LA BANCA TIENE TODAS LAS PROPIEDADES
+        this.propiedades = new ArrayList<>();
     }
 
     /*Constructor principal. Requiere parámetros:

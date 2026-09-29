@@ -26,6 +26,7 @@ public class Avatar {
         this.jugador = jugador;
         this.lugar = lugar;
         generarId(avCreados);
+        lugar.anhadirAvatar(this);
         avCreados.add(this); // Metemos el nuevo avatar en la lista de avatares creados.
     }
 
@@ -72,10 +73,23 @@ public class Avatar {
      */
     private void generarId(ArrayList<Avatar> avCreados) {
         String ID;
-        // Código para generar la letra
         do {
-            ID = "A" + (int) (Math.random() * 26);
-        } while(avCreados.contains(ID));
+            char letra = (char) ('A' + (int) (Math.random() * 26));
+            ID = String.valueOf(letra);
+        } while (existeId(ID, avCreados));
+
         this.id = ID;
+    }
+
+    // Metodo para comprobar si el ID existe dentro del ArrayList de los avatares creados.
+    private boolean existeId(String id, ArrayList<Avatar> avCreados) {
+        if (avCreados != null) {
+            for (int i = 0; i < avCreados.size(); i++) {
+                if (id.equals(avCreados.get(i).getId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
