@@ -22,5 +22,7 @@ public class Valor {
     public static final String PURPLE = "\u001B[35m";
     public static final String CYAN = "\u001B[36m";
     public static final String WHITE = "\u001B[37m";
+    public static final String BROWN  = "\u001B[38;5;94m";
+    public static final String ORANGE = "\u001B[38;5;208m";
 
 }

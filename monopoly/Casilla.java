@@ -183,6 +183,9 @@ public class Casilla {
 
     //Metodo utilizado para eliminar un avatar del array de avatares en casilla.
     public void eliminarAvatar(Avatar av) {
+        if(this.avatares != null) {
+            this.avatares.remove(av);
+        }
     }
 
     /*Metodo para evaluar qué hacer en una casilla concreta. Parámetros:
@@ -230,6 +233,33 @@ public class Casilla {
         return "Hola";
     }
 
+    // Metodo para obtener los colores de cada grupo para luego poder imprimirlos
+    public String obtenerCodigoColor() {
+        // Si la casilla no pertenece a ningún grupo (por ejemplo, Salida, Cárcel, etc.)
+        if (this.grupo == null || this.grupo.getColorGrupo() == null) {
+            return Valor.RESET;
+        }
+
+        String color = this.grupo.getColorGrupo().toLowerCase();
+
+        switch (color) {
+            case "negro":     return Valor.BLACK;
+            case "rojo":      return Valor.RED;
+            case "verde":     return Valor.GREEN;
+            case "amarillo":  return Valor.YELLOW;
+            case "azul":      return Valor.BLUE;
+            case "rosa":
+            case "magenta":   return Valor.PURPLE;
+            case "cian":
+            case "celeste":   return Valor.CYAN;
+            case "blanco":    return Valor.WHITE;
+            case "marron":
+            case "marrón":    return Valor.BROWN;
+            case "naranja":   return Valor.ORANGE;
+            default:          return Valor.RESET;
+        }
+    }
+
     public String toString() { // Para imprimir los nombres e ID de las casillas
         String id = "";
         if(avatares.size() != 0) {
@@ -237,7 +267,8 @@ public class Casilla {
                 id = id + "&" + avatares.get(i).getId();
             }
         }
-        return this.nombre + id;
+        // Resetea el color ANSI al final para no teñir las siguientes casillas ni los bordes.
+        return obtenerCodigoColor() + this.nombre + id + Valor.RESET;
     }
 
 }

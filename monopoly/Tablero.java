@@ -124,17 +124,17 @@ public class Tablero {
         norte.add(new Casilla("IrCarcel   ", "IrCarcel", 31, banca));
 
         // Grupos del lado norte.
-        Grupo roja = new Grupo(solar12, solar13, solar14, "Roja");
-        solar12.setGrupo(roja);
-        solar13.setGrupo(roja);
-        solar14.setGrupo(roja);
-        grupos.put("Roja", roja);
+        Grupo rojo = new Grupo(solar12, solar13, solar14, "Rojo");
+        solar12.setGrupo(rojo);
+        solar13.setGrupo(rojo);
+        solar14.setGrupo(rojo);
+        grupos.put("Rojo", rojo);
 
-        Grupo amarilla = new Grupo(solar15, solar16, solar17, "Amarilla");
-        solar15.setGrupo(amarilla);
-        solar16.setGrupo(amarilla);
-        solar17.setGrupo(amarilla);
-        grupos.put("Amarilla", amarilla);
+        Grupo amarillo = new Grupo(solar15, solar16, solar17, "Amarillo");
+        solar15.setGrupo(amarillo);
+        solar16.setGrupo(amarillo);
+        solar17.setGrupo(amarillo);
+        grupos.put("Amarillo", amarillo);
 
         posiciones.add(norte);
     }
