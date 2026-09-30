@@ -124,12 +124,24 @@ public class Jugador {
     * Se requiere disponer de las casillas del tablero para ello (por eso se pasan como parámetro).*/
     public void encarcelar(ArrayList<ArrayList<Casilla>> pos) {
         enCarcel = true;
+        int tirada;
+
         //conseguir posicion de la casilla carcel
         int posicion = pos.get(0).get(10).getPosicion();
         //calcular cual deberia ser el valor de la tirada para caer en la carcel
+        // Nos quitamos de la casilla actual
+        int actual = this.avatar.getLugar().getPosicion();
+        this.avatar.getLugar().eliminarAvatar(this.avatar);
 
-        //llamar metodo para mover avatar a la carcel
-        //this.avatar.moverAvatar(pos,);
+        // Calculamos la nueva posición (1 a 40)
+        if(actual>posicion){
+            tirada = 40-(posicion-actual);
+        }
+        else{
+            tirada = posicion-actual;
+        }
+
+        this.avatar.moverAvatar(pos,tirada);
     }
 
 }
