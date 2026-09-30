@@ -270,5 +270,4 @@ public class Casilla {
         // Resetea el color ANSI al final para no teñir las siguientes casillas ni los bordes.
         return obtenerCodigoColor() + this.nombre + id + Valor.RESET;
     }
-
 }
