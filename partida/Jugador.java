@@ -128,6 +128,7 @@ public class Jugador {
 
         //conseguir posicion de la casilla carcel
         int posicion = pos.get(0).get(10).getPosicion();
+
         //calcular cual deberia ser el valor de la tirada para caer en la carcel
         // Nos quitamos de la casilla actual
         int actual = this.avatar.getLugar().getPosicion();
@@ -135,12 +136,11 @@ public class Jugador {
 
         // Calculamos la nueva posición (1 a 40)
         if(actual>posicion){
-            tirada = 40-(posicion-actual);
+            tirada = 40+(posicion-actual);
         }
         else{
             tirada = posicion-actual;
         }
-
         this.avatar.moverAvatar(pos,tirada);
     }
 

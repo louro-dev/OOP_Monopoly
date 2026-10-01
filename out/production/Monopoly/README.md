@@ -25,9 +25,3 @@ Correccion loigca no calculo de encarcelar
 Implementada funcion encontrar_casilla (devuelve la instancia de Casilla solo pidiendola
 por el nombre)
 
-Correccion incdices en impresion de tablero
-
-Creados mas getters y setters en menu
-
-correccion llamada a encontrar_casilla
-

@@ -313,11 +313,11 @@ public class Tablero {
 
         for (int i = 0; i < tamanoLaterales; i++) {
             //definiciones
-            int indiceEste= tamanoLaterales-1-i,indiceOeste=i;
+            int indiceOeste= tamanoLaterales-1-i,indiceEste=i;
             String espacioCentral="                                                                                     " +
                     "                                                 ";
             //Casillas
-            tablero+="|"+oeste.get(indiceEste)+"|"
+            tablero+="|"+oeste.get(indiceOeste)+"|"
                     +espacioCentral+
                     "|"+este.get(indiceEste)+"|\n";
 
@@ -332,7 +332,7 @@ public class Tablero {
         // Sur
         tablero += lineaBaja;
         for(int i=sur.size()-1; i>=0; i--) {
-            tablero = tablero + "|" + sur.get(i).toString();
+            tablero+= "|" + sur.get(i).toString();
         }
         tablero += "|\n";
         tablero += lineaAlta;
@@ -341,6 +341,38 @@ public class Tablero {
     }
     
     //Metodo usado para buscar la casilla con el nombre pasado como argumento:
-    /*public Casilla encontrar_casilla(String nombre){
-    }*/
+    public Casilla encontrar_casilla(String nombre){
+        ArrayList<Casilla> sur = posiciones.get(0);
+         ArrayList<Casilla> oeste = posiciones.get(1);
+        ArrayList<Casilla> norte = posiciones.get(2);
+        ArrayList<Casilla> este = posiciones.get(3);
+        int tamLat = oeste.size();
+        int tamTop =  norte.size();
+
+        for(int i=0; i<tamTop; i++) {
+            String nom = sur.get(i).getNombre();
+            if(nom.equals(nombre)){
+                return sur.get(i);
+            }
+        }
+        for(int i=0; i<tamTop; i++) {
+            String nom = norte.get(i).getNombre();
+            if(nom.equals(nombre)){
+                return norte.get(i);
+            }
+        }
+        for(int i = 0; i< tamLat; i++) {
+            String nom = oeste.get(i).getNombre();
+            if(nom.equals(nombre)){
+                return oeste.get(i);
+            }
+        }
+        for(int i=0; i<tamLat; i++) {
+            String nom = este.get(i).getNombre();
+            if(nom.equals(nombre)){
+                return este.get(i);
+            }
+        }
+        return null;
+    }
 }

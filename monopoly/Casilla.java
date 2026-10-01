@@ -260,14 +260,31 @@ public class Casilla {
         }
     }
 
+    @Override
     public String toString() { // Para imprimir los nombres e ID de las casillas
         String id = "";
         if(avatares.size() != 0) {
+            id ="&";
             for(int i=0; i<avatares.size(); i++) {
-                id = id + "&" + avatares.get(i).getId();
+                id+= avatares.get(i).getId();
             }
         }
+        //quitamos los espacios entre el fin del nombre y la casilla
+        String CasillaLimpia=this.nombre.trim();
+
+        //Calculamos cuantos espacios hay que poner para rellenar una casilla de 14 de largo
+        int numEspacios=14-CasillaLimpia.length()-id.length();
+
+        //creamos el String que tenga los espacios necesarios
+        String espacios="";
+        for(int i=0; i<numEspacios; i++) {
+            espacios+=" ";
+        }
+
+        //Unimos todo
+        String celda=CasillaLimpia+espacios+id;
+
         // Resetea el color ANSI al final para no teñir las siguientes casillas ni los bordes.
-        return obtenerCodigoColor() + this.nombre + id + Valor.RESET;
+        return obtenerCodigoColor() + celda + Valor.RESET;
     }
 }

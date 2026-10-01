@@ -18,14 +18,51 @@ public class Menu {
     private boolean solvente; //Booleano para comprobar si el jugador que tiene el turno es solvente, es decir, si ha pagado sus deudas.
 
 
+    //GETTERS
+    public ArrayList<Avatar> getAvatares() {
+        return avatares;
+    }
+
+    public ArrayList<Jugador> getJugadores() {
+        return jugadores;
+    }
+
+    //SETTERS
+    public void setAvataresMenu(ArrayList<Avatar> avatares){
+        this.avatares = avatares;
+    }
+
+    public void setJugadoresMenu(ArrayList<Jugador> jugadores){
+        this.jugadores = jugadores;
+    }
+
+    //Constructor
+    public Menu(){
+        jugadores = new ArrayList<>();
+        avatares = new ArrayList<>();
+    }
+
     // Metodo para inciar una partida: crea los jugadores y avatares.
     private void iniciarPartida() {
     }
     
     /*Metodo que interpreta el comando introducido y toma la accion correspondiente.
-    * Parámetro: cadena de caracteres (el comando).
+    * Parámetros:
+    *      cadena de caracteres (el comando).
+    *      Arraylist de Arraylis de casillas
     */
-    private void analizarComando(String comando) {
+    public void analizarComando(String comando, ArrayList<ArrayList<Casilla>> casillas) {
+        if (comando.equals("t")) {
+            //obtenemos la tirada de los dados
+            int casillasMover = this.lanzarDados();
+
+            //vemos que jugador tiene el turno y lo sacamos
+            Avatar jugador = this.avatares.get(this.turno);
+
+            //invocamos a la funcion que mueve el avatar para
+            jugador.moverAvatar(casillas,casillasMover);
+
+        }
     }
 
     /*Metodo que realiza las acciones asociadas al comando 'describir jugador'.
@@ -47,7 +84,13 @@ public class Menu {
     }
 
     //Metodo que ejecuta todas las acciones relacionadas con el comando 'lanzar dados'.
-    private void lanzarDados() {
+    private int lanzarDados() {
+        this.dado1 = new Dado();
+        this.dado2 = new Dado();
+        dado1.hacerTirada();
+        dado2.hacerTirada();
+        tirado = true;
+        return dado1.getValor() + dado2.getValor();
     }
 
     /*Metodo que ejecuta todas las acciones realizadas con el comando 'comprar nombre_casilla'.
