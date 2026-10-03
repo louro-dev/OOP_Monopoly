@@ -45,6 +45,18 @@ public class Jugador {
         this.propiedades = new ArrayList<>();
     }
 
+    //Creamos un metodo que llame al constructor para poder tener control sobre los jugadores, ya que el constructor
+    //esta obligado a no fallar
+    public static Jugador newJugador(String nombre, String tipoAvatar, Casilla inicio, ArrayList<Avatar> avCreados,ArrayList<Jugador> jugadores){
+        if(avCreados.size()>=Valor.MAX_JUGADORES){
+            System.out.println("\nmaximo de jugadores alcanzado\n");
+            return null;
+        }
+        Jugador j=new Jugador(nombre,tipoAvatar,inicio,avCreados);
+        jugadores.add(j);
+        return j;
+    }
+
     // GETTERS
     public String getNombre() {
         return this.nombre;
@@ -143,5 +155,18 @@ public class Jugador {
         }
         this.avatar.moverAvatar(pos,tirada);
     }
+
+    @Override
+    public String toString(){
+        return"nombre del jugador: "+this.getNombre()+"\nAvatar del jugador: "+
+                this.getAvatar()+"\nFortuna del jugador: "+
+                String.format(java.util.Locale.of("es","ES"), "%,.0f", this.getFortuna())+
+                "\nGastos totales: "+
+                String.format(java.util.Locale.of("es", "ES"), "%,.0f", this.getGastos())+
+                "\nEsta encarcelado?: "+this.getEnCarcel()+"\nVueltas al tablero: "+this.getVueltas()+"\nLista de pro" +
+                "piedades: "+this.getPropiedades();
+    }
+
+
 
 }

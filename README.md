@@ -2,32 +2,40 @@
 devs: Rodrigo Rios Louro & Rocio Perez-Muñuzuri Fernandez & Jorge Piñeiro Ouviña  
 proyect for OOP class of programing the game monopoly in Java
 
-Refactorizado toda a funcion do toString to tableiro e do que imprime os Avatares
+Mejoras:
 
-Cambiadas proporcions to tableiro para que se axuste ao maximo de xogadores
+correccion concepto analizar comando: el switch para la accion se hará ahora en
+MonopolyETSE para evitar modificar los atributos del metodo, y se utilizará el
+método para saber que tipo de comando en el sentido de orden o fichero que contiene
+ordenes. Lo devolerá como un entero.
 
-Acabado sistema de lanzar dados, conseguido que sea funcional
+CAMBIADO METODO EN MENU DE PRIVATE A PUBLIC. 
 
-Cambios en MonopolyETSE para probar que todo funciona complocando a prueba que xa habia
+añadido getter y setter para el entero que guarda el ID del jugador con el turno en 
+menu
 
-conseguido que imprima tablero, espere input e o reimprima.
-Solo se consguiu 1 vez pq esta posto o print manualmente, habria que facer un 
-while(input!=salir){Codigo} para que se repita hasta que acabe a partida.
+se ha comenzado la implementacion de la aceptacion de comandos con un documento
 
-Novo setter en Menu que deixa settear o ArrayList de avatares a es eatributo, non era 
-necesario facer o New, y getter para poder pasalo as fucnions de creacion de jugadores
-para que a actualicen
+posibilidad: hacer que AnalizarComando devuelva numero de 2 cifras si es comando
+para saber que comando es y no usar un switch con Strings. Seria mas seguro en fallos 
+de entrada por mayusculas, ya que dentro de este usamos toLoersCase ppara el 
+analisis de las entradas.
 
-Implementar en algun sitio que o maximo de xogadores sea 4
+Implementada funcion IniciarPartida: se encarga de leer el documento inicial y hacer el
+tratamiento de los comandos que hay dentro de el, inicializa la banca y le da todas las
+propiedades y inicializa el tablero.
 
-Correccion loigca no calculo de encarcelar
+Implementamos dar de alta un jugador, bien pidiendolo por comando o dando la orden desde
+el documento Inicial. 
 
-Implementada funcion encontrar_casilla (devuelve la instancia de Casilla solo pidiendola
-por el nombre)
+Falta implementar que el documento se pueda pasar por los args, por ahora hay que pedirlo
 
-Correccion incdices en impresion de tablero
+Se ha añadido un .txt de prueba para que se vayan pidiendo poco a poco desde ese documento
+las funciones implementadas para probarlas
 
-Creados mas getters y setters en menu
+Funciona con documenti inicial, crea jugadores correctamente 1 a 1 pasandoselo por linea de
+comandos y lanza los dados para que el primero avance
 
-correccion llamada a encontrar_casilla
+Creados toString para imprimir jugadores, imprimir avatares.
 
+Implementada funcionalidad que lista jugadores.

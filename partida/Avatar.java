@@ -114,4 +114,9 @@ public class Avatar {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return this.getTipo();
+    }
 }

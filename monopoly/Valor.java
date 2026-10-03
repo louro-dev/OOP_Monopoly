@@ -11,6 +11,7 @@ public class Valor {
     public static final float FACTOR_SERVICIO = 50000; // Factor multiplicador del alquiler de las casillas de servicio
     public static final float IMPUESTO = 2000000; // Cantidad a pagar en cualquiera de las dos casillas de impuestos
     public static final float COSTE_SALIR_CARCEL = 500000; // Cantidad a pagar para salir de la cárcel
+    public static final int MAX_JUGADORES = 4;
 
     //Colores del texto:
     public static final String RESET = "\u001B[0m";

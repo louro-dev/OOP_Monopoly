@@ -3,6 +3,7 @@ package monopoly;
 import partida.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 
 public class Tablero {
@@ -350,26 +351,26 @@ public class Tablero {
         int tamTop =  norte.size();
 
         for(int i=0; i<tamTop; i++) {
-            String nom = sur.get(i).getNombre();
-            if(nom.equals(nombre)){
+            String nom = sur.get(i).getNombre().trim().toLowerCase();
+            if(nom.equals(nombre.toLowerCase())) {
                 return sur.get(i);
             }
         }
         for(int i=0; i<tamTop; i++) {
-            String nom = norte.get(i).getNombre();
-            if(nom.equals(nombre)){
+            String nom = norte.get(i).getNombre().trim().toLowerCase();
+            if(nom.equals(nombre.toLowerCase())) {
                 return norte.get(i);
             }
         }
         for(int i = 0; i< tamLat; i++) {
-            String nom = oeste.get(i).getNombre();
-            if(nom.equals(nombre)){
+            String nom = oeste.get(i).getNombre().trim().toLowerCase();
+            if(nom.equals(nombre.toLowerCase())) {
                 return oeste.get(i);
             }
         }
         for(int i=0; i<tamLat; i++) {
-            String nom = este.get(i).getNombre();
-            if(nom.equals(nombre)){
+            String nom = este.get(i).getNombre().trim().toLowerCase();
+            if(nom.equals(nombre.toLowerCase())) {
                 return este.get(i);
             }
         }
