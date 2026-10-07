@@ -115,6 +115,18 @@ public class MonopolyETSE {
                         }
                         break;
 
+                    case 25:
+                        //
+                        if(menu.getTurno()==menu.getAvatares().size()-1){
+                            menu.setTurno(0);
+                        }
+                        else{
+                            menu.setTurno(menu.getTurno()+1);
+                        }
+                        System.out.println("Jugador que tiene el turno:"+menu.getJugadores().get(menu.getTurno()).getNombre()+"\n");
+                        ctrl=false;
+                        break;
+
                     case 28:
                         System.out.println("\n"+menu.getTablero());
                         getaway = true;
