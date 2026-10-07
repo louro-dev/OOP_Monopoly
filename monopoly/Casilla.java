@@ -195,6 +195,12 @@ public class Casilla {
     * Valor devuelto: true en caso de ser solvente (es decir, de cumplir las deudas), y false
     * en caso de no cumplirlas.*/
     public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada) {
+
+        //if (this is_in banca.getPrpopiedades()){
+        // return true;
+        if(actual.getFortuna()<this.getImpuesto()){
+            return false;
+        }
         return true;
     }
 
@@ -205,6 +211,7 @@ public class Casilla {
         solicitante.sumarGastos(valor);
         banca.sumarFortuna(valor);
         solicitante.sumarFortuna((-1)*valor);
+        banca.getPropiedades().remove(this);
         solicitante.anhadirPropiedad(this);
     }
 

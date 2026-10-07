@@ -1,9 +1,9 @@
-crearJugador Rocio Coche
-crearJugador Rodrigo Coche
-crearJugador Piouvi Coche
-crearJugador Javibi Coche
-crearJugador PabloGOat Coche
-jugadorTurno
-LanzarDados
-listarJugadores
-LanzarDados
+crear Jugador Rocio Coche
+crear Jugador Rodrigo Coche
+crear Jugador Piouvi Coche
+crear Jugador Javibi Coche
+crear Jugador PabloGOat Coche
+jugador
+Lanzar Dados
+listar Jugadores
+Lanzar Dados

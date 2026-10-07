@@ -120,9 +120,17 @@ public class Menu {
 
                 //separamos el comando en porciones [0]=comandi [1]=arg1 [2]=arg2
                 String[] divCom = lineaActual.split(" ");
+                String comand;
+
+                if(divCom.length>=2){
+                    comand=divCom[0]+divCom[1];
+                }
+                else{
+                    comand=divCom[0];
+                }
 
                 //case con analizarComando que raaliza las acciones pedidas
-                switch (analizarComando(divCom[0])) {
+                switch (analizarComando(comand)) {
                     //0 y -1 son errores
                     case 0:
                     case -1:
@@ -208,7 +216,7 @@ public class Menu {
             switch (comando.toLowerCase()){
                 case "lanzardados": return 21;
                 case "crearjugador": return 22;
-                case "jugadorturno": return 23;
+                case "jugador": return 23;
                 case "listarjugadores": return 24;
 
                 case "salir": return 28;

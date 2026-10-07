@@ -59,9 +59,16 @@ public class MonopolyETSE {
 
             //separamos String en partes para los comandos de mas de 1 palabra
             String[] divEn = answ.split(" ");
+            String comand;
+            if(divEn.length>=2){
+                comand=divEn[0]+divEn[1];
+            }
+            else{
+               comand=divEn[0];
+            }
 
             //pasamos el comando por el método analizarComando
-            int sec = menu.analizarComando(divEn[0]);
+            int sec = menu.analizarComando(comand);
             if (sec == -1) System.out.println("Comando invalido1");
             else if (sec > 20 && sec <29) {
                 //switch para saber que accion hacer
@@ -81,7 +88,7 @@ public class MonopolyETSE {
                         //encontramos casilla de salida
                         Casilla ini = menu.getTablero().encontrar_casilla("salida");
                         //utilizamos los otros Strings de divEn[i] para los parametros
-                        Jugador j = Jugador.newJugador(divEn[1],divEn[2],ini,menu.getAvatares(),menu.getJugadores());
+                        Jugador j = Jugador.newJugador(divEn[2],divEn[3],ini,menu.getAvatares(),menu.getJugadores());
 
                         break;
 
