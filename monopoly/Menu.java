@@ -25,7 +25,7 @@ public class Menu {
     private Jugador banca; //El jugador banca.
     private boolean tirado; //Booleano para comprobar si el jugador que tiene el turno ha tirado o no.
     private boolean solvente; //Booleano para comprobar si el jugador que tiene el turno es solvente, es decir, si ha pagado sus deudas.
-
+    private float boteParking = 0;
 
     //GETTERS
     public ArrayList<Avatar> getAvatares() {
@@ -36,6 +36,7 @@ public class Menu {
         return jugadores;
 
     }
+    public float getBoteParking(){return boteParking;}
 
     public int getTurno(){
         return turno;
@@ -68,6 +69,10 @@ public class Menu {
 
     public void setTableroMenu(Tablero tablero){
         this.tablero = tablero;
+    }
+
+    public void setBoteParking(float boteParking){
+        this.boteParking = boteParking;
     }
 
     //Constructor
@@ -146,10 +151,15 @@ public class Menu {
 
                         //vemos que jugador tiene el turno y lo sacamos
                         Avatar jugador = this.getAvatares().get(this.getTurno());
+                        Jugador jugadorActual = this.getJugadores().get(this.getTurno());
 
                         //invocamos a la funcion que mueve el avatar para
                         jugador.moverAvatar(this.getTablero().getPosiciones(), casillasMover);
+
+                        //Evaluamos la casilla de destino (alquileres, impuestos, parking, carcel, etc.)
+                        this.evaluarCasillaDestino(jugadorActual,jugador.getLugar(), casillasMover);
                         break;
+
                     //22 creamos nuevo jugador
                     case 22:
                         //public Jugador(String nombre, String tipoAvatar, Casilla inicio, ArrayList<Avatar> avCreados)
@@ -279,6 +289,114 @@ public class Menu {
 
     // Metodo que realiza las acciones asociadas al comando 'acabar turno'.
     private void acabarTurno() {
+    }
+    //metodo que evalua el tipo de casilla en el que cae el jugador y lo que ocurre en cada caso
+    private void evaluarCasillaDestino(Jugador actual, Casilla destino, int sumaDados) {
+        String tipo = destino.getTipo().toLowerCase();
+
+        switch (tipo) {
+            case "solar":
+                Jugador duenhoSolar = destino.getDuenho();
+                // Comprobamos si tiene dueño, si no es el jugador actual y si no está hipotecada
+                if (duenhoSolar != null && !duenhoSolar.equals(this.banca) && !duenhoSolar.equals(actual)) {
+                    float alquiler = destino.getImpuesto(); //se pone el alquiler en el apartado impuesto
+
+                    // Si el dueño posee todo el grupo, el alquiler se duplica[cite: 3]
+                    if (destino.getGrupo() != null && destino.getDuenho().getAvatar() != null && destino.getGrupo().esDuenhoGrupo(destino.getDuenho())&& destino.getGrupo().esDuenhoGrupo(duenhoSolar)) {
+                        alquiler *= 2;
+                    }
+
+                    // Le restamos el dinero al jugador actual (pasando el valor en negativo)
+                    actual.sumarFortuna((-1) * alquiler);
+                    actual.sumarGastos(alquiler);
+
+                    // Le sumamos el dinero al dueño de la casilla
+                    duenhoSolar.sumarFortuna(alquiler);
+
+                    System.out.printf("Se han pagado %.0f€ de alquiler a %s.\n", alquiler, destino.getDuenho().getNombre());
+
+                }
+                break;
+
+            case "servicio":
+                Jugador duenhoServicio = destino.getDuenho();
+
+                if (duenhoServicio != null && !duenhoServicio.equals(this.banca) && !duenhoServicio.equals(actual)) {
+                    float alquiler = 4.0f * sumaDados * 50000.0f;
+
+                    actual.sumarFortuna(-alquiler);
+                    actual.sumarGastos(alquiler);
+
+                    duenhoServicio.sumarFortuna(alquiler);
+                    System.out.printf("Se han pagado %.0f€ de servicio a %s.\n", alquiler, duenhoServicio.getNombre());
+                }
+                break;
+
+            case "transporte":
+                Jugador duenhoTransporte = destino.getDuenho();
+
+                if (duenhoTransporte != null && !duenhoTransporte.equals(this.banca) && !duenhoTransporte.equals(actual)) {
+                    float alquiler = destino.getImpuesto();
+
+                    actual.sumarFortuna(-alquiler);
+                    actual.sumarGastos(alquiler);
+
+                    duenhoTransporte.sumarFortuna(alquiler);
+                    System.out.printf("Se han pagado %.0f€ de transporte a %s.\n", alquiler, duenhoTransporte.getNombre());
+                }
+                break;
+            //para tener un sitio donde almacenar los impuestos cree el boteParking como atributo
+            case "impuesto":
+                float impuesto = 2000000; // 2.000.000€ depositados en Parking[cite: 3, 4]
+                actual.sumarFortuna((-1)*impuesto);
+                // Sumamos al bote usando el getter y setter
+                this.setBoteParking(this.getBoteParking() + impuesto);
+                System.out.printf("El jugador %s paga %.0f€ de impuestos que se depositan en el Parking.\n", actual.getNombre(), impuesto);
+                break;
+
+            case "parking":
+                float boteActual = this.getBoteParking();
+
+                if (boteActual > 0) {
+                    actual.sumarFortuna(boteActual);
+                    System.out.printf("El jugador %s recibe %.0f€ del bote del Parking.\n",
+                            actual.getNombre(), boteActual);
+
+                    // Reiniciamos el bote a 0 usando el setter
+                    this.setBoteParking(0.0f); //[cite: 4]
+                } else {
+                    System.out.println("El Parking no tiene bote acumulado.");
+                }
+                break;
+
+            case "ircarcel":
+                Avatar jugador = this.getAvatares().get(this.getTurno());
+                Casilla carcel = tablero.encontrar_casilla("carcel");
+                int posActual = actual.getAvatar().getLugar().getPosicion(); // Posición de 1 a 40
+                int posCarcel = 11; // Posición de la Cárcel
+
+                // Calculamos las casillas a avanzar hasta llegar a la Cárcel
+                int casillasMover;
+                if (posCarcel >= posActual) {
+                    casillasMover = posCarcel - posActual;
+                } else {
+                    casillasMover = (40 - posActual) + posCarcel;
+                }
+
+                // Movemos el avatar del jugador con la estructura indicada
+                jugador.moverAvatar(this.getTablero().getPosiciones(), casillasMover);
+
+                // Marcamos al jugador como encarcelado
+                actual.setEnCarcel(true);
+
+                System.out.println("El avatar se ha movido directamente a la casilla de Cárcel.");
+                break;
+
+            case "suerte":
+            case "caja":
+                // No realiza acción en esta primera entrega[cite: 6]
+                break;
+        }
     }
 
 }
