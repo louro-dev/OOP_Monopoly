@@ -6,4 +6,6 @@ crear Jugador PabloGOat Coche
 jugador
 Lanzar Dados
 listar Jugadores
+Acabar Turno
+jugador
 Lanzar Dados

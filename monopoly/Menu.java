@@ -189,6 +189,16 @@ public class Menu {
                             System.out.println(jug+"\n");
                         }
 
+                    case 25:
+                        //
+                        if(this.getTurno()==this.getAvatares().size()-1){
+                            this.turno=0;
+                        }
+                        else{
+                            this.turno=this.getTurno()+1;
+                        }
+                        System.out.println("Jugador que tiene el turno:"+this.getJugadores().get(this.getTurno()).getNombre()+"\n");
+                        ctrl=false;
                         break;
                     default:
                         break;
@@ -228,6 +238,7 @@ public class Menu {
                 case "crearjugador": return 22;
                 case "jugador": return 23;
                 case "listarjugadores": return 24;
+                case "acabarturno":return 25;
 
                 case "salir": return 28;
             }
