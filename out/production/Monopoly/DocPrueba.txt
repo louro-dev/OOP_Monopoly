@@ -1,9 +1,20 @@
 crear Jugador Rocio Coche
 crear Jugador Rodrigo Coche
-crear Jugador Piouvi Coche
-crear Jugador Javibi Coche
-crear Jugador PabloGOat Coche
-jugador
-Lanzar Dados
-listar Jugadores
-Lanzar Dados
+lanzar dados 6+6
+acabar turno
+acabar turno
+lanzar dados 6+6
+acabar turno
+acabar turno
+lanzar dados 3+3
+acabar turno
+acabar turno
+lanzar dados 1+1
+acabar turno
+acabar turno
+lanzar dados 1+1
+acabar turno
+acabar turno
+lanzar dados
+acabar turno
+acabar turno

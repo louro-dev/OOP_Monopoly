@@ -1,41 +1,36 @@
 # OOP_Monopoly
 devs: Rodrigo Rios Louro & Rocio Perez-Muñuzuri Fernandez & Jorge Piñeiro Ouviña  
+
 proyect for OOP class of programing the game monopoly in Java
 
-Mejoras:
 
-correccion concepto analizar comando: el switch para la accion se hará ahora en
-MonopolyETSE para evitar modificar los atributos del metodo, y se utilizará el
-método para saber que tipo de comando en el sentido de orden o fichero que contiene
-ordenes. Lo devolerá como un entero.
+*----SIGUIENTE CAMBIO GRANDE A HACER-----*
+Primero acabar funcionalidades, con esta arquiectura funciona pero hay codigo repetido
 
-CAMBIADO METODO EN MENU DE PRIVATE A PUBLIC. 
+    -Gestionar dentro de Analizar Comando toda a parte de acciones para no repetir 2 veces la 
+    estructura switch
 
-añadido getter y setter para el entero que guarda el ID del jugador con el turno en 
-menu
+*to-do*:
 
-se ha comenzado la implementacion de la aceptacion de comandos con un documento
+    -ver porque se imprime Jugador tal ha salido de la carcel en la tirada 2 y no en la 3
 
-posibilidad: hacer que AnalizarComando devuelva numero de 2 cifras si es comando
-para saber que comando es y no usar un switch con Strings. Seria mas seguro en fallos 
-de entrada por mayusculas, ya que dentro de este usamos toLoersCase ppara el 
-analisis de las entradas.
+*Mejoras:*
 
-Implementada funcion IniciarPartida: se encarga de leer el documento inicial y hacer el
-tratamiento de los comandos que hay dentro de el, inicializa la banca y le da todas las
-propiedades y inicializa el tablero.
+    -Ahora funciona con comandos de 2 palabras
 
-Implementamos dar de alta un jugador, bien pidiendolo por comando o dando la orden desde
-el documento Inicial. 
+    -Anhadida funcionalidad para acabar turno
 
-Falta implementar que el documento se pueda pasar por los args, por ahora hay que pedirlo
+    -cambiada logica de los dados: ahora se declaran dentro de menu y solo se llaman a modificar los 
+     valores dentro de lanzar dados, sin crear instancias auxiliares cada vez
 
-Se ha añadido un .txt de prueba para que se vayan pidiendo poco a poco desde ese documento
-las funciones implementadas para probarlas
+    -Anhadida condicion para setter de dados
 
-Funciona con documenti inicial, crea jugadores correctamente 1 a 1 pasandoselo por linea de
-comandos y lanza los dados para que el primero avance
+    -Anhadida funcionalidad dados deterministas
 
-Creados toString para imprimir jugadores, imprimir avatares.
+    -implementada logica de tiradas si el jugador esta en la carcel
 
-Implementada funcionalidad que lista jugadores.
+  *CAMBIO DE LOGICA GORDO:*
+
+    -gestionarase toda a partida desde a clase menu, en MonopolyETSE que solo este o menu=new Menu();
+
+
