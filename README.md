@@ -6,29 +6,21 @@ proyect for OOP class of programing the game monopoly in Java
 
 *to-do*:
 
-    -ver porque se imprime Jugador tal ha salido de la carcel en la tirada 2 y no en la 3
-    -revisar que al salir de la carcel se va a la casilla corecta
-    -implementar que si sacas dobles sales de la carcel
+    -implementar o valor das propieades segun as vas subindo de nivel para imprimilo co toString de Casilla
     -seguir implementando funcionalidades
 
 *Mejoras:*
 
-    -Ahora funciona con comandos de 2 palabras
-
-    -Anhadida funcionalidad para acabar turno
-
-    -cambiada logica de los dados: ahora se declaran dentro de menu y solo se llaman a modificar los 
-     valores dentro de lanzar dados, sin crear instancias auxiliares cada vez
-
-    -Anhadida condicion para setter de dados
-
-    -Anhadida funcionalidad dados deterministas
-
-    -implementada logica de tiradas si el jugador esta en la carcel
-
-  *CAMBIO DE LOGICA GORDO:*
-
-    -gestionarase toda a partida desde a clase menu, en MonopolyETSE que solo este o menu=new Menu();
+    -funciona salir de carcel al sacar dobles
+    -funciona salir de carcel por numero de tiradas e interaccionar con el menu
+    -implementada opcion para salir de la carcel pagando. Solo se imprime en el menu si el jugador esta encarcelado
+    -implementado metodo esSolvente para saber si un jugador tiene fondos para pagar algo al llamar a sumarFortuna con valor megativo
+    -sumarFortuna devuelve ahora Boolean par que cuando se usa se devuelva si es solvente o no
+    -Cambiados todos los sumarFortuna para que si sale false pare lo que este haciendo
+    -implementado toString de los dados
+    -Imprimir valor de los dados cuando se invoca a lanzar dados
+    -Refactorización función encarcelar
+    -Usamor metodo encarcelar en el metodo que analiza las casillas en las que se cae para encarcelar
 
 
 

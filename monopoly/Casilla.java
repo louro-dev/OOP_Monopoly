@@ -198,10 +198,7 @@ public class Casilla {
 
         //if (this is_in banca.getPrpopiedades()){
         // return true;
-        if(actual.getFortuna()<this.getImpuesto()){
-            return false;
-        }
-        return true;
+        return !(actual.getFortuna() < this.getImpuesto());
     }
 
     /*Metodo usado para comprar una casilla determinada. Parámetros:
@@ -270,7 +267,7 @@ public class Casilla {
     @Override
     public String toString() { // Para imprimir los nombres e ID de las casillas
         String id = "";
-        if(avatares.size() != 0) {
+        if(!avatares.isEmpty()) {
             id ="&";
             for(int i=0; i<avatares.size(); i++) {
                 id+= avatares.get(i).getId();
@@ -294,4 +291,14 @@ public class Casilla {
         // Resetea el color ANSI al final para no teñir las siguientes casillas ni los bordes.
         return obtenerCodigoColor() + celda + Valor.RESET;
     }
+
+    public String toString(boolean Detallado){
+        //acabar de implementar os 
+        return("tipo: "+getTipo()+"\ngrupo: "+getGrupo()+"\npropietarios: "+getDuenho()+"\nvalor: "+getValor()+
+                "\nalquiler: "+getImpuesto()+"\nvalor hotel: "+getAlquilerHotel()+"\nvalor casa: "+getAlquilerCasa()+
+                "\nvalor piscina: "+getAlquilerPiscina()+"\nvalor pista de deporte: "+getAlquilerPista()+
+                "\nalquiler casa: ");
+    }
+
+
 }

@@ -213,6 +213,7 @@ public class Menu {
 
                             //sacamos el entero con el valor
                             int casillasMover = this.getDado1().getValor() + this.getDado2().getValor();
+                            System.out.println("Dado1:"+this.getDado1()+"\nDado2:"+this.getDado2());
 
 
                             //vemos que jugador tiene el turno y lo sacamos
@@ -220,20 +221,20 @@ public class Menu {
                             Jugador jugadorActual = this.getJugadores().get(this.getTurno());
 
                             //logica de tirada si esta en la carcel
-                            if(this.getAvatares().get(this.getTurno()).getJugador().getEnCarcel()){
-                                //si os dados coinciden salese de carcel, mirar si usa
-                                System.out.println("tirada numero:"+this.getAvatares().get(this.getTurno()).getJugador().getTiradasCarcel());
+                            if(jugadorActual.getEnCarcel()){
+                                System.out.println("tirada numero: "+(jugadorActual.getTiradasCarcel()+1));
                                 System.out.println("tiradas para salir:3");
                                 ctrl=false;
-                                this.getAvatares().get(this.getTurno()).getJugador().setTiradasCarcel(
-                                        this.getAvatares().get(this.getTurno()).getJugador().getTiradasCarcel()+1);
-                                if(this.getAvatares().get(this.getTurno()).getJugador().getTiradasCarcel() ==3){
-                                    System.out.println("jugador"+this.getAvatares().get(this.getTurno()).getJugador().getNombre()
-                                            +"ha salido de la carcel!!");
-                                    this.getAvatares().get(this.getTurno()).getJugador().setEnCarcel(false);
-                                    this.getAvatares().get(this.getTurno()).getJugador().setTiradasCarcel(0);
+                                jugadorActual.setTiradasCarcel(jugadorActual.getTiradasCarcel()+1);
+                                if(jugadorActual.getTiradasCarcel() ==3 || this.getDado1().getValor()==this.getDado2().getValor()){
+                                    System.out.println(jugadorActual.getNombre() +"ha salido de la carcel!!");
+                                    jugadorActual.setEnCarcel(false);
+
+                                    jugadorActual.setTiradasCarcel(0);
+                                    ctrl=true;
                                 }
                             }
+
                             if(!this.getAvatares().get(this.getTurno()).getJugador().getEnCarcel()){
                                 //invocamos a la funcion que mueve el avatar para
                                 jugador.moverAvatar(this.getTablero().getPosiciones(), casillasMover);
@@ -241,7 +242,6 @@ public class Menu {
                                 //Evaluamos la casilla de destino (alquileres, impuestos, parking, carcel, etc.)
                                 this.evaluarCasillaDestino(jugadorActual, jugador.getLugar(), casillasMover);
                             }
-
 
                             tirado = true;
 
@@ -293,6 +293,24 @@ public class Menu {
                             ctrl = false;
                             tirado=false;
                             break;
+
+                        case 26:
+                            Jugador jug=this.getJugadores().get(this.getTurno());
+                            ctrl=false;
+                            if(!jug.getEnCarcel()){
+                                System.out.println("Comando invalido");
+                                break;
+                            }
+                            if(!jug.sumarFortuna((-1)*500000)){
+
+                                break;
+                            }
+                            this.getBanca().sumarFortuna(500000);
+                            jug.setTiradasCarcel(0);
+                            jug.setEnCarcel(false);
+
+                            System.out.println(jug.getNombre()+" ha pagado 500000 para salir de la carcel.\nPuede lanzar los dados\n");
+                            break;
                         default:
                             break;
                     }
@@ -307,10 +325,13 @@ public class Menu {
             ctrl=true;
             //imprimimos la opcion para pedir los dados y la escaneamos con sc.nextLine()
             Scanner sc = new Scanner(System.in);
-            System.out.println("--------------------MENU--------------------\nlanzar dados: lanzar Dados\n" +
-                    "Lanzar dados determinados: lanzad Dados x+y\n" +
-                    "Crear jugador: crear Jugador nombre tipo_avatar\nJugador al que le toca: jugador Turno\n" +
-                    "Listar jugadores: listar Jugadores\nAcabar Turno: Acabar Turno\nAcabar Partida: salir\n");
+            System.out.println("--------------------MENU--------------------\nlanzar los dados: lanzar Dados\n" +
+                    "Lanzar los dados determinados: lanzad Dados x+y\n" +
+                    "Crear un jugador: crear Jugador nombre tipo_avatar\nJugador al que le toca: jugador Turno\n" +
+                    "Listar los jugadores: listar Jugadores\nAcabar el turno: Acabar Turno\nAcabar la partida: salir\n");
+            if(this.getJugadores().get(this.getTurno()).getEnCarcel()){
+                System.out.println("Salir de la carcel: Salir Carcel\n");
+            }
             String answ = sc.nextLine();
 
             //separamos String en partes para los comandos de mas de 1 palabra
@@ -326,7 +347,7 @@ public class Menu {
             //pasamos el comando por el método analizarComando
             int sec = this.analizarComando(comand);
             if (sec == -1) System.out.println("Comando invalido1");
-            else if (sec > 20 && sec <29) {
+            else if (sec > 20 && sec <=29) {
                 //switch para saber que accion hacer
                 switch (sec) {
                     case 21:
@@ -353,6 +374,7 @@ public class Menu {
 
                         //sacamos el entero con el valor
                         int casillasMover = this.getDado1().getValor() + this.getDado2().getValor();
+                        System.out.println("Dado1:"+this.getDado1()+"\nDado2:"+this.getDado2());
 
 
                         //vemos que jugador tiene el turno y lo sacamos
@@ -360,18 +382,17 @@ public class Menu {
                         Jugador jugadorActual = this.getJugadores().get(this.getTurno());
 
                         //logica de tirada si esta en la carcel
-                        if(this.getAvatares().get(this.getTurno()).getJugador().getEnCarcel()){
-                            //si os dados coinciden salese de carcel, mirar si usa
-                            System.out.println("tirada numero:"+(this.getAvatares().get(this.getTurno()).getJugador().getTiradasCarcel())+1);
-                            System.out.println("tiradas para salir:3");
+                        if(jugadorActual.getEnCarcel()){
+                            System.out.println("tirada numero: "+(jugadorActual.getTiradasCarcel()+1));
+                            System.out.println(" tiradas para salir:3");
                             ctrl=false;
-                            this.getAvatares().get(this.getTurno()).getJugador().setTiradasCarcel(
-                                    this.getAvatares().get(this.getTurno()).getJugador().getTiradasCarcel()+1);
-                            if(this.getAvatares().get(this.getTurno()).getJugador().getTiradasCarcel() ==3){
-                                System.out.println("jugador"+this.getAvatares().get(this.getTurno()).getJugador().getNombre()
-                                        +"ha salido de la carcel!!");
-                                this.getAvatares().get(this.getTurno()).getJugador().setEnCarcel(false);
-                                this.getAvatares().get(this.getTurno()).getJugador().setTiradasCarcel(0);
+                            jugadorActual.setTiradasCarcel(jugadorActual.getTiradasCarcel()+1);
+                            if(jugadorActual.getTiradasCarcel() ==3 || this.getDado1().getValor()==this.getDado2().getValor()){
+                                System.out.println(jugadorActual.getNombre() +" ha salido de la carcel!!");
+                                jugadorActual.setEnCarcel(false);
+
+                                jugadorActual.setTiradasCarcel(0);
+                                ctrl=true;
                             }
                         }
 
@@ -420,7 +441,6 @@ public class Menu {
                         break;
 
                     case 25:
-                        //
                         if (this.getTurno() == this.getAvatares().size() - 1) {
                             this.turno = 0;
                         } else {
@@ -431,7 +451,25 @@ public class Menu {
                         tirado=false;
                         break;
 
-                    case 28:
+                    case 26:
+                        Jugador jug=this.getJugadores().get(this.getTurno());
+                        ctrl=false;
+                        if(!jug.getEnCarcel()){
+                            System.out.println("Comando invalido");
+                            break;
+                        }
+                        if(!jug.sumarFortuna((-1)*500000)){
+
+                            break;
+                        }
+                        this.getBanca().sumarFortuna(500000);
+                        jug.setTiradasCarcel(0);
+                        jug.setEnCarcel(false);
+
+                        System.out.println(jug.getNombre()+" ha pagado 500000 para salir de la carcel.\nPuede lanzar los dados\n");
+                        break;
+
+                    case 29:
                         System.out.println("\n"+this.getTablero());
                         end = true;
                         ctrl=false;
@@ -440,7 +478,7 @@ public class Menu {
 
                     default:
                         ctrl=false;
-                        System.out.println("Comando invalido2");
+                        System.out.println("Comando invalido");
                 }
             }
             if (ctrl) System.out.println("\n"+this.getTablero());
@@ -459,6 +497,8 @@ public class Menu {
     //     22 si es crear jugador
     //     23 si es decir que jugador tiene el turno
     //     24 si es listar los jugadores
+    //     25 para acabar el turnno
+    //     26 para salir de carcel pagando
     //
     //     29 si se pide salir y acabar la partida
     private int analizarComando(String comando) {
@@ -478,8 +518,9 @@ public class Menu {
                 case "jugador": return 23;
                 case "listarjugadores": return 24;
                 case "acabarturno":return 25;
+                case "salircarcel": return 26;
 
-                case "salir": return 28;
+                case "salir": return 29;
             }
         }
         return -1;
@@ -554,7 +595,9 @@ public class Menu {
                     }
 
                     // Le restamos el dinero al jugador actual (pasando el valor en negativo)
-                    actual.sumarFortuna((-1) * alquiler);
+                    if(!actual.sumarFortuna((-1) * alquiler)){
+                        break;
+                    };
                     actual.sumarGastos(alquiler);
 
                     // Le sumamos el dinero al dueño de la casilla
@@ -571,7 +614,9 @@ public class Menu {
                 if (duenhoServicio != null && !duenhoServicio.equals(this.banca) && !duenhoServicio.equals(actual)) {
                     float alquiler = 4.0f * sumaDados * 50000.0f;
 
-                    actual.sumarFortuna(-alquiler);
+                    if(!actual.sumarFortuna(-alquiler)){
+                        break;
+                    }
                     actual.sumarGastos(alquiler);
 
                     duenhoServicio.sumarFortuna(alquiler);
@@ -585,7 +630,9 @@ public class Menu {
                 if (duenhoTransporte != null && !duenhoTransporte.equals(this.banca) && !duenhoTransporte.equals(actual)) {
                     float alquiler = destino.getImpuesto();
 
-                    actual.sumarFortuna(-alquiler);
+                    if(!actual.sumarFortuna((-1)*alquiler)){
+                        break;
+                    }
                     actual.sumarGastos(alquiler);
 
                     duenhoTransporte.sumarFortuna(alquiler);
@@ -595,7 +642,9 @@ public class Menu {
             //para tener un sitio donde almacenar los impuestos cree el boteParking como atributo
             case "impuesto":
                 float impuesto = 2000000; // 2.000.000€ depositados en Parking[cite: 3, 4]
-                actual.sumarFortuna((-1)*impuesto);
+                if(!actual.sumarFortuna((-1)*impuesto)){
+                    break;
+                }
                 // Sumamos al bote usando el getter y setter
                 this.setBoteParking(this.getBoteParking() + impuesto);
                 System.out.printf("El jugador %s paga %.0f€ de impuestos que se depositan en el Parking.\n", actual.getNombre(), impuesto);
@@ -617,24 +666,8 @@ public class Menu {
                 break;
 
             case "ircarcel":
-                Avatar jugador = this.getAvatares().get(this.getTurno());
-                Casilla carcel = tablero.encontrar_casilla("carcel");
-                int posActual = actual.getAvatar().getLugar().getPosicion(); // Posición de 1 a 40
-                int posCarcel = 11; // Posición de la Cárcel
-
-                // Calculamos las casillas a avanzar hasta llegar a la Cárcel
-                int casillasMover;
-                if (posCarcel >= posActual) {
-                    casillasMover = posCarcel - posActual;
-                } else {
-                    casillasMover = (40 - posActual) + posCarcel;
-                }
-
-                // Movemos el avatar del jugador con la estructura indicada
-                jugador.moverAvatar(this.getTablero().getPosiciones(), casillasMover);
-
-                // Marcamos al jugador como encarcelado
-                actual.setEnCarcel(true);
+                Jugador jugador = this.getJugadores().get(this.getTurno());
+                jugador.encarcelar(this.getTablero());
 
                 System.out.println("El avatar se ha movido directamente a la casilla de Cárcel.");
                 break;

@@ -35,5 +35,8 @@ public class Dado {
         return valor;
     }
 
-
+    @Override
+    public String toString() {
+        return " "+this.getValor();
+    }
 }

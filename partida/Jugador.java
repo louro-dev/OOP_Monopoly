@@ -120,10 +120,25 @@ public class Jugador {
         propiedades.remove(casilla);
     }
 
-    //Metodo para añadir fortuna a un jugador
+    //Metodo que comprueba si un jugador es solvente a la hora de realizar cambios en su fortuna
+    private boolean esSolvente(float precio){
+        if(this.getFortuna()<((-1)*precio)){
+            System.out.println("Fondos insuficientes");
+            return false;
+        }
+        return true;
+    }
+
+    //Metodo para añadir o quitar fortuna a un jugador
     //Como parámetro se pide el valor a añadir. Si hay que restar fortuna, se pasaría un valor negativo.
-    public void sumarFortuna(float valor) {
+    public boolean sumarFortuna(float valor) {
+        if (valor<0){
+            if(!this.esSolvente(valor)){
+                return false;
+            }
+        }
         fortuna+=valor;
+        return true;
     }
 
     //Metodo para sumar gastos a un jugador.
@@ -134,26 +149,26 @@ public class Jugador {
 
     /*Metodo para establecer al jugador en la cárcel.
     * Se requiere disponer de las casillas del tablero para ello (por eso se pasan como parámetro).*/
-    public void encarcelar(ArrayList<ArrayList<Casilla>> pos) {
-        enCarcel = true;
-        int tirada;
+    public void encarcelar(Tablero tab) {
+        this.enCarcel = true;
+        this.tiradasCarcel=0;
 
-        //conseguir posicion de la casilla carcel
-        int posicion = pos.get(0).get(10).getPosicion();
+        //obtenemos la posicion de la carcel
+        Casilla prison = tab.encontrar_casilla("Carcel");
 
         //calcular cual deberia ser el valor de la tirada para caer en la carcel
-        // Nos quitamos de la casilla actual
         int actual = this.avatar.getLugar().getPosicion();
-        this.avatar.getLugar().eliminarAvatar(this.avatar);
 
+        int distancia;
         // Calculamos la nueva posición (1 a 40)
-        if(actual>posicion){
-            tirada = 40+(posicion-actual);
+        if(actual>prison.getPosicion()){
+            distancia = 40+(prison.getPosicion()-actual);
         }
         else{
-            tirada = posicion-actual;
+            distancia = prison.getPosicion()-actual;
         }
-        this.avatar.moverAvatar(pos,tirada);
+
+        this.avatar.moverAvatar(tab.getPosiciones(), distancia);
     }
 
     @Override

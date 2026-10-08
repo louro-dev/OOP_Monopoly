@@ -9,12 +9,4 @@ acabar turno
 lanzar dados 3+3
 acabar turno
 acabar turno
-lanzar dados 1+1
-acabar turno
-acabar turno
-lanzar dados 1+1
-acabar turno
-acabar turno
-lanzar dados
-acabar turno
-acabar turno
+salir carcel
