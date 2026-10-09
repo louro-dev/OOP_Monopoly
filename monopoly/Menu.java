@@ -1,9 +1,11 @@
 package monopoly;
 
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Stream;
 import java.io.BufferedReader;
@@ -27,7 +29,7 @@ public class Menu {
     private boolean solvente; //Booleano para comprobar si el jugador que tiene el turno es solvente, es decir, si ha pagado sus deudas.
     private float boteParking = 0;
 
-    //CONSTRUCTOR
+    //CONSTRUCTORf
     public Menu(String args[]){
         jugadores = new ArrayList<>();
         avatares = new ArrayList<>();
@@ -250,7 +252,6 @@ public class Menu {
                         //22 creamos nuevo jugador
                         case 22:
                             int tam = this.getAvatares().size();
-                            //public Jugador(String nombre, String tipoAvatar, Casilla inicio, ArrayList<Avatar> avCreados)
                             Jugador j = Jugador.newJugador(divCom[2], divCom[3], ini, this.getAvatares(), this.getJugadores());
 
                             if(this.getAvatares().size() == tam){
@@ -301,16 +302,37 @@ public class Menu {
                                 System.out.println("Comando invalido");
                                 break;
                             }
-                            if(!jug.sumarFortuna((-1)*500000)){
+                            if(!jug.sumarFortuna((-1)*Valor.COSTE_SALIR_CARCEL)){
 
                                 break;
                             }
-                            this.getBanca().sumarFortuna(500000);
+                            this.getBanca().sumarFortuna(Valor.COSTE_SALIR_CARCEL);
                             jug.setTiradasCarcel(0);
                             jug.setEnCarcel(false);
 
                             System.out.println(jug.getNombre()+" ha pagado 500000 para salir de la carcel.\nPuede lanzar los dados\n");
                             break;
+
+                        case 27:
+                            ctrl=false;
+                            Casilla atc= this.getTablero().encontrar_casilla(divCom[1]);
+                            if(atc!=null) {
+                                System.out.println(atc.toString(atc.getTipo()));
+                            }
+                            else{
+                                System.out.println("No existe esa casilla");
+                            }
+
+                            break;
+
+                        case 28:
+                            ctrl=false;
+                            Jugador ply = Jugador.encontrarJugador(divCom[2],this.getJugadores());
+                            if(ply != null) {
+                                System.out.println(ply.toString(ply.getNombre()));
+                            }
+                            break;
+
                         default:
                             break;
                     }
@@ -320,15 +342,17 @@ public class Menu {
                 System.out.println("Error al leer el archivo2");
             }
         }
+        //________________________________________________________________
+        //----------------------------------------------------------------
         do{
             //reiniciamos variable de control de impresion
             ctrl=true;
             //imprimimos la opcion para pedir los dados y la escaneamos con sc.nextLine()
             Scanner sc = new Scanner(System.in);
             System.out.println("--------------------MENU--------------------\nlanzar los dados: lanzar Dados\n" +
-                    "Lanzar los dados determinados: lanzad Dados x+y\n" +
-                    "Crear un jugador: crear Jugador nombre tipo_avatar\nJugador al que le toca: jugador Turno\n" +
-                    "Listar los jugadores: listar Jugadores\nAcabar el turno: Acabar Turno\nAcabar la partida: salir\n");
+                    "Lanzar los dados determinados: lanzad Dados <x+y>\nCrear un jugador: crear Jugador <nombre> <tipo_avatar>"+
+                    "\nJugador al que le toca: jugador\nListar los jugadores: listar Jugadores"+"Describir una casilla: describir <casilla>"+
+                    "Describir a un jugador: describir jugador <nombre>"+"\nAcabar el turno: Acabar Turno\nAcabar la partida: salir\n");
             if(this.getJugadores().get(this.getTurno()).getEnCarcel()){
                 System.out.println("Salir de la carcel: Salir Carcel\n");
             }
@@ -347,7 +371,7 @@ public class Menu {
             //pasamos el comando por el método analizarComando
             int sec = this.analizarComando(comand);
             if (sec == -1) System.out.println("Comando invalido1");
-            else if (sec > 20 && sec <=29) {
+            else if (sec >= 20 && sec <=29) {
                 //switch para saber que accion hacer
                 switch (sec) {
                     case 21:
@@ -458,23 +482,46 @@ public class Menu {
                             System.out.println("Comando invalido");
                             break;
                         }
-                        if(!jug.sumarFortuna((-1)*500000)){
+                        if(!jug.sumarFortuna((-1)*Valor.COSTE_SALIR_CARCEL)){
 
                             break;
                         }
-                        this.getBanca().sumarFortuna(500000);
+                        this.getBanca().sumarFortuna(Valor.COSTE_SALIR_CARCEL);
                         jug.setTiradasCarcel(0);
                         jug.setEnCarcel(false);
 
                         System.out.println(jug.getNombre()+" ha pagado 500000 para salir de la carcel.\nPuede lanzar los dados\n");
                         break;
 
-                    case 29:
+                    case 27:
+                        ctrl=false;
+                        Casilla atc= this.getTablero().encontrar_casilla(divEn[1]);
+                        if(atc!=null) {
+                            System.out.println(atc.toString(atc.getTipo()));
+                        }
+                        else{
+                            System.out.println("No existe esa casilla");
+                        }
+
+                        break;
+
+                    case 28:
+                        ctrl=false;
+                        Jugador ply = Jugador.encontrarJugador(divEn[2],this.getJugadores());
+                        if(ply != null) {
+                            System.out.println(ply.toString(ply.getNombre()));
+                        }
+                        break;
+
+                    case 20:
                         System.out.println("\n"+this.getTablero());
                         end = true;
                         ctrl=false;
                         System.out.println("Terminando partida...");
                         break;
+
+                    case 29:
+
 
                     default:
                         ctrl=false;
@@ -492,15 +539,7 @@ public class Menu {
     //devuelve:
     // -1 si ha habido un error
     // 1 si la entrada es un documento
-    // 2x si la entrada es un comando:
-    //     21 si es lanzar dados
-    //     22 si es crear jugador
-    //     23 si es decir que jugador tiene el turno
-    //     24 si es listar los jugadores
-    //     25 para acabar el turnno
-    //     26 para salir de carcel pagando
-    //
-    //     29 si se pide salir y acabar la partida
+    // 2x/3x si la entrada es un comando:
     private int analizarComando(String comando) {
         //capa1: analizamos si es documento o si es comando
         if(comando.toLowerCase().endsWith(".txt")){
@@ -508,19 +547,26 @@ public class Menu {
             File doc = new File(comando);
             if(doc.exists() && doc.isFile()) return 1;
             else return -1;
+
         }
+
+        String cmd=comando.toLowerCase(Locale.ROOT);
+        if(cmd.equals("describirjugador"))return 28;
+        if(cmd.startsWith("describir")) return 27;
         else{
             //capa 2: hacemos un switch con todos los comandos posibles para ver que coincida con uno de ellos
             // el toLowerCase se usa por si hya mayusculas
-            switch (comando.toLowerCase()){
+            switch (cmd){
                 case "lanzardados": return 21;
                 case "crearjugador": return 22;
                 case "jugador": return 23;
                 case "listarjugadores": return 24;
                 case "acabarturno":return 25;
                 case "salircarcel": return 26;
-
-                case "salir": return 29;
+                //hueco del "case 27" de describir casilla que sale antes por el return
+                //hueco del "case 28" de describir jugador, que no puede ir aqui porque se confundiria con el 2
+                case "comprarcasilla": return 29;
+                case "salir": return 20;
             }
         }
         return -1;

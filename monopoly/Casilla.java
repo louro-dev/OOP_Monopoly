@@ -27,6 +27,7 @@ public class Casilla {
     private float alquilerHotel;
     private float alquilerPiscina;
     private float alquilerPista;
+    private boolean hipotecada; //atributo que dice si una casilla esta hipotecada o no
 
     //Constructores:
     public Casilla() {
@@ -119,6 +120,7 @@ public class Casilla {
     public float getAlquilerPista() {
         return alquilerPista;
     }
+    public boolean getHipotecada() {return hipotecada;}
 
     // SETTERS
     public void setNombre(String n) {
@@ -172,6 +174,7 @@ public class Casilla {
     public void setAlquilerPista(float a) {
         this.alquilerPista = a;
     }
+    public  void setHipotecada(boolean b) {this.hipotecada = b;}
 
     //Metodo utilizado para añadir un avatar al array de avatares en casilla.
     public void anhadirAvatar(Avatar av) {
@@ -292,13 +295,39 @@ public class Casilla {
         return obtenerCodigoColor() + celda + Valor.RESET;
     }
 
-    public String toString(boolean Detallado){
-        //acabar de implementar os 
-        return("tipo: "+getTipo()+"\ngrupo: "+getGrupo()+"\npropietarios: "+getDuenho()+"\nvalor: "+getValor()+
-                "\nalquiler: "+getImpuesto()+"\nvalor hotel: "+getAlquilerHotel()+"\nvalor casa: "+getAlquilerCasa()+
-                "\nvalor piscina: "+getAlquilerPiscina()+"\nvalor pista de deporte: "+getAlquilerPista()+
-                "\nalquiler casa: ");
+    public String toString(String tipo){
+        tipo = tipo.trim().toLowerCase();
+        //acabar de implementar os
+            if(tipo.equals("solar")) return ("tipo: " + getTipo() + "\ngrupo: " + getGrupo() + "\npropietario: " + getDuenho().getNombre() + "\nvalor: " + getValor() +
+                        "\nalquiler: " + getImpuesto() + "\nvalor hotel: " + getPrecioHotel() + "\nvalor casa: " + getPrecioCasa() +
+                        "\nvalor piscina: " + getPrecioPiscina() + "\nvalor pista de deporte: " + getPrecioPista() +
+                        "\nalquiler casa: " + getAlquilerCasa() + "\nalquiler hotel: " + getPrecioHotel() + "\nalquiler piscina: " +
+                        getAlquilerPista() + "\nalquiler pista de deporte: " + this.getAlquilerPista() + "\n\n");
+
+            if (tipo.equals("impuesto")) return("tipo: "+getTipo()+"\na pagar: "+getImpuesto()+"\n");
+
+            //parking es de tipo especial
+            if (tipo.equals("especial")) {
+                String ret = ("bote: " + getImpuesto() + "\n[");
+                for (int i = 0; i < getAvatares().size(); i++) {
+                    ret += this.getAvatares().get(i).getJugador().getNombre();
+                }
+                ret += "]\n\n";
+                return ret;
+            }
+
+            if (tipo.equals("carcel")) {
+                String ret = ("salir: " + Valor.COSTE_SALIR_CARCEL + "\n");
+                for (int i = 0; i < getAvatares().size(); i++) {
+                    ret += "[" + getAvatares().get(i).getJugador().getNombre() + "," + getAvatares().get(i).getJugador().getTiradasCarcel() + "]";
+                }
+                ret += "\n\n";
+                return ret;
+            }
+
+            else return " ";
+        }
     }
 
 
-}
+

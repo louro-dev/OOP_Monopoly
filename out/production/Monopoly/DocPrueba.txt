@@ -2,11 +2,15 @@ crear Jugador Rocio Coche
 crear Jugador Rodrigo Coche
 lanzar dados 6+6
 acabar turno
+lanzar dados 6+6
 acabar turno
 lanzar dados 6+6
 acabar turno
+lanzar dados 4+4
 acabar turno
 lanzar dados 3+3
-acabar turno
-acabar turno
-salir carcel
+describir solar8
+describir Imp1
+describir Parking
+describir carcel
+describir jugador Rodrigo

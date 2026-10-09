@@ -6,22 +6,18 @@ proyect for OOP class of programing the game monopoly in Java
 
 *to-do*:
 
-    -implementar o valor das propieades segun as vas subindo de nivel para imprimilo co toString de Casilla
     -seguir implementando funcionalidades
 
 *Mejoras:*
-
-    -funciona salir de carcel al sacar dobles
-    -funciona salir de carcel por numero de tiradas e interaccionar con el menu
-    -implementada opcion para salir de la carcel pagando. Solo se imprime en el menu si el jugador esta encarcelado
-    -implementado metodo esSolvente para saber si un jugador tiene fondos para pagar algo al llamar a sumarFortuna con valor megativo
-    -sumarFortuna devuelve ahora Boolean par que cuando se usa se devuelva si es solvente o no
-    -Cambiados todos los sumarFortuna para que si sale false pare lo que este haciendo
-    -implementado toString de los dados
-    -Imprimir valor de los dados cuando se invoca a lanzar dados
-    -Refactorización función encarcelar
-    -Usamor metodo encarcelar en el metodo que analiza las casillas en las que se cae para encarcelar
-
+    
+    -correccion en setter de tipoID, solo hay 4 tipos disponibles
+    -implementado metodo esTipoValido para comprobar si el tipo de avatar es valido antes de llamar a los constructores
+    -constructor Jugador(args) puesto a private, olo se puede usar newJugador
+    -implementado toString grupo
+    -implementado que describa las casillas que se le piden
+    -nuevo atributo boolean hipotecada en casilla para saber si una casilla esta hipotecada o no
+    -nuevo metodo encontrarJugador que devuelve un jugador dando el nombre
+    -implementado toString jugador para describir jugador segun funcionalidad 12
 
 
 *----SIGUIENTE CAMBIO GRANDE A HACER-----*

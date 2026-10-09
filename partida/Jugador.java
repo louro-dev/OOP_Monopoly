@@ -33,7 +33,7 @@ public class Jugador {
     * avatares creados (usado para dos propósitos: evitar que dos jugadores tengan el mismo nombre y
     * que dos avatares tengan mismo ID). Desde este constructor también se crea el avatar.
      */
-    public Jugador(String nombre, String tipoAvatar, Casilla inicio, ArrayList<Avatar> avCreados) {
+    private Jugador(String nombre, String tipoAvatar, Casilla inicio, ArrayList<Avatar> avCreados) {
         this.nombre = nombre;
         this.fortuna = Valor.FORTUNA_INICIAL; // Se puede hacer porque FORTUNA_INICIAL es público.
         this.avatar = new Avatar(tipoAvatar,this,inicio,avCreados);
@@ -50,6 +50,10 @@ public class Jugador {
     public static Jugador newJugador(String nombre, String tipoAvatar, Casilla inicio, ArrayList<Avatar> avCreados,ArrayList<Jugador> jugadores){
         if(avCreados.size()>=Valor.MAX_JUGADORES){
             System.out.println("\nmaximo de jugadores alcanzado\n");
+            return null;
+        }
+        if(!Avatar.esTipoValido(tipoAvatar)){
+            System.out.println("\ntipo de avatar invalido\n");
             return null;
         }
         Jugador j=new Jugador(nombre,tipoAvatar,inicio,avCreados);
@@ -171,6 +175,16 @@ public class Jugador {
         this.avatar.moverAvatar(tab.getPosiciones(), distancia);
     }
 
+    public static Jugador encontrarJugador(String nombre,ArrayList<Jugador> jugadores){
+        for(int j=0;j<jugadores.size();j++){
+            if(jugadores.get(j).getNombre().equals(nombre)){
+                return jugadores.get(j);
+            }
+        }
+        System.out.println("Jugador no encontrado");
+        return null;
+    }
+
     @Override
     public String toString(){
         return"nombre del jugador: "+this.getNombre()+"\nAvatar del jugador: "+
@@ -182,6 +196,34 @@ public class Jugador {
                 "piedades: "+this.getPropiedades();
     }
 
+    public String toString(String nombre) {
+        String st="nombre: "+nombre+"\nAvatar: "+this.getAvatar().getId()+"\nfortuna: "+
+                String.format(java.util.Locale.of("es","ES"), "%,.0f", this.getFortuna())
+                +"\npropiedades: [";
 
+        //bucle para imprimir propiedades
+        for (int i = 0; i < getPropiedades().size(); i++) {
+            st += this.getPropiedades().get(i).getNombre().trim();
+            //solo añadimos la coma si hay siguiente elemento
+            if (i < getPropiedades().size() - 1) {
+                st += ", ";
+            }
+        }
+        st += "]\nhipotecadas: [";
 
+        //propiedades hipotecadas
+        for (int i = 0; i < getPropiedades().size(); i++) {
+            if (this.getPropiedades().get(i).getHipotecada()) {
+                if (i>0) {
+                    st += ", ";
+                }
+                st += this.getPropiedades().get(i).getNombre().trim();
+            }
+        }
+        st += "]\n\n";
+
+        st+="faltan os edificios";
+
+        return st;
+    }
 }

@@ -3,6 +3,7 @@ package partida;
 import monopoly.*;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class Avatar {
@@ -22,7 +23,7 @@ public class Avatar {
     * avatares creados (usado para crear un ID distinto del de los demás avatares).
      */
     public Avatar(String tipo, Jugador jugador, Casilla lugar, ArrayList<Avatar> avCreados) {
-        this.tipo = tipo;
+        this.setTipo(tipo);
         this.jugador = jugador;
         this.lugar = lugar;
         generarId(avCreados);
@@ -48,8 +49,15 @@ public class Avatar {
     public void setId(String i) {
         this.id = i;
     }
-    public void setTipo(String t) {
-        this.tipo = t;
+    public boolean setTipo(String t) {
+        String lwcs=t.toLowerCase(Locale.ROOT);
+        switch (lwcs) {
+            case "coche": this.tipo = "Coche"; return true;
+            case "esfinge": this.tipo = "Esfinge"; return true;
+            case "sombrero": this.tipo = "Sombrero"; return true;
+            case "pelota":this.tipo = "Pelota"; return true;
+            default: System.out.println("Avatar no posible, elija otro"); return false;
+        }
     }
     public void setJugador(Jugador j) {
         this.jugador = j;
@@ -113,6 +121,12 @@ public class Avatar {
             }
         }
         return false;
+    }
+
+    //metodo que comprueba si el tipoId introducido es valido. Se comprobará de nuevo en el setter por seguridad.
+    public static boolean esTipoValido(String tId){
+        String tipoId=tId.toLowerCase(Locale.ROOT);
+        return tipoId.equals("coche") || tipoId.equals("esfinge") || tipoId.equals("sombrero") || tipoId.equals("pelota");
     }
 
     @Override
