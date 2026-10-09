@@ -338,7 +338,11 @@ public class Menu {
                             c.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
                             break;
 
+                        case 30:
+                            break;
+
                         default:
+                            ctrl=false;
                             break;
                     }
                     if (ctrl) System.out.println("\n" + this.getTablero());
@@ -356,9 +360,10 @@ public class Menu {
             Scanner sc = new Scanner(System.in);
             System.out.println("--------------------MENU--------------------\nlanzar los dados: lanzar Dados\n" +
                     "Lanzar los dados determinados: lanzad Dados <x+y>\nCrear un jugador: crear Jugador <nombre> <tipo_avatar>"+
-                    "\nJugador al que le toca: jugador\nListar los jugadores: listar Jugadores"+"Describir una casilla: describir <casilla>"+
-                    "Describir a un jugador: describir jugador <nombre>"+"\nAcabar el turno: Acabar Turno\nAcabar la partida: salir\n");
-            if(this.getJugadores().get(this.getTurno()).getEnCarcel()){
+                    "\nJugador al que le toca: jugador\nListar los jugadores: listar Jugadores\n"+"Describir una casilla: describir <casilla>\n"+
+                    "Describir a un jugador: describir jugador <nombre>"+"\nAcabar el turno: Acabar Turno\nVer el tablero: ver tablero\n" +
+                    "Comprar una casilla: comprar casilla\nAcabar la partida: salir\n");
+            if(!this.getJugadores().isEmpty() && this.getJugadores().get(this.getTurno()).getEnCarcel()){
                 System.out.println("Salir de la carcel: Salir Carcel\n");
             }
             String answ = sc.nextLine();
@@ -376,7 +381,7 @@ public class Menu {
             //pasamos el comando por el método analizarComando
             int sec = this.analizarComando(comand);
             if (sec == -1) System.out.println("Comando invalido1");
-            else if (sec >= 20 && sec <=29) {
+            else if (sec >= 20 && sec <=35) {
                 //switch para saber que accion hacer
                 switch (sec) {
                     case 21:
@@ -530,7 +535,8 @@ public class Menu {
                         Casilla c=this.getAvatares().get(this.getTurno()).getLugar();
                         c.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
                         break;
-
+                    case 30:
+                        break;
 
                     default:
                         ctrl=false;
@@ -576,6 +582,7 @@ public class Menu {
                 //hueco del "case 28" de describir jugador, que no puede ir aqui porque se confundiria con el 2
                 case "comprarcasilla": return 29;
                 case "salir": return 20;
+                case "vertablero": return 30;
             }
         }
         return -1;
