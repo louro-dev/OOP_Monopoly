@@ -7,17 +7,15 @@ proyect for OOP class of programing the game monopoly in Java
 *to-do*:
 
     -seguir implementando funcionalidades
+    -corregir que al imprimir las propiedades de jugador imprima el Id como si imprimiese en el tablero (ejemplo con el documento: [Solar2        &R])
+
 
 *Mejoras:*
     
-    -correccion en setter de tipoID, solo hay 4 tipos disponibles
-    -implementado metodo esTipoValido para comprobar si el tipo de avatar es valido antes de llamar a los constructores
-    -constructor Jugador(args) puesto a private, olo se puede usar newJugador
-    -implementado toString grupo
-    -implementado que describa las casillas que se le piden
-    -nuevo atributo boolean hipotecada en casilla para saber si una casilla esta hipotecada o no
-    -nuevo metodo encontrarJugador que devuelve un jugador dando el nombre
-    -implementado toString jugador para describir jugador segun funcionalidad 12
+    -Usamos constructor de Avatar vacio para la banca, que tiene el id "@" forzado
+    -Segundo toString de Casilla cambiado de ifs a switch
+    -implementado metodo para comprar casillas
+
 
 
 *----SIGUIENTE CAMBIO GRANDE A HACER-----*

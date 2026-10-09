@@ -1,6 +1,7 @@
 package partida;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import monopoly.*;
 
@@ -26,6 +27,7 @@ public class Jugador {
         this.tiradasCarcel = 0;
         this.vueltas = 0;
         this.propiedades = new ArrayList<>();
+        this.avatar = new Avatar();
     }
 
     /*Constructor principal. Requiere parámetros:
@@ -226,4 +228,5 @@ public class Jugador {
 
         return st;
     }
+
 }

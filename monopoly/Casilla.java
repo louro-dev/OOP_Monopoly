@@ -208,11 +208,15 @@ public class Casilla {
     * - Jugador que solicita la compra de la casilla.
     * - Banca del monopoly (es el dueño de las casillas no compradas aún).*/
     public void comprarCasilla(Jugador solicitante, Jugador banca) {
-        solicitante.sumarGastos(valor);
-        banca.sumarFortuna(valor);
-        solicitante.sumarFortuna((-1)*valor);
-        banca.getPropiedades().remove(this);
-        solicitante.anhadirPropiedad(this);
+        if (this.getDuenho().getAvatar().getId().equals(banca.getAvatar().getId())) {
+            if (solicitante.sumarFortuna((-1) * this.getValor())) {
+                banca.eliminarPropiedad(this);
+                solicitante.anhadirPropiedad(this);
+                System.out.println("el jugador "+solicitante.getNombre()+" ha comprado la casilla "+this.getNombre().trim()+"\n");
+            }
+        } else {
+            System.out.println("Esa casilla ya tiene duenho");
+        }
     }
 
     /*Metodo para añadir valor a una casilla. Utilidad:
@@ -267,6 +271,10 @@ public class Casilla {
         }
     }
 
+    public void ComprarCasilla(Jugador plyr,Menu menu) {
+
+    }
+
     @Override
     public String toString() { // Para imprimir los nombres e ID de las casillas
         String id = "";
@@ -298,35 +306,38 @@ public class Casilla {
     public String toString(String tipo){
         tipo = tipo.trim().toLowerCase();
         //acabar de implementar os
-            if(tipo.equals("solar")) return ("tipo: " + getTipo() + "\ngrupo: " + getGrupo() + "\npropietario: " + getDuenho().getNombre() + "\nvalor: " + getValor() +
+        switch (tipo) {
+            case "solar":
+                return ("tipo: " + getTipo() + "\ngrupo: " + getGrupo() + "\npropietario: " + getDuenho().getNombre() + "\nvalor: " + getValor() +
                         "\nalquiler: " + getImpuesto() + "\nvalor hotel: " + getPrecioHotel() + "\nvalor casa: " + getPrecioCasa() +
                         "\nvalor piscina: " + getPrecioPiscina() + "\nvalor pista de deporte: " + getPrecioPista() +
                         "\nalquiler casa: " + getAlquilerCasa() + "\nalquiler hotel: " + getPrecioHotel() + "\nalquiler piscina: " +
                         getAlquilerPista() + "\nalquiler pista de deporte: " + this.getAlquilerPista() + "\n\n");
-
-            if (tipo.equals("impuesto")) return("tipo: "+getTipo()+"\na pagar: "+getImpuesto()+"\n");
+            case "impuesto":
+                return ("tipo: " + getTipo() + "\na pagar: " + getImpuesto() + "\n");
 
             //parking es de tipo especial
-            if (tipo.equals("especial")) {
+            case "especial":
                 String ret = ("bote: " + getImpuesto() + "\n[");
                 for (int i = 0; i < getAvatares().size(); i++) {
                     ret += this.getAvatares().get(i).getJugador().getNombre();
                 }
                 ret += "]\n\n";
                 return ret;
-            }
 
-            if (tipo.equals("carcel")) {
-                String ret = ("salir: " + Valor.COSTE_SALIR_CARCEL + "\n");
+            case "carcel":
+                String rt = ("salir: " + Valor.COSTE_SALIR_CARCEL + "\n");
                 for (int i = 0; i < getAvatares().size(); i++) {
-                    ret += "[" + getAvatares().get(i).getJugador().getNombre() + "," + getAvatares().get(i).getJugador().getTiradasCarcel() + "]";
+                    rt += "[" + getAvatares().get(i).getJugador().getNombre() + "," + getAvatares().get(i).getJugador().getTiradasCarcel() + "]";
                 }
-                ret += "\n\n";
-                return ret;
-            }
+                rt += "\n\n";
+                return rt;
 
-            else return " ";
+            default:
+                return " ";
         }
+
+    }
     }
 
 

@@ -332,6 +332,11 @@ public class Menu {
                                 System.out.println(ply.toString(ply.getNombre()));
                             }
                             break;
+                        case 29:
+                            ctrl=false;
+                            Casilla c=this.getAvatares().get(this.getTurno()).getLugar();
+                            c.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
+                            break;
 
                         default:
                             break;
@@ -521,6 +526,10 @@ public class Menu {
                         break;
 
                     case 29:
+                        ctrl=false;
+                        Casilla c=this.getAvatares().get(this.getTurno()).getLugar();
+                        c.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
+                        break;
 
 
                     default:

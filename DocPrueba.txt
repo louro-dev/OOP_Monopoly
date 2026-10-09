@@ -1,16 +1,4 @@
 crear Jugador Rocio Coche
 crear Jugador Rodrigo Coche
-lanzar dados 6+6
-acabar turno
-lanzar dados 6+6
-acabar turno
-lanzar dados 6+6
-acabar turno
-lanzar dados 4+4
-acabar turno
-lanzar dados 3+3
-describir solar8
-describir Imp1
-describir Parking
-describir carcel
-describir jugador Rodrigo
+lanzar dados 2+1
+comprar casilla solar2

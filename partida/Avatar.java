@@ -16,6 +16,10 @@ public class Avatar {
 
     //Constructor vacío
     public Avatar() {
+        this.id="@";
+        this.tipo="";
+        this.jugador=null;
+        this.lugar=null;
     }
 
     /*Constructor principal. Requiere éstos parámetros:
