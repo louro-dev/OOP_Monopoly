@@ -189,13 +189,25 @@ public class Jugador {
 
     @Override
     public String toString(){
-        return"nombre del jugador: "+this.getNombre()+"\nAvatar del jugador: "+
+        String str= "nombre del jugador: "+this.getNombre()+"\nAvatar del jugador: "+
                 this.getAvatar()+"\nFortuna del jugador: "+
                 String.format(java.util.Locale.of("es","ES"), "%,.0f", this.getFortuna())+
                 "\nGastos totales: "+
                 String.format(java.util.Locale.of("es", "ES"), "%,.0f", this.getGastos())+
                 "\nEsta encarcelado?: "+this.getEnCarcel()+"\nVueltas al tablero: "+this.getVueltas()+"\nLista de pro" +
-                "piedades: "+this.getPropiedades();
+                "piedades: [";
+
+        //bucle para imprimir propiedades
+        for (int i = 0; i < getPropiedades().size(); i++) {
+            str += this.getPropiedades().get(i).getNombre().trim();
+            //solo añadimos la coma si hay siguiente elemento
+            if (i < getPropiedades().size() - 1) {
+                str += ", ";
+            }
+        }
+        str += "]";
+
+        return str;
     }
 
     public String toString(String nombre) {

@@ -6,18 +6,15 @@ proyect for OOP class of programing the game monopoly in Java
 
 *to-do*:
 
-    -seguir implementando funcionalidades
-    -corregir que al imprimir las propiedades de jugador imprima el Id como si imprimiese en el tablero (ejemplo con el documento: [Solar2        &R])
-    -
+    -seguir implementando funcionalidades 
+    -cambiar del evaluar casilla que hay al metodo de casilla.java
+    -usar metodo sumarValor para aumentar valor de parking
 
 *Mejoras:*
-    
-    -Usamos constructor de Avatar vacio para la banca, que tiene el id "@" forzado
-    -Segundo toString de Casilla cambiado de ifs a switch
-    -implementado metodo para comprar casillas
-    -implementada la funcionalidad de imprimir el tablero al poner el comando
-    -correccion del print del menu
 
+    -corregido como se imprimen las propiedades al llamar al toString de jugador
+    -implementado que ahora tambien se pueda describir la casilla transporte y servicio
+    -cambiado switch de obtenerCodigoColor por enhanced switch
 
 *----SIGUIENTE CAMBIO GRANDE A HACER-----*
 

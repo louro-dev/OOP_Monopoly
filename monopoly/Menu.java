@@ -27,7 +27,6 @@ public class Menu {
     private Jugador banca; //El jugador banca.
     private boolean tirado; //Booleano para comprobar si el jugador que tiene el turno ha tirado o no.
     private boolean solvente; //Booleano para comprobar si el jugador que tiene el turno es solvente, es decir, si ha pagado sus deudas.
-    private float boteParking = 0;
 
     //CONSTRUCTORf
     public Menu(String args[]){
@@ -43,68 +42,26 @@ public class Menu {
     }
 
     //GETTERS
-    public ArrayList<Avatar> getAvatares() {
-        return avatares;
-    }
-
-    public ArrayList<Jugador> getJugadores() {
-        return jugadores;
-
-    }
-    public float getBoteParking(){return boteParking;}
-
-    public int getTurno(){
-        return turno;
-    }
-
-    public Jugador getBanca(){
-        return  banca;
-    }
-
-    public Tablero getTablero() {
-        return tablero;
-    }
-
-    public Dado getDado1() {
-        return dado1;
-    }
-
-    public Dado getDado2() {
-        return dado2;
-    }
+    public ArrayList<Avatar> getAvatares() {return avatares;}
+    public ArrayList<Jugador> getJugadores() {return jugadores;}
+    public int getTurno(){return turno;}
+    public Jugador getBanca(){return  banca;}
+    public Tablero getTablero() {return tablero;}
+    public Dado getDado1() {return dado1;}
+    public Dado getDado2() {return dado2;}
+    public int getLanzamientos() {return lanzamientos;}
+    public boolean getSolvente() {return solvente;}
 
     //SETTERS
-    public void setAvataresMenu(ArrayList<Avatar> avatares){
-        this.avatares = avatares;
-    }
-
-    public void setJugadoresMenu(ArrayList<Jugador> jugador){
-        this.jugadores = jugador;
-    }
-
-    public void setTurno(int turno){
-        this.turno = turno;
-    }
-
-    public void setBancaMenu(Jugador banca){
-        this.banca = banca;
-    }
-
-    public void setTableroMenu(Tablero tablero){
-        this.tablero = tablero;
-    }
-
-    public void setBoteParking(float boteParking){
-        this.boteParking = boteParking;
-    }
-
-    public void setDado1(Dado dado1){
-        this.dado1 = dado1;
-    }
-
-    public void setDado2(Dado dado2){
-        this.dado2 = dado2;
-    }
+    public void setAvataresMenu(ArrayList<Avatar> avatares){this.avatares = avatares;}
+    public void setJugadoresMenu(ArrayList<Jugador> jugador){this.jugadores = jugador;}
+    public void setTurno(int turno){this.turno = turno;}
+    public void setBancaMenu(Jugador banca){this.banca = banca;}
+    public void setTableroMenu(Tablero tablero){this.tablero = tablero;}
+    public void setDado1(Dado dado1){this.dado1 = dado1;}
+    public void setDado2(Dado dado2){this.dado2 = dado2;}
+    public void setLanzamientosMenu(int lanzamientos){this.lanzamientos = lanzamientos;}
+    public void setSolvente(boolean solvente){this.solvente = solvente;}
 
 
     // Metodo para inciar una partida: crea los jugadores y avatares.
@@ -113,15 +70,13 @@ public class Menu {
         //creamos variable de control para gestionar en que iteraciones se imprime el tablero: si se va a mover un jugador
         //si hace falta, pero si solo se pide que se imprima algo no hace falta reimprimirlo
         boolean ctrl=true;
-
         boolean end=false;
 
         File iniDoc = null;
         //Si se pasa el documento por argumento se abre y ya
         if(args.length>0)   iniDoc=new File(args[0]);
-            //si no se pregunta si se quiere usar o no. Si sí se pide.
+        //si no se pregunta si se quiere usar o no. Si sí se pide.
         else{
-
             System.out.println("Ningun documento introducido en linea de comandos\n quiere usar documento inicial?: y/n\n");
             String ans=new Scanner(System.in).next();
             switch (ans) {
@@ -145,7 +100,8 @@ public class Menu {
 
 
         //sacamos casilla de inicio del tablero
-        Casilla ini=tablero.encontrar_casilla("salida");
+        Casilla ini = tablero.encontrar_casilla("salida");
+
 
         //setteamos las propiedades de la banca(todas)
         for (int i = 0; i < tablero.getPosiciones().size(); i++) {
@@ -156,29 +112,21 @@ public class Menu {
 
         //Si hay cualquier error con el documento inicial se sale una vez inicializado todo lo necesario
         if(iniDoc != null && iniDoc.exists() && iniDoc.isFile()) {
-
             //Leemos documento inicial
             try (BufferedReader br = new BufferedReader(new FileReader(iniDoc))) {
-
                 //creamos las variables auxiliares
                 String lineaActual;
-
                 while (((lineaActual = br.readLine()) != null)) {
                     //reiniciamos variable de control de impresion
                     ctrl = true;
-
                     //si la linea esta vacia la ignoramos
                     if (lineaActual.trim().isEmpty()) continue;
 
                     //separamos el comando en porciones [0]=comandi [1]=arg1 [2]=arg2
                     String[] divCom = lineaActual.split(" ");
                     String comand;
-
-                    if (divCom.length >= 2) {
-                        comand = divCom[0] + divCom[1];
-                    } else {
-                        comand = divCom[0];
-                    }
+                    if (divCom.length >= 2) {comand = divCom[0] + divCom[1];}
+                    else {comand = divCom[0];}
 
                     //case con analizarComando que raaliza las acciones pedidas
                     switch (analizarComando(comand)) {
@@ -188,10 +136,10 @@ public class Menu {
                             System.out.println("Error al leer el archivo1");
                             return;
                         //1 se ignora, no puede mandarte a outro nuevo archivo
-                        case 1:
-                            break;
+                        case 1: break;
                         //21 se lanzan los dados y mueve al jugador que tiene el turno
                         case 21:
+                            if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
                             if (tirado) {
                                 System.out.println("ya se ha tirado en este turno");
                                 ctrl = false;
@@ -207,7 +155,6 @@ public class Menu {
                                 //setteamos los valores de los dados
                                 this.getDado1().setValor(val1);
                                 this.getDado2().setValor(val2);
-
                             } else {
                                 //si no esta determimado valdrá el valor aleatorio que se genere
                                 this.lanzarDados(this.getDado1(), this.getDado2());
@@ -246,7 +193,6 @@ public class Menu {
                             }
 
                             tirado = true;
-
                             break;
 
                         //22 creamos nuevo jugador
@@ -254,15 +200,13 @@ public class Menu {
                             int tam = this.getAvatares().size();
                             Jugador j = Jugador.newJugador(divCom[2], divCom[3], ini, this.getAvatares(), this.getJugadores());
 
-                            if(this.getAvatares().size() == tam){
-                                ctrl=false;
-                            }
-
+                            if(this.getAvatares().size() == tam){ctrl=false;}
                             break;
                         //23 imprimir jugador que tiene el turno
                         case 23:
                             //ponemos control de impresion a false para que no imprima
                             ctrl = false;
+                            if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
                             //imprimimos cabecera de impresion
                             System.out.println("\n---------------JUGADOR QUE TIENE EL TURNO---------------");
                             //this.getTurno(); indice en la losta del jugador que tiene el turno
@@ -273,6 +217,7 @@ public class Menu {
                         case 24:
                             //ponemos control de impresion a false para que no imprima
                             ctrl = false;
+                            if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
                             //imprimimos cabecera de impresion
                             System.out.println("\n------------------------JUGADORES------------------------\n");
                             //imprimimos jugador con bucle que itera el ArrayList
@@ -284,12 +229,10 @@ public class Menu {
                             break;
 
                         case 25:
-                            //
-                            if (this.getTurno() == this.getAvatares().size() - 1) {
-                                this.turno = 0;
-                            } else {
-                                this.turno = this.getTurno() + 1;
-                            }
+                            if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
+                            if (this.getTurno() == this.getAvatares().size() - 1) {this.turno = 0;}
+                            else {this.turno = this.getTurno() + 1;}
+
                             System.out.println("Jugador que tiene el turno:" + this.getJugadores().get(this.getTurno()).getNombre() + "\n");
                             ctrl = false;
                             tirado=false;
@@ -298,14 +241,12 @@ public class Menu {
                         case 26:
                             Jugador jug=this.getJugadores().get(this.getTurno());
                             ctrl=false;
-                            if(!jug.getEnCarcel()){
-                                System.out.println("Comando invalido");
-                                break;
-                            }
-                            if(!jug.sumarFortuna((-1)*Valor.COSTE_SALIR_CARCEL)){
 
-                                break;
-                            }
+                            if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
+                            if(!jug.getEnCarcel()){System.out.println("Comando invalido");break;}
+
+                            if(!jug.sumarFortuna((-1)*Valor.COSTE_SALIR_CARCEL)){setSolvente(false);break;}
+
                             this.getBanca().sumarFortuna(Valor.COSTE_SALIR_CARCEL);
                             jug.setTiradasCarcel(0);
                             jug.setEnCarcel(false);
@@ -316,29 +257,40 @@ public class Menu {
                         case 27:
                             ctrl=false;
                             Casilla atc= this.getTablero().encontrar_casilla(divCom[1]);
-                            if(atc!=null) {
-                                System.out.println(atc.toString(atc.getTipo()));
-                            }
-                            else{
-                                System.out.println("No existe esa casilla");
-                            }
+                            if(atc!=null) {System.out.println(atc.toString(atc.getTipo()));}
+                            else{System.out.println("No existe esa casilla");}
 
                             break;
 
                         case 28:
+                            if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
                             ctrl=false;
                             Jugador ply = Jugador.encontrarJugador(divCom[2],this.getJugadores());
-                            if(ply != null) {
-                                System.out.println(ply.toString(ply.getNombre()));
-                            }
+                            if(ply != null) {System.out.println(ply.toString(ply.getNombre()));}
                             break;
                         case 29:
+                            if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
                             ctrl=false;
                             Casilla c=this.getAvatares().get(this.getTurno()).getLugar();
                             c.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
                             break;
 
                         case 30:
+                            break;
+
+                        case 31:
+                            System.out.println("\n----------CASILLAS EN VENTA----------\n");
+                            for(int i = 0; i < getBanca().getPropiedades().size(); i++){
+                                Casilla cas = getBanca().getPropiedades().get(i);
+                                String tipo = cas.getTipo().trim().toLowerCase(Locale.ROOT);
+
+                                // Solo imprimimos si es Solar, Transporte o Servicio
+                                if(tipo.equals("solar") || tipo.equals("transporte") || tipo.equals("servicio")){
+                                    // Imprimimos la información de la casilla y un salto de línea para separarlas
+                                    System.out.println(cas.casEnVenta(tipo) + "\n");
+                                }
+                            }
+                            ctrl = false;
                             break;
 
                         default:
@@ -362,7 +314,7 @@ public class Menu {
                     "Lanzar los dados determinados: lanzad Dados <x+y>\nCrear un jugador: crear Jugador <nombre> <tipo_avatar>"+
                     "\nJugador al que le toca: jugador\nListar los jugadores: listar Jugadores\n"+"Describir una casilla: describir <casilla>\n"+
                     "Describir a un jugador: describir jugador <nombre>"+"\nAcabar el turno: Acabar Turno\nVer el tablero: ver tablero\n" +
-                    "Comprar una casilla: comprar casilla\nAcabar la partida: salir\n");
+                    "Comprar una casilla: comprar casilla\nListar las casillas en venta: Listar enventa\nAcabar la partida: salir\n");
             if(!this.getJugadores().isEmpty() && this.getJugadores().get(this.getTurno()).getEnCarcel()){
                 System.out.println("Salir de la carcel: Salir Carcel\n");
             }
@@ -372,11 +324,8 @@ public class Menu {
             String[] divEn = answ.split(" ");
             String comand;
 
-            if (divEn.length >= 2) {
-                comand = divEn[0] + divEn[1];
-            } else {
-                comand = divEn[0];
-            }
+            if (divEn.length >= 2) {comand = divEn[0] + divEn[1];}
+            else {comand = divEn[0];}
 
             //pasamos el comando por el método analizarComando
             int sec = this.analizarComando(comand);
@@ -385,6 +334,10 @@ public class Menu {
                 //switch para saber que accion hacer
                 switch (sec) {
                     case 21:
+                        if(this.getJugadores().isEmpty()){
+                            System.out.println("\nNo hay jugadores creados\n");
+                            break;
+                        }
                         if (tirado) {
                             System.out.println("ya se ha tirado en este turno");
                             ctrl = false;
@@ -455,6 +408,10 @@ public class Menu {
                         //ponemos control de impresion a false para que no imprima
                         ctrl=false;
                         //imprimimos cabecera de impresion
+                        if(this.getJugadores().isEmpty()){
+                            System.out.println("\nNo hay jugadores creados\n");
+                            break;
+                        }
                         System.out.println("---------------JUGADOR QUE TIENE EL TURNO---------------");
                         //this.getTurno(); indice en la losta del jugador que tiene el turno
                         Jugador turn=this.getJugadores().get(this.getTurno());
@@ -464,6 +421,10 @@ public class Menu {
                     case 24:
                         //ponemos control de impresion a false para que no imprima
                         ctrl=false;
+                        if(this.getJugadores().isEmpty()){
+                            System.out.println("\nNo hay jugadores creados\n");
+                            break;
+                        }
                         //imprimimos cabecera de impresion
                         System.out.println("\n------------------------JUGADORES------------------------\n");
                         //imprimimos jugador con bucle que itera el ArrayList
@@ -475,6 +436,10 @@ public class Menu {
                         break;
 
                     case 25:
+                        if(this.getJugadores().isEmpty()){
+                            System.out.println("\nNo hay jugadores creados\n");
+                            break;
+                        }
                         if (this.getTurno() == this.getAvatares().size() - 1) {
                             this.turno = 0;
                         } else {
@@ -486,6 +451,10 @@ public class Menu {
                         break;
 
                     case 26:
+                        if(this.getJugadores().isEmpty()){
+                            System.out.println("\nNo hay jugadores creados\n");
+                            break;
+                        }
                         Jugador jug=this.getJugadores().get(this.getTurno());
                         ctrl=false;
                         if(!jug.getEnCarcel()){
@@ -493,7 +462,7 @@ public class Menu {
                             break;
                         }
                         if(!jug.sumarFortuna((-1)*Valor.COSTE_SALIR_CARCEL)){
-
+                            setSolvente(false);
                             break;
                         }
                         this.getBanca().sumarFortuna(Valor.COSTE_SALIR_CARCEL);
@@ -517,6 +486,10 @@ public class Menu {
 
                     case 28:
                         ctrl=false;
+                        if(this.getJugadores().isEmpty()){
+                            System.out.println("\nNo hay jugadores creados\n");
+                            break;
+                        }
                         Jugador ply = Jugador.encontrarJugador(divEn[2],this.getJugadores());
                         if(ply != null) {
                             System.out.println(ply.toString(ply.getNombre()));
@@ -532,10 +505,29 @@ public class Menu {
 
                     case 29:
                         ctrl=false;
+                        if(this.getJugadores().isEmpty()){
+                            System.out.println("\nNo hay jugadores creados\n");
+                            break;
+                        }
                         Casilla c=this.getAvatares().get(this.getTurno()).getLugar();
                         c.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
                         break;
                     case 30:
+                        break;
+
+                    case 31:
+                        System.out.println("\n----------CASILLAS EN VENTA----------\n");
+                        for(int i = 0; i < getBanca().getPropiedades().size(); i++){
+                            Casilla cas = getBanca().getPropiedades().get(i);
+                            String tipo = cas.getTipo().trim().toLowerCase(Locale.ROOT);
+
+                            // Solo imprimimos si es Solar, Transporte o Servicio
+                            if(tipo.equals("solar") || tipo.equals("transporte") || tipo.equals("servicio")){
+                                // Imprimimos la información de la casilla y un salto de línea para separarlas
+                                System.out.println(cas.casEnVenta(tipo) + "\n");
+                            }
+                        }
+                        ctrl = false;
                         break;
 
                     default:
@@ -581,8 +573,9 @@ public class Menu {
                 //hueco del "case 27" de describir casilla que sale antes por el return
                 //hueco del "case 28" de describir jugador, que no puede ir aqui porque se confundiria con el 2
                 case "comprarcasilla": return 29;
-                case "salir": return 20;
                 case "vertablero": return 30;
+                case "listarenventa": return 31;
+                case "salir": return 20;
             }
         }
         return -1;
@@ -658,6 +651,7 @@ public class Menu {
 
                     // Le restamos el dinero al jugador actual (pasando el valor en negativo)
                     if(!actual.sumarFortuna((-1) * alquiler)){
+                        setSolvente(false);
                         break;
                     };
                     actual.sumarGastos(alquiler);
@@ -677,6 +671,7 @@ public class Menu {
                     float alquiler = 4.0f * sumaDados * 50000.0f;
 
                     if(!actual.sumarFortuna(-alquiler)){
+                        setSolvente(false);
                         break;
                     }
                     actual.sumarGastos(alquiler);
@@ -693,6 +688,7 @@ public class Menu {
                     float alquiler = destino.getImpuesto();
 
                     if(!actual.sumarFortuna((-1)*alquiler)){
+                        setSolvente(false);
                         break;
                     }
                     actual.sumarGastos(alquiler);
@@ -703,25 +699,24 @@ public class Menu {
                 break;
             //para tener un sitio donde almacenar los impuestos cree el boteParking como atributo
             case "impuesto":
-                float impuesto = 2000000; // 2.000.000€ depositados en Parking[cite: 3, 4]
-                if(!actual.sumarFortuna((-1)*impuesto)){
+
+                if(!actual.sumarFortuna((-1)*Valor.IMPUESTO)){
+                    setSolvente(false);
                     break;
                 }
                 // Sumamos al bote usando el getter y setter
-                this.setBoteParking(this.getBoteParking() + impuesto);
-                System.out.printf("El jugador %s paga %.0f€ de impuestos que se depositan en el Parking.\n", actual.getNombre(), impuesto);
+                destino.sumarValor(Valor.IMPUESTO);
+                System.out.printf("El jugador %s paga %.0f€ de impuestos que se depositan en el Parking.\n", actual.getNombre(),Valor.IMPUESTO);
                 break;
 
             case "parking":
-                float boteActual = this.getBoteParking();
-
-                if (boteActual > 0) {
-                    actual.sumarFortuna(boteActual);
+                if (destino.getValor() > 0) {
+                    actual.sumarFortuna(destino.getValor());
                     System.out.printf("El jugador %s recibe %.0f€ del bote del Parking.\n",
-                            actual.getNombre(), boteActual);
+                            actual.getNombre(), destino.getValor());
 
                     // Reiniciamos el bote a 0 usando el setter
-                    this.setBoteParking(0.0f); //[cite: 4]
+                    destino.sumarValor((-1)*destino.getValor());//[cite: 4]
                 } else {
                     System.out.println("El Parking no tiene bote acumulado.");
                 }

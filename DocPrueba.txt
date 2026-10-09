@@ -2,3 +2,7 @@ crear Jugador Rocio Coche
 crear Jugador Rodrigo Coche
 lanzar dados 2+1
 comprar casilla solar2
+jugador
+describir trans2
+describir serv1
+listar enventa

@@ -196,13 +196,14 @@ public class Casilla {
     * - La banca (para ciertas comprobaciones).
     * - El valor de la tirada: para determinar impuesto a pagar en casillas de servicios.
     * Valor devuelto: true en caso de ser solvente (es decir, de cumplir las deudas), y false
-    * en caso de no cumplirlas.*/
-    public boolean evaluarCasilla(Jugador actual, Jugador banca, int tirada) {
+    * en caso de no cumplirlas.
+    public boolean evaluarCasilla(Jugador actual, Casilla destino, int sumaDados) {
 
         //if (this is_in banca.getPrpopiedades()){
         // return true;
         return !(actual.getFortuna() < this.getImpuesto());
     }
+     */
 
     /*Metodo usado para comprar una casilla determinada. Parámetros:
     * - Jugador que solicita la compra de la casilla.
@@ -240,8 +241,15 @@ public class Casilla {
      */
     /*Está pensado para filtrar y formatear la información únicamente de las casillas
     * que están disponibles para comprar (o mostrar los datos financieros específicos de venta).*/
-    public String casEnVenta() {
-        return "Hola";
+    public String casEnVenta(String tipo) {
+        tipo = tipo.trim().toLowerCase();
+
+        return switch (tipo) {
+            case "solar" -> ("tipo: solar\ngrupo: " + getGrupo() + "\nvalor: " + getValor());
+            case "transporte" -> ("tipo: transporte\nvalor: " + getValor());
+            case "servicio" -> ("tipo: servicio\nvalor: " + getValor());
+            default -> ""; // Por seguridad, aunque con el filtro del menú nunca entrará aquí
+        };
     }
 
     // Metodo para obtener los colores de cada grupo para luego poder imprimirlos
@@ -253,22 +261,19 @@ public class Casilla {
 
         String color = this.grupo.getColorGrupo().toLowerCase();
 
-        switch (color) {
-            case "negro":     return Valor.BLACK;
-            case "rojo":      return Valor.RED;
-            case "verde":     return Valor.GREEN;
-            case "amarillo":  return Valor.YELLOW;
-            case "azul":      return Valor.BLUE;
-            case "rosa":
-            case "magenta":   return Valor.PURPLE;
-            case "cian":
-            case "celeste":   return Valor.CYAN;
-            case "blanco":    return Valor.WHITE;
-            case "marron":
-            case "marrón":    return Valor.BROWN;
-            case "naranja":   return Valor.ORANGE;
-            default:          return Valor.RESET;
-        }
+        return switch (color) {
+            case "negro" -> Valor.BLACK;
+            case "rojo" -> Valor.RED;
+            case "verde" -> Valor.GREEN;
+            case "amarillo" -> Valor.YELLOW;
+            case "azul" -> Valor.BLUE;
+            case "rosa", "magenta" -> Valor.PURPLE;
+            case "cian", "celeste" -> Valor.CYAN;
+            case "blanco" -> Valor.WHITE;
+            case "marron", "marrón" -> Valor.BROWN;
+            case "naranja" -> Valor.ORANGE;
+            default -> Valor.RESET;
+        };
     }
 
     public void ComprarCasilla(Jugador plyr,Menu menu) {
@@ -307,14 +312,17 @@ public class Casilla {
         tipo = tipo.trim().toLowerCase();
         //acabar de implementar os
         switch (tipo) {
-            case "solar":
-                return ("tipo: " + getTipo() + "\ngrupo: " + getGrupo() + "\npropietario: " + getDuenho().getNombre() + "\nvalor: " + getValor() +
+            case "solar": return ("tipo: solar\ngrupo: " + getGrupo() + "\npropietario: " + getDuenho().getNombre() + "\nvalor: " + getValor() +
                         "\nalquiler: " + getImpuesto() + "\nvalor hotel: " + getPrecioHotel() + "\nvalor casa: " + getPrecioCasa() +
                         "\nvalor piscina: " + getPrecioPiscina() + "\nvalor pista de deporte: " + getPrecioPista() +
                         "\nalquiler casa: " + getAlquilerCasa() + "\nalquiler hotel: " + getPrecioHotel() + "\nalquiler piscina: " +
                         getAlquilerPista() + "\nalquiler pista de deporte: " + this.getAlquilerPista() + "\n\n");
-            case "impuesto":
-                return ("tipo: " + getTipo() + "\na pagar: " + getImpuesto() + "\n");
+
+            case "transporte": return ("tipo: transporte\nvalor: "+getValor()+"\n");
+
+            case "impuesto": return ("tipo: impuesto\na pagar: " + getImpuesto() + "\n");
+
+            case "servicio": return "tipo: servicio\nvalor: " + getValor() + "\n";
 
             //parking es de tipo especial
             case "especial":
@@ -333,8 +341,7 @@ public class Casilla {
                 rt += "\n\n";
                 return rt;
 
-            default:
-                return " ";
+            default: return " ";
         }
 
     }
