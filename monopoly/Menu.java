@@ -81,7 +81,7 @@ public class Menu {
             String ans=new Scanner(System.in).next();
             switch (ans) {
                 case "y":
-                    System.out.println("dea el nombre del documento:\n");
+                    System.out.println("Escriba el nombre del documento:\n");
                     String doc=new Scanner(System.in).next();
                     iniDoc=new File(doc);
                     break;
