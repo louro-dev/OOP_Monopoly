@@ -8,13 +8,9 @@ proyect for OOP class of programing the game monopoly in Java
 
 *Mejoras:*
 
-    -corregido como se imprimen las propiedades al llamar al toString de jugador
-    -implementado que ahora tambien se pueda describir la casilla transporte y servicio
-    -cambiado switch de obtenerCodigoColor por enhanced switch
-    -si se quieren hacer operaciones que impliquen jugadores sin haberlos creado sale
-    -usado metodo sumarValor para actualizar valor de la casilla parking
-    -borrado atributo boteparking, getter y setter
-    -implementada utilidad de atributo Solvente de menu
+    -corregido suma de gastos al comprar casilla
+    -revisados algunos warnings
+    -uso de la constante FACTOR_SERVICIO en el metodo analizar casilla
 
 *----SIGUIENTE CAMBIO GRANDE A HACER-----*
 

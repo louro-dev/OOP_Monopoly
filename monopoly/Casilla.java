@@ -233,9 +233,7 @@ public class Casilla {
     * Devuelve una cadena con información específica de cada tipo de casilla.*/
     /*Está pensado para devolver la información general e identificativa
     * de cualquier casilla (nombre, tipo, propietario, valor actual, etc.).*/
-    public String infoCasilla() {
-        return "hola";
-    }
+    public String infoCasilla() {return this.toString(this.tipo);}
 
     /* Metodo para mostrar información de una casilla en venta.
      * Valor devuelto: texto con esa información.
@@ -275,10 +273,6 @@ public class Casilla {
             case "naranja" -> Valor.ORANGE;
             default -> Valor.RESET;
         };
-    }
-
-    public void ComprarCasilla(Jugador plyr,Menu menu) {
-
     }
 
     @Override
