@@ -28,7 +28,7 @@ public class Menu {
     private boolean tirado; //Booleano para comprobar si el jugador que tiene el turno ha tirado o no.
     private boolean solvente; //Booleano para comprobar si el jugador que tiene el turno es solvente, es decir, si ha pagado sus deudas.
 
-    //CONSTRUCTOR
+    //CONSTRUCTORf
     public Menu(String args[]){
         jugadores = new ArrayList<>();
         avatares = new ArrayList<>();
@@ -228,7 +228,6 @@ public class Menu {
                             }
                             break;
 
-                        //terminar turno
                         case 25:
                             if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
                             if (this.getTurno() == this.getAvatares().size() - 1) {this.turno = 0;}
@@ -239,7 +238,6 @@ public class Menu {
                             tirado=false;
                             break;
 
-                        //salir carcel
                         case 26:
                             Jugador jug=this.getJugadores().get(this.getTurno());
                             ctrl=false;
@@ -256,16 +254,14 @@ public class Menu {
                             System.out.println(jug.getNombre()+" ha pagado 500000 para salir de la carcel.\nPuede lanzar los dados\n");
                             break;
 
-                        //describir casilla
                         case 27:
                             ctrl=false;
                             Casilla atc= this.getTablero().encontrar_casilla(divCom[1]);
-                            if(atc!=null) {System.out.println(atc.infoCasilla());}
+                            if(atc!=null) {System.out.println(atc.toString(atc.getTipo()));}
                             else{System.out.println("No existe esa casilla");}
 
                             break;
 
-                        //describir jugador
                         case 28:
                             if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
                             ctrl=false;
@@ -439,7 +435,6 @@ public class Menu {
                         }
                         break;
 
-                        //acabar turno
                     case 25:
                         if(this.getJugadores().isEmpty()){
                             System.out.println("\nNo hay jugadores creados\n");
@@ -454,7 +449,7 @@ public class Menu {
                         ctrl = false;
                         tirado=false;
                         break;
-                    //salir carcel
+
                     case 26:
                         if(this.getJugadores().isEmpty()){
                             System.out.println("\nNo hay jugadores creados\n");
@@ -477,12 +472,11 @@ public class Menu {
                         System.out.println(jug.getNombre()+" ha pagado 500000 para salir de la carcel.\nPuede lanzar los dados\n");
                         break;
 
-                    //describir casilla
                     case 27:
                         ctrl=false;
                         Casilla atc= this.getTablero().encontrar_casilla(divEn[1]);
                         if(atc!=null) {
-                            System.out.println(atc.infoCasilla());
+                            System.out.println(atc.toString(atc.getTipo()));
                         }
                         else{
                             System.out.println("No existe esa casilla");
@@ -490,7 +484,6 @@ public class Menu {
 
                         break;
 
-                    //describir jugador
                     case 28:
                         ctrl=false;
                         if(this.getJugadores().isEmpty()){
@@ -503,7 +496,6 @@ public class Menu {
                         }
                         break;
 
-                    //terminar partida
                     case 20:
                         System.out.println("\n"+this.getTablero());
                         end = true;
@@ -511,7 +503,6 @@ public class Menu {
                         System.out.println("Terminando partida...");
                         break;
 
-                    //comprar casilla
                     case 29:
                         ctrl=false;
                         if(this.getJugadores().isEmpty()){
@@ -521,12 +512,9 @@ public class Menu {
                         Casilla c=this.getAvatares().get(this.getTurno()).getLugar();
                         c.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
                         break;
-
-                    //ver tablero
                     case 30:
                         break;
 
-                    //listar casillas en venta
                     case 31:
                         System.out.println("\n----------CASILLAS EN VENTA----------\n");
                         for(int i = 0; i < getBanca().getPropiedades().size(); i++){
@@ -574,7 +562,7 @@ public class Menu {
         if(cmd.startsWith("describir")) return 27;
         else{
             //capa 2: hacemos un switch con todos los comandos posibles para ver que coincida con uno de ellos
-            // el toLowerCase se usa por si hay mayusculas
+            // el toLowerCase se usa por si hya mayusculas
             switch (cmd){
                 case "lanzardados": return 21;
                 case "crearjugador": return 22;

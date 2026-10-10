@@ -3,7 +3,6 @@ package monopoly;
 import partida.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 
 
 public class Tablero {
@@ -67,9 +66,7 @@ public class Tablero {
      */
     private Casilla crearTransporteServicio(String nombre, String tipo, int posicion) {
         Casilla casilla = new Casilla(nombre, tipo, posicion, Valor.PRECIO_TRANSPORTE_SERVICIO, banca);
-        if (tipo.equals("Transporte")) {
-            casilla.setImpuesto(Valor.ALQUILER_TRANSPORTE);
-        }
+        if (tipo.equals("Transporte")) {casilla.setImpuesto(Valor.ALQUILER_TRANSPORTE);}
         banca.anhadirPropiedad(casilla);
         return casilla;
     }

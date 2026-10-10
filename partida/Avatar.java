@@ -26,6 +26,8 @@ public class Avatar {
     * Tipo del avatar, jugador al que pertenece, lugar en el que estará ubicado, y un arraylist con los
     * avatares creados (usado para crear un ID distinto del de los demás avatares).
      */
+
+
     public Avatar(String tipo, Jugador jugador, Casilla lugar, ArrayList<Avatar> avCreados) {
         this.setTipo(tipo);
         this.jugador = jugador;
@@ -36,39 +38,25 @@ public class Avatar {
     }
 
     // GETTERS
-    public String getId() {
-        return id;
-    }
-    public String getTipo() {
-        return tipo;
-    }
-    public Jugador getJugador() {
-        return jugador;
-    }
-    public Casilla getLugar() {
-        return lugar;
-    }
+    public String getId() {return id;}
+    public String getTipo() {return tipo;}
+    public Jugador getJugador() {return jugador;}
+    public Casilla getLugar() {return lugar;}
 
     // SETTERS
-    public void setId(String i) {
-        this.id = i;
-    }
+    public void setId(String i) {this.id = i;}
     public boolean setTipo(String t) {
         String lwcs=t.toLowerCase(Locale.ROOT);
-        switch (lwcs) {
-            case "coche": this.tipo = "Coche"; return true;
-            case "esfinge": this.tipo = "Esfinge"; return true;
-            case "sombrero": this.tipo = "Sombrero"; return true;
-            case "pelota":this.tipo = "Pelota"; return true;
-            default: System.out.println("Avatar no posible, elija otro"); return false;
-        }
+        return switch (lwcs) {
+            case "coche" -> {this.tipo = "Coche";yield true;}
+            case "esfinge" -> {this.tipo = "Esfinge";yield true;}
+            case "sombrero" -> {this.tipo = "Sombrero";yield true;}
+            case "pelota" -> {this.tipo = "Pelota";yield true;}
+            default -> {System.out.println("Avatar no posible, elija otro");yield false;}
+        };
     }
-    public void setJugador(Jugador j) {
-        this.jugador = j;
-    }
-    public void setLugar(Casilla l) {
-        this.lugar = l;
-    }
+    public void setJugador(Jugador j) {this.jugador = j;}
+    public void setLugar(Casilla l) {this.lugar = l;}
 
     //A continuación, tenemos otros métodos útiles para el desarrollo del juego.
     /*Metodo que permite mover a un avatar a una casilla concreta. Parámetros:
@@ -84,9 +72,7 @@ public class Avatar {
 
         // Calculamos la nueva posición (1 a 40)
         int nuevaPosicion = this.lugar.getPosicion() + valorTirada;
-        if (nuevaPosicion > 40) {
-            nuevaPosicion = nuevaPosicion - 40;
-        }
+        if (nuevaPosicion > 40) {nuevaPosicion = nuevaPosicion - 40;}
 
         // Buscamos la casilla destino
         for (int i = 0; i < casillas.size(); i++) {

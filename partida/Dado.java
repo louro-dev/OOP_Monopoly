@@ -14,9 +14,7 @@ public class Dado {
     }
 
     // CONSTRUCTOS
-    public Dado(){
-        this.valor =0;
-    }
+    public Dado(){this.valor =0;}
 
     // SETTERS
     public void setValor(int numero) {
