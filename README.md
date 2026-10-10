@@ -18,3 +18,6 @@ Primero acabar funcionalidades, con esta arquiectura funciona pero hay codigo re
 
     -Gestionar dentro de Analizar Comando toda a parte de acciones para no repetir 2 veces la 
     estructura switch
+
+    -En vez de ter os cases brutales, cada funcionalidad ten un metodo propio xa definido. Pasar o codigo cos cases
+    ao metodo, e chamar a ese metodo desde analizar comando

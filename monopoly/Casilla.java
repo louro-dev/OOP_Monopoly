@@ -34,7 +34,7 @@ public class Casilla {
     }//Parámetros vacíos
 
     /*Constructor para casillas tipo Solar, Servicios o Transporte:
-    * Parámetros: nombre casilla, tipo (debe ser solar, serv. o transporte), posición en el tablero, valor y dueño.
+     * Parámetros: nombre casilla, tipo (debe ser solar, serv. o transporte), posición en el tablero, valor y dueño.
      */
     public Casilla(String nombre, String tipo, int posicion, float valor, Jugador duenho) {
         this.nombre = nombre;
@@ -46,7 +46,7 @@ public class Casilla {
     }
 
     /*Constructor utilizado para inicializar las casillas de tipo IMPUESTOS.
-    * Parámetros: nombre, posición en el tablero, impuesto establecido y dueño.
+     * Parámetros: nombre, posición en el tablero, impuesto establecido y dueño.
      */
     public Casilla(String nombre, int posicion, float impuesto, Jugador duenho) {
         this.nombre = nombre;
@@ -58,7 +58,7 @@ public class Casilla {
     }
 
     /*Constructor utilizado para crear las otras casillas (Suerte, Caja de comunidad y Especiales):
-    * Parámetros: nombre, tipo de la casilla (será uno de los que queda), posición en el tablero y dueño.
+     * Parámetros: nombre, tipo de la casilla (será uno de los que queda), posición en el tablero y dueño.
      */
     public Casilla(String nombre, String tipo, int posicion, Jugador duenho) {
         this.nombre = nombre;
@@ -69,126 +69,52 @@ public class Casilla {
     }
 
     // GETTERS
-    public String getNombre() {
-        return nombre;
-    }
-    public String getTipo() {
-        return tipo;
-    }
-    public float getValor() {
-        return valor;
-    }
-    public int getPosicion() {
-        return posicion;
-    }
-    public Jugador getDuenho() {
-        return duenho;
-    }
-    public Grupo getGrupo() {
-        return grupo;
-    }
-    public float getImpuesto() {
-        return impuesto;
-    }
-    public float getHipoteca() {
-        return hipoteca;
-    }
-    public ArrayList<Avatar> getAvatares() {
-        return avatares;
-    }
-    public float getPrecioCasa() {
-        return precioCasa;
-    }
-    public float getPrecioHotel() {
-        return precioHotel;
-    }
-    public float getPrecioPiscina() {
-        return precioPiscina;
-    }
-    public float getPrecioPista() {
-        return precioPista;
-    }
-    public float getAlquilerCasa() {
-        return alquilerCasa;
-    }
-    public float getAlquilerHotel() {
-        return alquilerHotel;
-    }
-    public float getAlquilerPiscina() {
-        return alquilerPiscina;
-    }
-    public float getAlquilerPista() {
-        return alquilerPista;
-    }
+    public String getNombre() {return nombre;}
+    public String getTipo() {return tipo;}
+    public float getValor() {return valor;}
+    public int getPosicion() {return posicion;}
+    public Jugador getDuenho() {return duenho;}
+    public Grupo getGrupo() {return grupo;}
+    public float getImpuesto() {return impuesto;}
+    public float getHipoteca() {return hipoteca;}
+    public ArrayList<Avatar> getAvatares() {return avatares;}
+    public float getPrecioCasa() {return precioCasa;}
+    public float getPrecioHotel() {return precioHotel;}
+    public float getPrecioPiscina() {return precioPiscina;}
+    public float getPrecioPista() {return precioPista;}
+    public float getAlquilerCasa() {return alquilerCasa;}
+    public float getAlquilerHotel() {return alquilerHotel;}
+    public float getAlquilerPiscina() {return alquilerPiscina;}
+    public float getAlquilerPista() {return alquilerPista;}
     public boolean getHipotecada() {return hipotecada;}
 
     // SETTERS
-    public void setNombre(String n) {
-        this.nombre = n;
-    }
-    public void setTipo(String t) {
-        this.tipo = t;
-    }
-    public void setValor(int v) {
-        this.valor = v;
-    }
-    public void setPosicion(int p) {
-        this.posicion = p;
-    }
-    public void setDuenho(Jugador d) {
-        this.duenho = d;
-    }
-    public void setGrupo(Grupo g) {
-        this.grupo = g;
-    }
-    public void setImpuesto(float i) {
-        this.impuesto = i;
-    }
-    public void setHipoteca(float h) {
-        this.hipoteca = h;
-    }
-    public void setAvatares(ArrayList<Avatar> a) {
-        this.avatares = a;
-    }
-    public void setPrecioCasa(float p) {
-        this.precioCasa = p;
-    }
-    public void setPrecioHotel(float p) {
-        this.precioHotel = p;
-    }
-    public void setPrecioPiscina(float p) {
-        this.precioPiscina = p;
-    }
-    public void setPrecioPista(float p) {
-        this.precioPista = p;
-    }
-    public void setAlquilerCasa(float a) {
-        this.alquilerCasa = a;
-    }
-    public void setAlquilerHotel(float a) {
-        this.alquilerHotel = a;
-    }
-    public void setAlquilerPiscina(float a) {
-        this.alquilerPiscina = a;
-    }
-    public void setAlquilerPista(float a) {
-        this.alquilerPista = a;
-    }
-    public  void setHipotecada(boolean b) {this.hipotecada = b;}
-
+    public void setNombre(String n) {this.nombre = n;}
+    public void setTipo(String t) {this.tipo = t;}
+    public void setValor(int v) {this.valor = v;}
+    public void setPosicion(int p) {this.posicion = p;}
+    public void setDuenho(Jugador d) {this.duenho = d;}
+    public void setGrupo(Grupo g) {this.grupo = g;}
+    public void setImpuesto(float i) {this.impuesto = i;}
+    public void setHipoteca(float h) {this.hipoteca = h;}
+    public void setAvatares(ArrayList<Avatar> a) {this.avatares = a;}
+    public void setPrecioCasa(float p) {this.precioCasa = p;}
+    public void setPrecioHotel(float p) {this.precioHotel = p;}
+    public void setPrecioPiscina(float p) {this.precioPiscina = p;}
+    public void setPrecioPista(float p) {this.precioPista = p;}
+    public void setAlquilerCasa(float a) {this.alquilerCasa = a;}
+    public void setAlquilerHotel(float a) {this.alquilerHotel = a;}
+    public void setAlquilerPiscina(float a) {this.alquilerPiscina = a;}
+    public void setAlquilerPista(float a) {this.alquilerPista = a;}
+    public void setHipotecada(boolean b) {this.hipotecada = b;}
     //Metodo utilizado para añadir un avatar al array de avatares en casilla.
     public void anhadirAvatar(Avatar av) {
-        if(this.avatares == null) {
-            this.avatares = new ArrayList<>();
-        }
+        if (this.avatares == null) {this.avatares = new ArrayList<>();}
         this.avatares.add(av);
     }
-
     //Metodo utilizado para eliminar un avatar del array de avatares en casilla.
     public void eliminarAvatar(Avatar av) {
-        if(this.avatares != null) {
-            this.avatares.remove(av);
-        }
+        if (this.avatares != null) {this.avatares.remove(av);}
     }
 
     /*Metodo para evaluar qué hacer en una casilla concreta. Parámetros:
@@ -206,45 +132,42 @@ public class Casilla {
      */
 
     /*Metodo usado para comprar una casilla determinada. Parámetros:
-    * - Jugador que solicita la compra de la casilla.
-    * - Banca del monopoly (es el dueño de las casillas no compradas aún).*/
+     * - Jugador que solicita la compra de la casilla.
+     * - Banca del monopoly (es el dueño de las casillas no compradas aún).*/
     public void comprarCasilla(Jugador solicitante, Jugador banca) {
         if (this.getDuenho().getAvatar().getId().equals(banca.getAvatar().getId())) {
             if (solicitante.sumarFortuna((-1) * this.getValor())) {
                 banca.eliminarPropiedad(this);
                 solicitante.anhadirPropiedad(this);
                 solicitante.sumarGastos(this.getValor());
-                System.out.println("el jugador "+solicitante.getNombre()+" ha comprado la casilla "+this.getNombre().trim()+"\n");
+                System.out.println("el jugador " + solicitante.getNombre() + " ha comprado la casilla " + this.getNombre().trim() + "\n");
             }
-        } else {
-            System.out.println("Esa casilla ya tiene duenho");
-        }
+        } else {System.out.println("Esa casilla ya tiene duenho");}
     }
 
     /*Metodo para añadir valor a una casilla. Utilidad:
-    * - Sumar valor a la casilla de parking.
-    * - Sumar valor a las casillas de solar al no comprarlas tras cuatro vueltas de todos los jugadores.
-    * Este metodo toma como argumento la cantidad a añadir del valor de la casilla.*/
+     * - Sumar valor a la casilla de parking.
+     * - Sumar valor a las casillas de solar al no comprarlas tras cuatro vueltas de todos los jugadores.
+     * Este metodo toma como argumento la cantidad a añadir del valor de la casilla.*/
     public void sumarValor(float suma) {
-        valor+=suma;
+        valor += suma;
     }
 
     /*Metodo para mostrar información sobre una casilla.
-    * Devuelve una cadena con información específica de cada tipo de casilla.*/
+     * Devuelve una cadena con información específica de cada tipo de casilla.*/
     /*Está pensado para devolver la información general e identificativa
-    * de cualquier casilla (nombre, tipo, propietario, valor actual, etc.).*/
+     * de cualquier casilla (nombre, tipo, propietario, valor actual, etc.).*/
     public String infoCasilla() {
-        return "hola";
+        return this.toString(this.tipo);
     }
 
     /* Metodo para mostrar información de una casilla en venta.
      * Valor devuelto: texto con esa información.
      */
     /*Está pensado para filtrar y formatear la información únicamente de las casillas
-    * que están disponibles para comprar (o mostrar los datos financieros específicos de venta).*/
+     * que están disponibles para comprar (o mostrar los datos financieros específicos de venta).*/
     public String casEnVenta(String tipo) {
         tipo = tipo.trim().toLowerCase();
-
         return switch (tipo) {
             case "solar" -> ("tipo: solar\ngrupo: " + getGrupo() + "\nvalor: " + getValor());
             case "transporte" -> ("tipo: transporte\nvalor: " + getValor());
@@ -256,9 +179,7 @@ public class Casilla {
     // Metodo para obtener los colores de cada grupo para luego poder imprimirlos
     public String obtenerCodigoColor() {
         // Si la casilla no pertenece a ningún grupo (por ejemplo, Salida, Cárcel, etc.)
-        if (this.grupo == null || this.grupo.getColorGrupo() == null) {
-            return Valor.RESET;
-        }
+        if (this.grupo == null || this.grupo.getColorGrupo() == null) {return Valor.RESET;}
 
         String color = this.grupo.getColorGrupo().toLowerCase();
 
@@ -277,76 +198,71 @@ public class Casilla {
         };
     }
 
-    public void ComprarCasilla(Jugador plyr,Menu menu) {
-
-    }
-
     @Override
     public String toString() { // Para imprimir los nombres e ID de las casillas
         String id = "";
-        if(!avatares.isEmpty()) {
-            id ="&";
-            for(int i=0; i<avatares.size(); i++) {
-                id+= avatares.get(i).getId();
-            }
+        if (!avatares.isEmpty()) {
+            id = "&";
+            for (int i = 0; i < avatares.size(); i++) {id += avatares.get(i).getId();}
         }
         //quitamos los espacios entre el fin del nombre y la casilla
-        String CasillaLimpia=this.nombre.trim();
+        String CasillaLimpia = this.nombre.trim();
 
         //Calculamos cuantos espacios hay que poner para rellenar una casilla de 14 de largo
-        int numEspacios=14-CasillaLimpia.length()-id.length();
+        int numEspacios = 14 - CasillaLimpia.length() - id.length();
 
         //creamos el String que tenga los espacios necesarios
-        String espacios="";
-        for(int i=0; i<numEspacios; i++) {
-            espacios+=" ";
-        }
+        String espacios = "";
+        for (int i = 0; i < numEspacios; i++) {espacios += " ";}
 
         //Unimos todo
-        String celda=CasillaLimpia+espacios+id;
+        String celda = CasillaLimpia + espacios + id;
 
         // Resetea el color ANSI al final para no teñir las siguientes casillas ni los bordes.
         return obtenerCodigoColor() + celda + Valor.RESET;
     }
 
-    public String toString(String tipo){
+    public String toString(String tipo) {
         tipo = tipo.trim().toLowerCase();
         //acabar de implementar os
         switch (tipo) {
-            case "solar": return ("tipo: solar\ngrupo: " + getGrupo() + "\npropietario: " + getDuenho().getNombre() + "\nvalor: " + getValor() +
+            case "solar":
+                return ("tipo: solar\ngrupo: " + getGrupo() + "\npropietario: " + getDuenho().getNombre() + "\nvalor: " + getValor() +
                         "\nalquiler: " + getImpuesto() + "\nvalor hotel: " + getPrecioHotel() + "\nvalor casa: " + getPrecioCasa() +
                         "\nvalor piscina: " + getPrecioPiscina() + "\nvalor pista de deporte: " + getPrecioPista() +
                         "\nalquiler casa: " + getAlquilerCasa() + "\nalquiler hotel: " + getPrecioHotel() + "\nalquiler piscina: " +
                         getAlquilerPista() + "\nalquiler pista de deporte: " + this.getAlquilerPista() + "\n\n");
 
-            case "transporte": return ("tipo: transporte\nvalor: "+getValor()+"\n");
+            case "transporte":
+                return ("tipo: transporte\nvalor: " + getValor() + "\n");
 
-            case "impuesto": return ("tipo: impuesto\na pagar: " + getImpuesto() + "\n");
+            case "impuesto":
+                return ("tipo: impuesto\na pagar: " + getImpuesto() + "\n");
 
-            case "servicio": return "tipo: servicio\nvalor: " + getValor() + "\n";
+            case "servicio":
+                return "tipo: servicio\nvalor: " + getValor() + "\n";
 
             //parking es de tipo especial
             case "especial":
                 String ret = ("bote: " + getImpuesto() + "\n[");
-                for (int i = 0; i < getAvatares().size(); i++) {
-                    ret += this.getAvatares().get(i).getJugador().getNombre();
-                }
+                for (int i = 0; i < getAvatares().size(); i++) {ret += this.getAvatares().get(i).getJugador().getNombre();}
+
                 ret += "]\n\n";
                 return ret;
 
             case "carcel":
                 String rt = ("salir: " + Valor.COSTE_SALIR_CARCEL + "\n");
-                for (int i = 0; i < getAvatares().size(); i++) {
-                    rt += "[" + getAvatares().get(i).getJugador().getNombre() + "," + getAvatares().get(i).getJugador().getTiradasCarcel() + "]";
-                }
+                for (int i = 0; i < getAvatares().size(); i++) {rt += "[" + getAvatares().get(i).getJugador().getNombre() +
+                        "," + getAvatares().get(i).getJugador().getTiradasCarcel() + "]";}
                 rt += "\n\n";
                 return rt;
 
-            default: return " ";
+            default:
+                return " ";
         }
 
     }
-    }
+}
 
 
 

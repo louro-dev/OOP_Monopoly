@@ -4,10 +4,8 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.stream.Stream;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
@@ -28,8 +26,8 @@ public class Menu {
     private boolean tirado; //Booleano para comprobar si el jugador que tiene el turno ha tirado o no.
     private boolean solvente; //Booleano para comprobar si el jugador que tiene el turno es solvente, es decir, si ha pagado sus deudas.
 
-    //CONSTRUCTORf
-    public Menu(String args[]){
+    //CONSTRUCTOR
+    public Menu(String[] args){
         jugadores = new ArrayList<>();
         avatares = new ArrayList<>();
         lanzamientos = 0;
@@ -66,7 +64,7 @@ public class Menu {
 
     // Metodo para inciar una partida: crea los jugadores y avatares.
     //por ahora solo pedimos casilla de Salida, si hiciesen falta mas se pediria el tablero
-    private void iniciarPartida(String args[]) {
+    private void iniciarPartida(String[] args) {
         //creamos variable de control para gestionar en que iteraciones se imprime el tablero: si se va a mover un jugador
         //si hace falta, pero si solo se pide que se imprima algo no hace falta reimprimirlo
         boolean ctrl=true;
@@ -88,7 +86,6 @@ public class Menu {
                 case "n":
                 default:
                     //temporalmente usamos la variable de control para controlar si se va a usar documento inicial o no
-                    ctrl=false;
                     System.out.println("empezando sin documento inicial...\n");
                     break;
             }
@@ -132,9 +129,7 @@ public class Menu {
                     switch (analizarComando(comand)) {
                         //0 y -1 son errores
                         case 0:
-                        case -1:
-                            System.out.println("Error al leer el archivo1");
-                            return;
+                        case -1: System.out.println("Error al leer el archivo1");return;
                         //1 se ignora, no puede mandarte a outro nuevo archivo
                         case 1: break;
                         //21 se lanzan los dados y mueve al jugador que tiene el turno
@@ -195,14 +190,12 @@ public class Menu {
                             tirado = true;
                             break;
 
-                        //22 creamos nuevo jugador
                         case 22:
-                            int tam = this.getAvatares().size();
                             Jugador j = Jugador.newJugador(divCom[2], divCom[3], ini, this.getAvatares(), this.getJugadores());
 
-                            if(this.getAvatares().size() == tam){ctrl=false;}
+                            if(j==null){ctrl=false;}
                             break;
-                        //23 imprimir jugador que tiene el turno
+
                         case 23:
                             //ponemos control de impresion a false para que no imprima
                             ctrl = false;
@@ -213,7 +206,7 @@ public class Menu {
                             Jugador turn = this.getJugadores().get(this.getTurno());
                             System.out.println(turn + "\n\n");
                             break;
-                        //24 listamos los jugadores
+
                         case 24:
                             //ponemos control de impresion a false para que no imprima
                             ctrl = false;
@@ -257,7 +250,7 @@ public class Menu {
                         case 27:
                             ctrl=false;
                             Casilla atc= this.getTablero().encontrar_casilla(divCom[1]);
-                            if(atc!=null) {System.out.println(atc.toString(atc.getTipo()));}
+                            if(atc!=null) {System.out.println(atc.infoCasilla());}
                             else{System.out.println("No existe esa casilla");}
 
                             break;
@@ -268,6 +261,7 @@ public class Menu {
                             Jugador ply = Jugador.encontrarJugador(divCom[2],this.getJugadores());
                             if(ply != null) {System.out.println(ply.toString(ply.getNombre()));}
                             break;
+
                         case 29:
                             if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
                             ctrl=false;
@@ -275,8 +269,7 @@ public class Menu {
                             c.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
                             break;
 
-                        case 30:
-                            break;
+                        case 30: break;
 
                         case 31:
                             System.out.println("\n----------CASILLAS EN VENTA----------\n");
@@ -303,18 +296,27 @@ public class Menu {
                 System.out.println("Error al leer el archivo2");
             }
         }
-        //________________________________________________________________
-        //----------------------------------------------------------------
+
         do{
             //reiniciamos variable de control de impresion
             ctrl=true;
             //imprimimos la opcion para pedir los dados y la escaneamos con sc.nextLine()
             Scanner sc = new Scanner(System.in);
-            System.out.println("--------------------MENU--------------------\nlanzar los dados: lanzar Dados\n" +
-                    "Lanzar los dados determinados: lanzad Dados <x+y>\nCrear un jugador: crear Jugador <nombre> <tipo_avatar>"+
-                    "\nJugador al que le toca: jugador\nListar los jugadores: listar Jugadores\n"+"Describir una casilla: describir <casilla>\n"+
-                    "Describir a un jugador: describir jugador <nombre>"+"\nAcabar el turno: Acabar Turno\nVer el tablero: ver tablero\n" +
-                    "Comprar una casilla: comprar casilla\nListar las casillas en venta: Listar enventa\nAcabar la partida: salir\n");
+            System.out.println("""
+                    --------------------MENU--------------------
+                    lanzar los dados: lanzar Dados
+                    Lanzar los dados determinados: lanzad Dados <x+y>
+                    Crear un jugador: crear Jugador <nombre> <tipo_avatar>
+                    Jugador al que le toca: jugador
+                    Listar los jugadores: listar Jugadores
+                    Describir una casilla: describir <casilla>
+                    Describir a un jugador: describir jugador <nombre>
+                    Acabar el turno: Acabar Turno
+                    Ver el tablero: ver tablero
+                    Comprar una casilla: comprar casilla
+                    Listar las casillas en venta: Listar enventa
+                    Acabar la partida: salir
+                    """);
             if(!this.getJugadores().isEmpty() && this.getJugadores().get(this.getTurno()).getEnCarcel()){
                 System.out.println("Salir de la carcel: Salir Carcel\n");
             }
@@ -395,10 +397,10 @@ public class Menu {
                         break;
 
                     case 22:
-                        int tam = this.getAvatares().size();
+
                         //utilizamos los otros Strings de divEn[i] para los parametros
                         Jugador j = Jugador.newJugador(divEn[2],divEn[3],ini,this.getAvatares(),this.getJugadores());
-                        if(this.getAvatares().size() == tam){
+                        if(j==null){
                             ctrl=false;
                         }
 
@@ -475,12 +477,8 @@ public class Menu {
                     case 27:
                         ctrl=false;
                         Casilla atc= this.getTablero().encontrar_casilla(divEn[1]);
-                        if(atc!=null) {
-                            System.out.println(atc.toString(atc.getTipo()));
-                        }
-                        else{
-                            System.out.println("No existe esa casilla");
-                        }
+                        if(atc!=null) System.out.println(atc.infoCasilla());
+                        else System.out.println("No existe esa casilla");
 
                         break;
 
@@ -653,14 +651,13 @@ public class Menu {
                     if(!actual.sumarFortuna((-1) * alquiler)){
                         setSolvente(false);
                         break;
-                    };
+                    }
                     actual.sumarGastos(alquiler);
 
                     // Le sumamos el dinero al dueño de la casilla
                     duenhoSolar.sumarFortuna(alquiler);
 
                     System.out.printf("Se han pagado %.0f€ de alquiler a %s.\n", alquiler, destino.getDuenho().getNombre());
-
                 }
                 break;
 

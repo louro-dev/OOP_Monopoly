@@ -3,7 +3,6 @@ package monopoly;
 import partida.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 
 
 public class Tablero {
@@ -21,26 +20,14 @@ public class Tablero {
     }
 
     // GETTERS
-    public ArrayList<ArrayList<Casilla>> getPosiciones() {
-        return posiciones;
-    }
-    public HashMap<String, Grupo> getGrupos() {
-        return grupos;
-    }
-    public Jugador getBanca() {
-        return banca;
-    }
+    public ArrayList<ArrayList<Casilla>> getPosiciones() {return posiciones;}
+    public HashMap<String, Grupo> getGrupos() {return grupos;}
+    public Jugador getBanca() {return banca;}
 
     // SETTERS
-    public void setPosiciones(ArrayList<ArrayList<Casilla>> p) {
-        this.posiciones = p;
-    }
-    public void setGrupos(HashMap<String, Grupo> g) {
-        this.grupos = g;
-    }
-    public void setBanca(Jugador b) {
-        this.banca = b;
-    }
+    public void setPosiciones(ArrayList<ArrayList<Casilla>> p) {this.posiciones = p;}
+    public void setGrupos(HashMap<String, Grupo> g) {this.grupos = g;}
+    public void setBanca(Jugador b) {this.banca = b;}
     
     //Metodo para crear todas las casillas del tablero. Formado a su vez por cuatro métodos (1/lado).
     private void generarCasillas() {
@@ -79,9 +66,7 @@ public class Tablero {
      */
     private Casilla crearTransporteServicio(String nombre, String tipo, int posicion) {
         Casilla casilla = new Casilla(nombre, tipo, posicion, Valor.PRECIO_TRANSPORTE_SERVICIO, banca);
-        if (tipo.equals("Transporte")) {
-            casilla.setImpuesto(Valor.ALQUILER_TRANSPORTE);
-        }
+        if (tipo.equals("Transporte")) {casilla.setImpuesto(Valor.ALQUILER_TRANSPORTE);}
         banca.anhadirPropiedad(casilla);
         return casilla;
     }

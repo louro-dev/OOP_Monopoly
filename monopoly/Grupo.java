@@ -42,26 +42,14 @@ public class Grupo {
     }
 
     // GETTERS
-    public ArrayList<Casilla> getMiembros() {
-        return miembros;
-    }
-    public String getColorGrupo() {
-        return colorGrupo;
-    }
-    public int getNumCasillas() {
-        return numCasillas;
-    }
+    public ArrayList<Casilla> getMiembros() {return miembros;}
+    public String getColorGrupo() {return colorGrupo;}
+    public int getNumCasillas() {return numCasillas;}
 
     // SETTERS
-    public void setMiembros(ArrayList<Casilla> m) {
-        this.miembros = m;
-    }
-    public void setColorGrupo(String c) {
-        this.colorGrupo = c;
-    }
-    public void setNumCasillas(int n) {
-        this.numCasillas = n;
-    }
+    public void setMiembros(ArrayList<Casilla> m) {this.miembros = m;}
+    public void setColorGrupo(String c) {this.colorGrupo = c;}
+    public void setNumCasillas(int n) {this.numCasillas = n;}
 
     /* Metodo que añade una casilla al array de casillas miembro de un grupo.
     * Parámetro: casilla que se quiere añadir.
@@ -80,16 +68,12 @@ public class Grupo {
         for(int c=0; c<miembros.size(); c++) {
             Casilla cas = miembros.get(c);
             String id = cas.getDuenho().getAvatar().getId();
-            if(!jugador.getAvatar().getId().equals(id)) {
-                return false;
-            }
+            if(!jugador.getAvatar().getId().equals(id)) {return false;}
         }
         return true;
     }
 
     @Override
-    public String toString() {
-        return this.getColorGrupo();
-    }
+    public String toString() {return this.getColorGrupo();}
 
 }
