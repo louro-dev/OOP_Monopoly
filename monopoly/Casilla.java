@@ -213,6 +213,7 @@ public class Casilla {
             if (solicitante.sumarFortuna((-1) * this.getValor())) {
                 banca.eliminarPropiedad(this);
                 solicitante.anhadirPropiedad(this);
+                solicitante.sumarGastos(this.getValor());
                 System.out.println("el jugador "+solicitante.getNombre()+" ha comprado la casilla "+this.getNombre().trim()+"\n");
             }
         } else {

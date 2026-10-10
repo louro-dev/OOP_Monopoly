@@ -668,7 +668,7 @@ public class Menu {
                 Jugador duenhoServicio = destino.getDuenho();
 
                 if (duenhoServicio != null && !duenhoServicio.equals(this.banca) && !duenhoServicio.equals(actual)) {
-                    float alquiler = 4.0f * sumaDados * 50000.0f;
+                    float alquiler = 4.0f * sumaDados * Valor.FACTOR_SERVICIO;
 
                     if(!actual.sumarFortuna(-alquiler)){
                         setSolvente(false);

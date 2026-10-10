@@ -1,7 +1,6 @@
 package partida;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import monopoly.*;
 
@@ -235,8 +234,6 @@ public class Jugador {
             }
         }
         st += "]\n\n";
-
-        st+="faltan os edificios";
 
         return st;
     }
