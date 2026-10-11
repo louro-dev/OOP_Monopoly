@@ -702,7 +702,11 @@ public class Menu {
                     break;
                 }
                 // Sumamos al bote usando el getter y setter
-                destino.sumarValor(Valor.IMPUESTO);
+                // Buscamos la casilla de parking en el tablero y le sumamos el valor
+                Casilla parking = this.getTablero().encontrar_casilla("parking"); // o "Especial" / "Parking"
+                if (parking != null) {
+                    parking.sumarValor(Valor.IMPUESTO);
+                }
                 System.out.printf("El jugador %s paga %.0f€ de impuestos que se depositan en el Parking.\n", actual.getNombre(),Valor.IMPUESTO);
                 break;
 
