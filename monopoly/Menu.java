@@ -49,6 +49,7 @@ public class Menu {
     public Dado getDado2() {return dado2;}
     public int getLanzamientos() {return lanzamientos;}
     public boolean getSolvente() {return solvente;}
+    public boolean getTirado() {return tirado;}
 
     //SETTERS
     public void setAvataresMenu(ArrayList<Avatar> avatares){this.avatares = avatares;}
@@ -60,6 +61,7 @@ public class Menu {
     public void setDado2(Dado dado2){this.dado2 = dado2;}
     public void setLanzamientosMenu(int lanzamientos){this.lanzamientos = lanzamientos;}
     public void setSolvente(boolean solvente){this.solvente = solvente;}
+    public void setTirado(boolean tirado) {this.tirado = tirado;}
 
 
     // Metodo para inciar una partida: crea los jugadores y avatares.
@@ -223,6 +225,7 @@ public class Menu {
 
                         case 25:
                             if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");break;}
+                            if(!this.getTirado()) {break;}
                             if (this.getTurno() == this.getAvatares().size() - 1) {this.turno = 0;}
                             else {this.turno = this.getTurno() + 1;}
 
@@ -442,6 +445,7 @@ public class Menu {
                             System.out.println("\nNo hay jugadores creados\n");
                             break;
                         }
+                        if(!this.getTirado()) {break;}
                         if (this.getTurno() == this.getAvatares().size() - 1) {
                             this.turno = 0;
                         } else {
