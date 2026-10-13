@@ -29,6 +29,13 @@ public class Casilla {
     private float alquilerPista;
     private boolean hipotecada; //atributo que dice si una casilla esta hipotecada o no
 
+    // Atributos adicionales para saber el numero de edificios y su ID
+    private int numeroCasas = 0;
+    private int numeroHoteles = 0;
+    private int numeroPiscinas = 0;
+    private int numeroPistas = 0;
+    private ArrayList<String> edificios = new ArrayList<>();
+
     //Constructores:
     public Casilla() {
     }//Parámetros vacíos
@@ -87,6 +94,11 @@ public class Casilla {
     public float getAlquilerPiscina() {return alquilerPiscina;}
     public float getAlquilerPista() {return alquilerPista;}
     public boolean getHipotecada() {return hipotecada;}
+    public int getNumeroCasas() { return numeroCasas;}
+    public int getNumeroHoteles() {return numeroHoteles;}
+    public int getNumeroPiscinas() {return numeroPiscinas;}
+    public int getNumeroPistas() {return numeroPistas;}
+    public ArrayList<String> getEdificios() {return edificios;}
 
     // SETTERS
     public void setNombre(String n) {this.nombre = n;}
@@ -107,6 +119,12 @@ public class Casilla {
     public void setAlquilerPiscina(float a) {this.alquilerPiscina = a;}
     public void setAlquilerPista(float a) {this.alquilerPista = a;}
     public void setHipotecada(boolean b) {this.hipotecada = b;}
+    public void setNumeroCasas(int c) {this.numeroCasas = c;}
+    public void setNumeroHoteles(int h) {this.numeroHoteles = h;}
+    public void setNumeroPiscinas(int p) {this.numeroPiscinas = p;}
+    public void setNumeroPistas(int p) {this.numeroPistas = p;}
+    public void setEdificios(ArrayList<String> e) {this.edificios = e;}
+
     //Metodo utilizado para añadir un avatar al array de avatares en casilla.
     public void anhadirAvatar(Avatar av) {
         if (this.avatares == null) {this.avatares = new ArrayList<>();}
@@ -261,6 +279,54 @@ public class Casilla {
                 return " ";
         }
 
+    }
+
+    public boolean puedoEdificar(String tipo) {
+        switch (tipo.toLowerCase()) {
+            case "casa":
+                // Se construyen si no hay hotel y hay menos de 4 casas
+                return this.numeroHoteles == 0 && this.numeroCasas < 4;
+
+            case "hotel":
+                // Se puede construir exactamente 1 hotel si hay 4 casas y 0 hoteles
+                return this.numeroCasas == 4 && this.numeroHoteles == 0;
+
+            case "piscina":
+                // Requiere tener exactamente 1 hotel y no tener piscina
+                return this.numeroHoteles == 1 && this.numeroPiscinas == 0;
+
+            case "pista":
+                // Requiere tener exactamente 1 piscina y no tener pista
+                return this.numeroPiscinas == 1 && this.numeroPistas == 0;
+
+            default:
+                return false;
+        }
+    }
+
+    public String anhadirEdificio(String tipo) {
+        String idEdificio = switch (tipo.toLowerCase()) {
+            case "casa" -> {
+                this.setNumeroCasas(getNumeroCasas() + 1);
+                yield "casa-" + getNumeroCasas();
+            }
+            case "hotel" -> {
+                this.setNumeroHoteles(getNumeroHoteles() + 1);
+                yield "hotel-" + getNumeroHoteles();
+            }
+            case "piscina" -> {
+                this.setNumeroPiscinas(getNumeroPiscinas() + 1);
+                yield "piscina-" + getNumeroPiscinas();
+            }
+            case "pista" -> {
+                this.setNumeroPistas(getNumeroPistas() + 1);
+                yield "pista-" + getNumeroPistas();
+            }
+            default -> "";
+        };
+
+        edificios.add(idEdificio);
+        return idEdificio;
     }
 }
 

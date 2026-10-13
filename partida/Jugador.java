@@ -15,7 +15,8 @@ public class Jugador {
     private boolean enCarcel; //Será true si el jugador está en la carcel
     private int tiradasCarcel; //Cuando está en la carcel, contará las tiradas sin éxito que ha hecho allí para intentar salir (se usa para limitar el numero de intentos).
     private int vueltas; //Cuenta las vueltas dadas al tablero.
-    private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
+    private ArrayList<Casilla> propiedades;//Propiedades que posee el jugador.
+    private ArrayList<Casilla> Edificios;
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {
@@ -44,6 +45,7 @@ public class Jugador {
         this.tiradasCarcel = 0;
         this.vueltas = 0;
         this.propiedades = new ArrayList<>();
+
     }
 
     //Creamos un metodo que llame al constructor para poder tener control sobre los jugadores, ya que el constructor
@@ -87,6 +89,9 @@ public class Jugador {
     public ArrayList<Casilla> getPropiedades() {
         return this.propiedades;
     }
+    public ArrayList<Casilla> getEdificios() {
+        return this.Edificios;
+    }
 
     // SETTERS
     public void setNombre(String n) {
@@ -110,9 +115,8 @@ public class Jugador {
     public void setVueltas(int v) {
         this.vueltas = v;
     }
-    public void setPropiedades(ArrayList<Casilla> p) {
-        this.propiedades = p;
-    }
+    public void setPropiedades(ArrayList<Casilla> p) {this.propiedades = p;}
+    public void setEdificios(ArrayList<Casilla> p) {this.Edificios = p;}
 
     //Otros métodos:
     //Metodo para añadir una propiedad al jugador. Como parámetro, la casilla a añadir.
@@ -149,7 +153,7 @@ public class Jugador {
     //Metodo para sumar gastos a un jugador.
     //Parámetro: valor a añadir a los gastos del jugador (será el precio de un solar, impuestos pagados...).
     public void sumarGastos(float valor) {
-        gastos+=valor;
+        gastos+=Math.abs(valor);
     }
 
     /*Metodo para establecer al jugador en la cárcel.
@@ -186,56 +190,88 @@ public class Jugador {
         return null;
     }
 
+    // Es el toString de listar jugadores y describir jugador turno
     @Override
-    public String toString(){
-        String str= "nombre del jugador: "+this.getNombre()+"\nAvatar del jugador: "+
-                this.getAvatar()+"\nFortuna del jugador: "+
-                String.format(java.util.Locale.of("es","ES"), "%,.0f", this.getFortuna())+
-                "\nGastos totales: "+
-                String.format(java.util.Locale.of("es", "ES"), "%,.0f", this.getGastos())+
-                "\nEsta encarcelado?: "+this.getEnCarcel()+"\nVueltas al tablero: "+this.getVueltas()+"\nLista de pro" +
-                "piedades: [";
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-        //bucle para imprimir propiedades
+        sb.append("Nombre del jugador: ").append(this.getNombre())
+                .append("\nAvatar del jugador: ").append(this.getAvatar())
+                .append("\nFortuna del jugador: ").append(String.format(java.util.Locale.of("es", "ES"), "%,.0f", this.getFortuna()))
+                .append("\nGastos totales: ").append(String.format(java.util.Locale.of("es", "ES"), "%,.0f", this.getGastos()))
+                .append("\nEsta encarcelado?: ").append(this.getEnCarcel())
+                .append("\nVueltas al tablero: ").append(this.getVueltas())
+                .append("\nLista de propiedades: [");
+
+        // Bucle para imprimir propiedades con StringBuilder
         for (int i = 0; i < getPropiedades().size(); i++) {
-            str += this.getPropiedades().get(i).getNombre().trim();
-            //solo añadimos la coma si hay siguiente elemento
+            sb.append(this.getPropiedades().get(i).getNombre().trim());
             if (i < getPropiedades().size() - 1) {
-                str += ", ";
+                sb.append(", ");
             }
         }
-        str += "]";
+        sb.append("]");
 
-        return str;
+
+        sb.append("\nLista de edificios: [");
+        if (this.getEdificios() != null && !this.getEdificios().isEmpty()) {
+            for (int i = 0; i < this.getEdificios().size(); i++) {
+                sb.append(this.getEdificios().get(i));
+                if (i < this.getEdificios().size() - 1) {
+                    sb.append(", ");
+                }
+            }
+        }
+        sb.append("]");
+
+
+        return sb.toString();
     }
 
+    // Es el toString de describir jugador
     public String toString(String nombre) {
-        String st="nombre: "+nombre+"\nAvatar: "+this.getAvatar().getId()+"\nfortuna: "+
-                String.format(java.util.Locale.of("es","ES"), "%,.0f", this.getFortuna())
-                +"\npropiedades: [";
+        StringBuilder sb = new StringBuilder();
 
-        //bucle para imprimir propiedades
+        sb.append("Nombre: ").append(nombre)
+                .append("\nAvatar: ").append(this.getAvatar().getId())
+                .append("\nFortuna: ").append(String.format(java.util.Locale.of("es", "ES"), "%,.0f", this.getFortuna()))
+                .append("\nPropiedades: [");
+
+        // Bucle para imprimir propiedades
         for (int i = 0; i < getPropiedades().size(); i++) {
-            st += this.getPropiedades().get(i).getNombre().trim();
-            //solo añadimos la coma si hay siguiente elemento
+            sb.append(this.getPropiedades().get(i).getNombre().trim());
             if (i < getPropiedades().size() - 1) {
-                st += ", ";
+                sb.append(", ");
             }
         }
-        st += "]\nhipotecadas: [";
+        sb.append("]\nhipotecadas: [");
 
-        //propiedades hipotecadas
+        // Propiedades hipotecadas
+        boolean primerHipotecada = true;
         for (int i = 0; i < getPropiedades().size(); i++) {
             if (this.getPropiedades().get(i).getHipotecada()) {
-                if (i>0) {
-                    st += ", ";
+                if (!primerHipotecada) {
+                    sb.append(", ");
                 }
-                st += this.getPropiedades().get(i).getNombre().trim();
+                sb.append(this.getPropiedades().get(i).getNombre().trim());
+                primerHipotecada = false;
             }
         }
-        st += "]\n\n";
+        sb.append("]\n");
 
-        return st;
+        // Listar edificios del jugador
+        sb.append("edificios: [");
+        if (this.getEdificios() != null && !this.getEdificios().isEmpty()) {
+            for (int i = 0; i < this.getEdificios().size(); i++) {
+                sb.append(this.getEdificios().get(i));
+                if (i < this.getEdificios().size() - 1) {
+                    sb.append(", ");
+                }
+            }
+        }
+        sb.append("]\n\n");
+
+        return sb.toString();
     }
 
 }
