@@ -312,6 +312,11 @@ public class Casilla {
             }
             case "hotel" -> {
                 this.setNumeroHoteles(getNumeroHoteles() + 1);
+                this.setNumeroCasas(0);
+                edificios.remove("casa-1");
+                edificios.remove("casa-2");
+                edificios.remove("casa-3");
+                edificios.remove("casa-4");
                 yield "hotel-" + getNumeroHoteles();
             }
             case "piscina" -> {
