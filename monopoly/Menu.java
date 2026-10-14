@@ -147,17 +147,17 @@ public class Menu {
             Scanner sc = new Scanner(System.in);
             System.out.println("""
                     --------------------MENU--------------------
-                    lanzar los dados: lanzar Dados
-                    Lanzar los dados determinados: lanzad Dados <x+y>
-                    Crear un jugador: crear Jugador <nombre> <tipo_avatar>
+                    lanzar los dados: lanzar dados
+                    Lanzar los dados determinados: lanzar dados <x+y>
+                    Crear un jugador: crear jugador <nombre> <tipo_avatar>
                     Jugador al que le toca: jugador
                     Listar los jugadores: listar Jugadores
                     Describir una casilla: describir <casilla>
                     Describir a un jugador: describir jugador <nombre>
-                    Acabar el turno: Acabar Turno
+                    Acabar el turno: acabar turno
                     Ver el tablero: ver tablero
                     Comprar una casilla: comprar casilla
-                    Listar las casillas en venta: Listar enventa
+                    Listar las casillas en venta: listar enventa
                     Acabar la partida: salir
                     """);
             if(!this.getJugadores().isEmpty() && this.getJugadores().get(this.getTurno()).getEnCarcel()){
@@ -226,11 +226,11 @@ public class Menu {
                             }
                         }
                         else {
-                            System.out.println("Faltan o sobran parámetros. Uso: crear jugador <nombre> <avatar>");
+                            System.out.println("Error. Uso: crear jugador <nombre> <avatar>");
                         }
                     }
                     else {
-                        System.out.println("Faltan parámetros. Uso: crear jugador <nombre> <avatar>");
+                        System.out.println("Error. Uso: crear jugador <nombre> <avatar>");
                         ctrl = false;
                     }
                     break;
@@ -283,6 +283,9 @@ public class Menu {
         Jugador ply = Jugador.encontrarJugador(nombre,this.getJugadores());
         if(ply != null) {
             System.out.println(ply.toString(ply.getNombre()));
+        }
+        else {
+            System.out.println("Error. Uso: describir jugador <nombre>");
         }
     }
 

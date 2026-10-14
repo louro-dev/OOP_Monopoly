@@ -16,7 +16,6 @@ public class Jugador {
     private int tiradasCarcel; //Cuando está en la carcel, contará las tiradas sin éxito que ha hecho allí para intentar salir (se usa para limitar el numero de intentos).
     private int vueltas; //Cuenta las vueltas dadas al tablero.
     private ArrayList<Casilla> propiedades;//Propiedades que posee el jugador.
-    private ArrayList<Casilla> Edificios;
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {
@@ -89,9 +88,6 @@ public class Jugador {
     public ArrayList<Casilla> getPropiedades() {
         return this.propiedades;
     }
-    public ArrayList<Casilla> getEdificios() {
-        return this.Edificios;
-    }
 
     // SETTERS
     public void setNombre(String n) {
@@ -116,7 +112,6 @@ public class Jugador {
         this.vueltas = v;
     }
     public void setPropiedades(ArrayList<Casilla> p) {this.propiedades = p;}
-    public void setEdificios(ArrayList<Casilla> p) {this.Edificios = p;}
 
     //Otros métodos:
     //Metodo para añadir una propiedad al jugador. Como parámetro, la casilla a añadir.
@@ -214,11 +209,21 @@ public class Jugador {
 
 
         sb.append("\nLista de edificios: [");
-        if (this.getEdificios() != null && !this.getEdificios().isEmpty()) {
-            for (int i = 0; i < this.getEdificios().size(); i++) {
-                sb.append(this.getEdificios().get(i));
-                if (i < this.getEdificios().size() - 1) {
-                    sb.append(", ");
+        boolean primerEdificio = true;
+
+        // Recorremos la lista de casillas (propiedades)
+        for (int i = 0; i < getPropiedades().size(); i++) {
+            Casilla c = getPropiedades().get(i);
+
+            // Comprobamos si la casilla actual tiene edificios
+            if (c.getEdificios() != null && !c.getEdificios().isEmpty()) {
+                // Recorremos la lista de edificios de esta casilla
+                for (int j = 0; j < c.getEdificios().size(); j++) {
+                    if (!primerEdificio) {
+                        sb.append(", ");
+                    }
+                    sb.append(c.getEdificios().get(j)); // Añade el edificio
+                    primerEdificio = false;
                 }
             }
         }
@@ -261,11 +266,17 @@ public class Jugador {
 
         // Listar edificios del jugador
         sb.append("edificios: [");
-        if (this.getEdificios() != null && !this.getEdificios().isEmpty()) {
-            for (int i = 0; i < this.getEdificios().size(); i++) {
-                sb.append(this.getEdificios().get(i));
-                if (i < this.getEdificios().size() - 1) {
-                    sb.append(", ");
+        boolean primerEdificio = true;
+
+        for (int i = 0; i < this.getPropiedades().size(); i++) {
+            Casilla c = this.getPropiedades().get(i);
+            if (c.getEdificios() != null && !c.getEdificios().isEmpty()) {
+                for (int j = 0; j < c.getEdificios().size(); j++) {
+                    if (!primerEdificio) {
+                        sb.append(", ");
+                    }
+                    sb.append(c.getEdificios().get(j));
+                    primerEdificio = false;
                 }
             }
         }
