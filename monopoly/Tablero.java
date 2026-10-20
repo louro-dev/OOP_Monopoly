@@ -276,7 +276,7 @@ public class Tablero {
     //Para imprimir el tablero, modificamos el metodo toString().
     @Override
     public String toString() {
-        String tablero = "";
+        StringBuilder tablero = new StringBuilder();
         ArrayList<Casilla> sur = posiciones.get(0);
         ArrayList<Casilla> oeste = posiciones.get(1);
         ArrayList<Casilla> norte = posiciones.get(2);
@@ -287,12 +287,12 @@ public class Tablero {
                 "-------------------------------------------------------------------------\n";
 
         // Norte
-        tablero += lineaBaja;
-        for(int i=0; i<norte.size(); i++) {
-            tablero = tablero + "|" + norte.get(i).toString();
+        tablero.append(lineaBaja);
+        for (Casilla casilla : norte) {
+            tablero.append("|").append(casilla.toString());
         }
-        tablero += "|\n";
-        tablero += lineaAlta;
+        tablero.append("|\n");
+        tablero.append(lineaAlta);
 
         // Este y Oeste
         int tamanoLaterales = oeste.size();
@@ -303,27 +303,23 @@ public class Tablero {
             String espacioCentral="                                                                                     " +
                     "                                                 ";
             //Casillas
-            tablero+="|"+oeste.get(indiceOeste)+"|"
-                    +espacioCentral+
-                    "|"+este.get(indiceEste)+"|\n";
+            tablero.append("|").append(oeste.get(indiceOeste)).append("|").append(espacioCentral).append("|").append(este.get(indiceEste)).append("|\n");
 
             //separadores
             if(i<tamanoLaterales-1) {
-                tablero += "|--------------|"
-                        + espacioCentral
-                        + "|--------------|\n";
+                tablero.append("|--------------|").append(espacioCentral).append("|--------------|\n");
             }
         }
 
         // Sur
-        tablero += lineaBaja;
+        tablero.append(lineaBaja);
         for(int i=sur.size()-1; i>=0; i--) {
-            tablero+= "|" + sur.get(i).toString();
+            tablero.append("|").append(sur.get(i).toString());
         }
-        tablero += "|\n";
-        tablero += lineaAlta;
+        tablero.append("|\n");
+        tablero.append(lineaAlta);
 
-        return tablero;
+        return tablero.toString();
     }
     
     //Metodo usado para buscar la casilla con el nombre pasado como argumento:
@@ -335,28 +331,28 @@ public class Tablero {
         int tamLat = oeste.size();
         int tamTop =  norte.size();
 
-        for(int i=0; i<tamTop; i++) {
-            String nom = sur.get(i).getNombre().trim().toLowerCase();
+        for(Casilla CasS : sur) {
+            String nom = CasS.getNombre().trim().toLowerCase();
             if(nom.equals(nombre.toLowerCase())) {
-                return sur.get(i);
+                return CasS;
             }
         }
-        for(int i=0; i<tamTop; i++) {
-            String nom = norte.get(i).getNombre().trim().toLowerCase();
-            if(nom.equals(nombre.toLowerCase())) {
-                return norte.get(i);
+        for (Casilla CasN : norte) {
+            String nom = CasN.getNombre().trim().toLowerCase();
+            if (nom.equals(nombre.toLowerCase())) {
+                return CasN;
             }
         }
-        for(int i = 0; i< tamLat; i++) {
-            String nom = oeste.get(i).getNombre().trim().toLowerCase();
-            if(nom.equals(nombre.toLowerCase())) {
-                return oeste.get(i);
+        for (Casilla CasW : oeste) {
+            String nom = CasW.getNombre().trim().toLowerCase();
+            if (nom.equals(nombre.toLowerCase())) {
+                return CasW;
             }
         }
-        for(int i=0; i<tamLat; i++) {
-            String nom = este.get(i).getNombre().trim().toLowerCase();
+        for(Casilla CasE : este) {
+            String nom = CasE.getNombre().trim().toLowerCase();
             if(nom.equals(nombre.toLowerCase())) {
-                return este.get(i);
+                return CasE;
             }
         }
         return null;

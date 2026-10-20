@@ -142,10 +142,6 @@ public class Casilla {
     * Valor devuelto: true en caso de ser solvente (es decir, de cumplir las deudas), y false
     * en caso de no cumplirlas.
     public boolean evaluarCasilla(Jugador actual, Casilla destino, int sumaDados) {
-
-        //if (this is_in banca.getPrpopiedades()){
-        // return true;
-        return !(actual.getFortuna() < this.getImpuesto());
     }
      */
 
@@ -157,6 +153,7 @@ public class Casilla {
             if (solicitante.sumarFortuna((-1) * this.getValor())) {
                 banca.eliminarPropiedad(this);
                 solicitante.anhadirPropiedad(this);
+                this.setDuenho(solicitante);
                 solicitante.sumarGastos(this.getValor());
                 System.out.println("el jugador " + solicitante.getNombre() + " ha comprado la casilla " + this.getNombre().trim() + "\n");
             }
@@ -216,12 +213,160 @@ public class Casilla {
         };
     }
 
+
+
+    public boolean puedoEdificar(String tipo) {
+        if(this.getHipotecada()) {
+            return false;
+        }
+
+        if (this.grupo == null || this.duenho == null || this.duenho.getNombre().equalsIgnoreCase("banca")) {
+            return false;
+        }
+        ArrayList<Casilla> casillasGrupo = this.grupo.getMiembros();
+        for (int i = 0; i < casillasGrupo.size(); i++) {
+            Casilla c = casillasGrupo.get(i);
+            // Si alguna casilla del grupo no la posee este mismo dueño, no puede edificar
+            if (c.getDuenho() == null || !c.getDuenho().equals(this.duenho)) {
+                return false;
+            }
+        }
+        return switch (tipo.toLowerCase()) {
+            case "casa" ->
+                // Se construyen si no hay hotel y hay menos de 4 casas
+                    this.numeroHoteles == 0 && this.numeroCasas < 4;
+            case "hotel" ->
+                // Se puede construir exactamente 1 hotel si hay 4 casas y 0 hoteles
+                    this.numeroCasas == 4 && this.numeroHoteles == 0;
+            case "piscina" ->
+                // Requiere tener exactamente 1 hotel y no tener piscina
+                    this.numeroHoteles == 1 && this.numeroPiscinas == 0;
+            case "pista" ->
+                // Requiere tener exactamente 1 piscina y no tener pista
+                    this.numeroPiscinas == 1 && this.numeroPistas == 0;
+            default -> false;
+        };
+    }
+
+    public void anhadirEdificio(String tipo) {
+        String idEdificio = switch (tipo.toLowerCase()) {
+            case "casa" -> {
+                this.setNumeroCasas(getNumeroCasas() + 1);
+                yield "casa-" + getNumeroCasas();
+            }
+            case "hotel" -> {
+                this.setNumeroHoteles(getNumeroHoteles() + 1);
+                this.setNumeroCasas(0);
+                edificios.remove("casa-1");
+                edificios.remove("casa-2");
+                edificios.remove("casa-3");
+                edificios.remove("casa-4");
+                yield "hotel-" + getNumeroHoteles();
+            }
+            case "piscina" -> {
+                this.setNumeroPiscinas(getNumeroPiscinas() + 1);
+                yield "piscina-" + getNumeroPiscinas();
+            }
+            case "pista" -> {
+                this.setNumeroPistas(getNumeroPistas() + 1);
+                yield "pista-" + getNumeroPistas();
+            }
+            default -> "";
+        };
+        edificios.add(idEdificio);
+    }
+
+    public String infoEdificios() {
+        StringBuilder resultado = new StringBuilder();
+
+        if (this.tipo.equalsIgnoreCase("solar") && !this.duenho.getNombre().equalsIgnoreCase("banca")) {
+
+            for (String idEdificio : this.edificios) {
+                float coste = 0;
+
+                // Determinamos el coste según el tipo de edificio en la ID
+                if (idEdificio.startsWith("casa")) {
+                    coste = this.precioCasa;
+                } else if (idEdificio.startsWith("hotel")) {
+                    coste = this.precioHotel;
+                } else if (idEdificio.startsWith("piscina")) {
+                    coste = this.precioPiscina;
+                } else if (idEdificio.startsWith("pista")) {
+                    coste = this.precioPista;
+                }
+
+                resultado.append("{\n" + "  id: ").append(idEdificio).append(",\n").append("  propietario: ")
+                        .append(this.duenho.getNombre()).append(",\n").append("  casilla: ").append(this.nombre.trim()).append(",\n").append("  grupo: ").append(this.grupo.getColorGrupo()).append(",\n").append("  coste: ").append((int) coste).append("\n").append("},\n");
+            }
+        }
+
+        return resultado.toString();
+    }
+
+    public void hipotecar(Jugador solicitante){
+        String tipo;
+        if(this.tipo==null){tipo="";}
+        else{tipo = this.tipo.trim().toLowerCase();}
+        String nombreCasilla = this.nombre.trim();
+        if(!this.tipo.equalsIgnoreCase("solar") && !this.tipo.equalsIgnoreCase("transporte") && !this.tipo.equalsIgnoreCase("servicio")){
+            System.out.println(solicitante.getNombre() + " no puede hipotecar " + nombreCasilla + ". No es una propiedad hipotecable.\n");
+            return;
+        }
+        if(!this.duenho.equals(solicitante)){
+            System.out.println(solicitante.getNombre() + " no puede hipotecar " + nombreCasilla + ". No es su propiedad.\n");
+            return;
+        }
+        if(this.hipotecada){
+            System.out.println(solicitante.getNombre() + " no puede hipotecar " + nombreCasilla + ". Ya está hipotecada.\n");
+            return;
+        }
+        if(tipo.equals("solar")&& (numeroCasas>0 || numeroHoteles>0 || numeroPistas>0 || numeroPiscinas>0)){
+            System.out.println(solicitante.getNombre() + " no puede hipotecar " + nombreCasilla + ". Debe vender antes los edificios.\n");
+            return;
+        }
+        setHipotecada(true);
+        solicitante.sumarFortuna(getHipoteca());
+        String mensaje= solicitante.getNombre() + " recibe " + (long) this.hipoteca +  "€ por la hipoteca de " + nombreCasilla + ".\n";
+        if (tipo.equalsIgnoreCase("solar") && this.grupo != null) {
+            mensaje += "No puede recibir alquileres ni edificar en el grupo " + this.grupo.getColorGrupo() + ".";
+        } else {
+            mensaje += "No puede recibir alquileres por esta propiedad.";
+        }
+        System.out.println(mensaje);
+    }
+
+    public void deshipotecar(Jugador solicitante){
+        //comprobamos si la propiedad esta hipotecada
+        if(!getHipotecada()){
+            System.out.println(solicitante.getNombre() +" no puede deshipotecar "+getNombre().trim()+", no esta hipotecada\n");
+            return;
+        }
+        //comprobamos si es un tipo de casilla comprable
+        String tipoCasilla=this.getTipo().toLowerCase();
+        if(!tipoCasilla.equals("solar")&&!tipoCasilla.equals("transporte")&&!tipoCasilla.equals("servicio")){
+            System.out.println(solicitante.getNombre() +" no puede deshipotecar "+getNombre().trim()+", no es una casilla hipotecable.");
+            return;
+        }
+        //comprobamos que el duenho de la casilla sea el jugador solicitante
+        if(!getDuenho().equals(solicitante)){
+            System.out.println(solicitante.getNombre() +" no puede deshipotecar "+getNombre().trim()+", no es duenho\n");
+            return;
+        }
+
+        if(solicitante.sumarFortuna((-1)*getHipoteca())){
+            solicitante.sumarGastos(getHipoteca());
+            setHipotecada(false);
+            System.out.println(solicitante.getNombre() +" ha pagado "+getHipoteca()+" por deshipotecar la propiedad "+ getNombre());
+        }
+    }
+
     @Override
     public String toString() { // Para imprimir los nombres e ID de las casillas
-        String id = "";
+        StringBuilder id = new StringBuilder();
         if (!avatares.isEmpty()) {
-            id = "&";
-            for (int i = 0; i < avatares.size(); i++) {id += avatares.get(i).getId();}
+            id = new StringBuilder("&");
+            for (Avatar avatare : avatares) {
+                id.append(avatare.getId());}
         }
         //quitamos los espacios entre el fin del nombre y la casilla
         String CasillaLimpia = this.nombre.trim();
@@ -230,8 +375,8 @@ public class Casilla {
         int numEspacios = 14 - CasillaLimpia.length() - id.length();
 
         //creamos el String que tenga los espacios necesarios
-        String espacios = "";
-        for (int i = 0; i < numEspacios; i++) {espacios += " ";}
+        StringBuilder espacios = new StringBuilder();
+        espacios.repeat(" ", Math.max(0, numEspacios));
 
         //Unimos todo
         String celda = CasillaLimpia + espacios + id;
@@ -262,76 +407,23 @@ public class Casilla {
 
             //parking es de tipo especial
             case "especial":
-                String ret = ("bote: " + getImpuesto() + "\n[");
-                for (int i = 0; i < getAvatares().size(); i++) {ret += this.getAvatares().get(i).getJugador().getNombre();}
+                StringBuilder ret = new StringBuilder(("bote: " + getImpuesto() + "\n["));
+                for (int i = 0; i < getAvatares().size(); i++) {
+                    ret.append(this.getAvatares().get(i).getJugador().getNombre());}
 
-                ret += "]\n\n";
-                return ret;
+                ret.append("]\n\n");
+                return ret.toString();
 
             case "carcel":
-                String rt = ("salir: " + Valor.COSTE_SALIR_CARCEL + "\n");
-                for (int i = 0; i < getAvatares().size(); i++) {rt += "[" + getAvatares().get(i).getJugador().getNombre() +
-                        "," + getAvatares().get(i).getJugador().getTiradasCarcel() + "]";}
-                rt += "\n\n";
-                return rt;
+                StringBuilder rt = new StringBuilder(("salir: " + Valor.COSTE_SALIR_CARCEL + "\n"));
+                for (int i = 0; i < getAvatares().size(); i++) {
+                    rt.append("[").append(getAvatares().get(i).getJugador().getNombre()).append(",").append(getAvatares().get(i).getJugador().getTiradasCarcel()).append("]");}
+                rt.append("\n\n");
+                return rt.toString();
 
             default:
                 return " ";
         }
-
-    }
-
-    public boolean puedoEdificar(String tipo) {
-        switch (tipo.toLowerCase()) {
-            case "casa":
-                // Se construyen si no hay hotel y hay menos de 4 casas
-                return this.numeroHoteles == 0 && this.numeroCasas < 4;
-
-            case "hotel":
-                // Se puede construir exactamente 1 hotel si hay 4 casas y 0 hoteles
-                return this.numeroCasas == 4 && this.numeroHoteles == 0;
-
-            case "piscina":
-                // Requiere tener exactamente 1 hotel y no tener piscina
-                return this.numeroHoteles == 1 && this.numeroPiscinas == 0;
-
-            case "pista":
-                // Requiere tener exactamente 1 piscina y no tener pista
-                return this.numeroPiscinas == 1 && this.numeroPistas == 0;
-
-            default:
-                return false;
-        }
-    }
-
-    public String anhadirEdificio(String tipo) {
-        String idEdificio = switch (tipo.toLowerCase()) {
-            case "casa" -> {
-                this.setNumeroCasas(getNumeroCasas() + 1);
-                yield "casa-" + getNumeroCasas();
-            }
-            case "hotel" -> {
-                this.setNumeroHoteles(getNumeroHoteles() + 1);
-                this.setNumeroCasas(0);
-                edificios.remove("casa-1");
-                edificios.remove("casa-2");
-                edificios.remove("casa-3");
-                edificios.remove("casa-4");
-                yield "hotel-" + getNumeroHoteles();
-            }
-            case "piscina" -> {
-                this.setNumeroPiscinas(getNumeroPiscinas() + 1);
-                yield "piscina-" + getNumeroPiscinas();
-            }
-            case "pista" -> {
-                this.setNumeroPistas(getNumeroPistas() + 1);
-                yield "pista-" + getNumeroPistas();
-            }
-            default -> "";
-        };
-
-        edificios.add(idEdificio);
-        return idEdificio;
     }
 }
 

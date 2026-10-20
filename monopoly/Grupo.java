@@ -65,10 +65,11 @@ public class Grupo {
      */
     public boolean esDuenhoGrupo(Jugador jugador) {
         ArrayList<Casilla> miembros = this.getMiembros();
-        for(int c=0; c<miembros.size(); c++) {
-            Casilla cas = miembros.get(c);
+        for (Casilla cas : miembros) {
             String id = cas.getDuenho().getAvatar().getId();
-            if(!jugador.getAvatar().getId().equals(id)) {return false;}
+            if (!jugador.getAvatar().getId().equals(id)) {
+                return false;
+            }
         }
         return true;
     }

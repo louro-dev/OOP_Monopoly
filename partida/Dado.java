@@ -18,7 +18,6 @@ public class Dado {
 
     // SETTERS
     public void setValor(int numero) {
-
         if(numero<7 && numero >0){this.valor = numero;}
         else{
             //si el valor del dado es invalido(se ha dado en la funcion de forzar un dado mayor que 6) se pone ese dado

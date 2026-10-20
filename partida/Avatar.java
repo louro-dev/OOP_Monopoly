@@ -72,12 +72,17 @@ public class Avatar {
 
         // Calculamos la nueva posición (1 a 40)
         int nuevaPosicion = this.lugar.getPosicion() + valorTirada;
-        if (nuevaPosicion > 40) {nuevaPosicion = nuevaPosicion - 40;}
+        if (nuevaPosicion > 40) {
+            nuevaPosicion = nuevaPosicion - 40;
+            if (this.jugador != null) {
+                this.jugador.setVueltas(this.jugador.getVueltas() + 1);
+                this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
+            }
+        }
 
         // Buscamos la casilla destino
-        for (int i = 0; i < casillas.size(); i++) {
-            for (int j = 0; j < casillas.get(i).size(); j++) {
-                Casilla c = casillas.get(i).get(j);
+        for (ArrayList<Casilla> casilla : casillas) {
+            for (Casilla c : casilla) {
                 if (c.getPosicion() == nuevaPosicion) {
                     this.lugar = c;
                     this.lugar.anhadirAvatar(this);
@@ -104,8 +109,8 @@ public class Avatar {
     // Metodo para comprobar si el ID existe dentro del ArrayList de los avatares creados.
     private boolean existeId(String id, ArrayList<Avatar> avCreados) {
         if (avCreados != null) {
-            for (int i = 0; i < avCreados.size(); i++) {
-                if (id.equals(avCreados.get(i).getId())) {
+            for (Avatar avCreado : avCreados) {
+                if (id.equals(avCreado.getId())) {
                     return true;
                 }
             }

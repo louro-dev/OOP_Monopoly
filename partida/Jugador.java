@@ -64,18 +64,10 @@ public class Jugador {
     }
 
     // GETTERS
-    public String getNombre() {
-        return this.nombre;
-    }
-    public Avatar getAvatar() {
-        return this.avatar;
-    }
-    public float getFortuna() {
-        return this.fortuna;
-    }
-    public float getGastos() {
-        return this.gastos;
-    }
+    public String getNombre() {return this.nombre;}
+    public Avatar getAvatar() {return this.avatar;}
+    public float getFortuna() {return this.fortuna;}
+    public float getGastos() {return this.gastos;}
     public boolean getEnCarcel() {
         return this.enCarcel;
     }
@@ -176,9 +168,9 @@ public class Jugador {
     }
 
     public static Jugador encontrarJugador(String nombre,ArrayList<Jugador> jugadores){
-        for(int j=0;j<jugadores.size();j++){
-            if(jugadores.get(j).getNombre().equals(nombre)){
-                return jugadores.get(j);
+        for (Jugador jugadore : jugadores) {
+            if (jugadore.getNombre().equals(nombre)) {
+                return jugadore;
             }
         }
         System.out.println("Jugador no encontrado");
@@ -207,7 +199,7 @@ public class Jugador {
         }
         sb.append("]");
 
-
+        // Listar edificios del jugador
         sb.append("\nLista de edificios: [");
         boolean primerEdificio = true;
 
@@ -222,8 +214,7 @@ public class Jugador {
                     if (!primerEdificio) {
                         sb.append(", ");
                     }
-                    sb.append(c.getEdificios().get(j)); // Añade el edificio
-                    primerEdificio = false;
+                    sb.append(c.getEdificios().get(j)).append(" (").append(c.getNombre().trim()).append(")");                    primerEdificio = false;
                 }
             }
         }
@@ -284,5 +275,11 @@ public class Jugador {
 
         return sb.toString();
     }
-
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Jugador otro = (Jugador) o;
+        return this.nombre != null && this.nombre.equals(otro.nombre);
+    }
 }

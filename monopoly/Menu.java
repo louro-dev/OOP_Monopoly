@@ -147,7 +147,7 @@ public class Menu {
             Scanner sc = new Scanner(System.in);
             System.out.println("""
                     --------------------MENU--------------------
-                    lanzar los dados: lanzar dados
+                    Lanzar los dados: lanzar dados
                     Lanzar los dados determinados: lanzar dados <x+y>
                     Crear un jugador: crear jugador <nombre> <tipo_avatar>
                     Jugador al que le toca: jugador
@@ -157,6 +157,11 @@ public class Menu {
                     Acabar el turno: acabar turno
                     Ver el tablero: ver tablero
                     Comprar una casilla: comprar casilla
+                    Edificar un edificio: edificar <nombre_edificio>
+                    Listar los edificios: listar edificios
+                    Listar los edificios de un grupo: listar edificios <color_grupo>
+                    Hipotecar una casilla: hipotecar <casilla>
+                    Deshipotecar una casilla: deshipotecar <casilla>
                     Listar las casillas en venta: listar enventa
                     Acabar la partida: salir
                     """);
@@ -204,6 +209,12 @@ public class Menu {
                 ctrl = false;
             }
         }
+        else if(cmd.startsWith("hipotecar")){
+            hipotecar(cmd.substring(9));
+        }
+        else if(cmd.startsWith("deshipotecar")) {
+            deshipotecar(cmd.substring(12));
+        }
         else if(cmd.startsWith("describir")){
             descCasilla(cmd.substring(9));}
         else if(cmd.startsWith("edificar")){
@@ -239,6 +250,14 @@ public class Menu {
                     break;
                 case "listarjugadores":
                     listarJugadores();
+                    break;
+                case "listaredificios":
+                    if(auxiliar == null) {
+                        listarEdificios();
+                    }
+                    else {
+                        listarEdificios(auxiliar);
+                    }
                     break;
                 case "acabarturno":
                     acabarTurno();
@@ -293,7 +312,7 @@ public class Menu {
         //ponemos control de impresion a false para que no imprima
         ctrl=false;
         //imprimimos cabecera de impresion
-        if(this.getJugadores().isEmpty()){
+        if(!this.getJugadores().isEmpty()){
             System.out.println("---------------JUGADOR QUE TIENE EL TURNO---------------");
             //this.getTurno(); indice en la losta del jugador que tiene el turno
             Jugador turn=this.getJugadores().get(this.getTurno());
@@ -329,13 +348,39 @@ public class Menu {
         if(!this.getJugadores().isEmpty()){
             if (!tirado) {
                 if (vals!=null) {
+
                     //si el valor de la tirada viene determinado, casillas mover es con la suma de los valores introducidos
                     String[] dados = vals.split("\\+");
+
+                    // 1. Comprobar que realmente hay dos partes (antes y después del +)
+                    if (dados.length != 2) {
+                        System.out.println("Error de formato. Usa: lanzar dados <numero>+<numero>");
+                        this.setCtrl(false);
+                        return; // Cortamos la ejecución de este método y volvemos al menú
+                    }
+
                     //parseamos para tener los valores en entero
-                    int val1 = Integer.parseInt(dados[0]), val2 = Integer.parseInt(dados[1]);
+                    int val1 = 0, val2 = 0;
+
+                    //Intentar convertir a número capturando el posible error
+                    try {
+                        val1 = Integer.parseInt(dados[0]);
+                        val2 = Integer.parseInt(dados[1]);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error: Los valores de los dados deben ser números enteros.");
+                        this.setCtrl(false);
+                        return; // Cortamos la ejecución de este método y volvemos al menú
+                    }
+
                     //setteamos los valores de los dados
-                    this.getDado1().setValor(val1);
-                    this.getDado2().setValor(val2);
+                    if (val1 > 6 || val1 < 1 || val2 > 6 || val2 < 1) {
+                        this.getDado1().setValor(0);
+                        this.getDado2().setValor(0);
+                    }
+                    else {
+                        this.getDado1().setValor(val1);
+                        this.getDado2().setValor(val2);
+                    }
                 }
                 else{
                     this.getDado1().setValor(this.getDado1().hacerTirada());
@@ -455,8 +500,8 @@ public class Menu {
 
     // Metodo que realiza las acciones asociadas al comando 'acabar turno'.
     private void acabarTurno() {
-        if(this.getJugadores().isEmpty()){
-            if(!this.getTirado()) {
+        if(!this.getJugadores().isEmpty()){
+            if(this.getTirado()) {
                 if (this.getTurno() == this.getAvatares().size() - 1) {
                     this.turno = 0;
                 } else {
@@ -475,6 +520,28 @@ public class Menu {
         }
     }
 
+    private void hipotecar(String nombreCasilla) {
+        if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");}
+        ctrl=false;
+        Jugador actual = this.getJugadores().get(this.getTurno());
+        Casilla c= this.getTablero().encontrar_casilla(nombreCasilla);
+        if (c == null) {
+            System.out.println("\nNo existe ninguna casilla llamada " + nombreCasilla + "\n");
+            return;
+        }
+        c.hipotecar(actual);
+    }
+    private void deshipotecar(String nombreCasilla) {
+        if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");}
+        ctrl=false;
+        Jugador actual = this.getJugadores().get(this.getTurno());
+        Casilla c= this.getTablero().encontrar_casilla(nombreCasilla);
+        if (c == null) {
+            System.out.println("\nNo existe ninguna casilla llamada " + nombreCasilla + "\n");
+            return;
+        }
+        c.deshipotecar(actual);
+    }
     //metodo que evalua el tipo de casilla en el que cae el jugador y lo que ocurre en cada caso
     private void evaluarCasillaDestino(Jugador actual, Casilla destino, int sumaDados) {
         String tipo = destino.getTipo().toLowerCase();
@@ -583,24 +650,25 @@ public class Menu {
 
     // Funcion para construir un edificio
     private void construirEdificio(String tipoEdificio, Jugador jugadorActual) {
+        if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");}
         // Obtener la casilla donde está ubicado el avatar del jugador
         Casilla casillaActual = jugadorActual.getAvatar().getLugar();
 
         // Validar que la casilla sea de tipo Solar
-        if (!casillaActual.getTipo().toLowerCase().equals("solar")) {
+        if (!casillaActual.getTipo().equalsIgnoreCase("solar")) {
             System.out.println("No se puede edificar en una casilla de tipo " + casillaActual.getTipo());
             return;
         }
 
         // Validar que el solar pertenezca al jugador actual
         if (casillaActual.getDuenho() == null || !casillaActual.getDuenho().equals(jugadorActual)) {
-            System.out.println("No puedes edificar en " + casillaActual.getNombre() + " porque no eres el propietario.");
+            System.out.println("No puedes edificar en " + casillaActual.getNombre().trim() + " porque no eres el propietario.");
             return;
         }
 
         // Validar las reglas de edificacion
         if (!casillaActual.puedoEdificar(tipoEdificio)) {
-            System.out.println("No se cumplen los requisitos para edificar un/a " + tipoEdificio + " en " + casillaActual.getNombre() + ".");
+            System.out.println("No se cumplen los requisitos para edificar un/a " + tipoEdificio + " en " + casillaActual.getNombre().trim() + ".");
             return;
         }
 
@@ -628,7 +696,7 @@ public class Menu {
         if(!jugadorActual.sumarFortuna((-1)*precioEdificio)){
             System.out.println("La fortuna de " + jugadorActual.getNombre() +
                     " no es suficiente para edificar un/a " + tipoEdificio +
-                    " en la casilla " + casillaActual.getNombre() + ".");
+                    " en la casilla " + casillaActual.getNombre().trim() + ".");
             return;
         }
 
@@ -639,9 +707,58 @@ public class Menu {
         jugadorActual.sumarGastos(precioEdificio);
 
         // Mensaje
-        System.out.println("Se ha edificado un/a " + tipoEdificio + " en " + casillaActual.getNombre() +
+        System.out.println("Se ha edificado un/a " + tipoEdificio + " en " + casillaActual.getNombre().trim() +
                 ". La fortuna de " + jugadorActual.getNombre() +
                 " se reduce en " + precioEdificio + "€.");
+    }
+
+    private void listarEdificios() {
+        ctrl = false;
+        boolean hayEdificios = false;
+
+        for (int i = 0; i < this.tablero.getPosiciones().size(); i++) {
+            ArrayList<Casilla> lado = this.tablero.getPosiciones().get(i);
+
+            for (Casilla casilla : lado) {
+                String textoEdificios = casilla.infoEdificios();
+                if (!textoEdificios.isEmpty()) {
+                    System.out.println("\n------------------------EDIFICIOS------------------------\n");
+                    System.out.print(textoEdificios);
+                    hayEdificios = true;
+                }
+            }
+        }
+
+        if (!hayEdificios) {
+            System.out.println("\nNo hay edificios creados\n");
+        }
+    }
+
+    private void listarEdificios(String grupo) {
+        ctrl = false;
+        boolean hayEdificios = false;
+
+        for (int i = 0; i < this.tablero.getPosiciones().size(); i++) {
+            ArrayList<Casilla> lado = this.tablero.getPosiciones().get(i);
+
+            for (Casilla casilla : lado) {
+                if (casilla.getGrupo() != null && casilla.getGrupo().getColorGrupo().equalsIgnoreCase(grupo)) {
+                    String textoEdificios = casilla.infoEdificios();
+                    if (!textoEdificios.isEmpty()) {
+                        // Imprimimos la cabecera solo la primera vez que encontramos edificios
+                        if (!hayEdificios) {
+                            System.out.println("\n------------------------EDIFICIOS " + grupo.toUpperCase() + "------------------------\n");
+                            hayEdificios = true;
+                        }
+                        System.out.print(textoEdificios);
+                    }
+                }
+            }
+        }
+
+        if (!hayEdificios) {
+            System.out.println("\nNo hay edificios creados en el grupo " + grupo + "\n");
+        }
     }
 
 }
