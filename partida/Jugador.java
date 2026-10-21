@@ -16,10 +16,11 @@ public class Jugador {
     private int tiradasCarcel; //Cuando está en la carcel, contará las tiradas sin éxito que ha hecho allí para intentar salir (se usa para limitar el numero de intentos).
     private int vueltas; //Cuenta las vueltas dadas al tablero.
     private ArrayList<Casilla> propiedades;//Propiedades que posee el jugador.
+    private int dobles = 0; // Entero para saber cuántas veces ha sacado dobles en los dados.
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {
-        this.nombre = "Banca";
+        this.nombre = "banca";
         this.fortuna = Valor.FORTUNA_BANCA; // Se puede hacer porque FORTUNA_BANCA es público.
         this.gastos = 0;
         this.enCarcel = false;
@@ -80,6 +81,7 @@ public class Jugador {
     public ArrayList<Casilla> getPropiedades() {
         return this.propiedades;
     }
+    public int getDobles() {return dobles;}
 
     // SETTERS
     public void setNombre(String n) {
@@ -104,6 +106,7 @@ public class Jugador {
         this.vueltas = v;
     }
     public void setPropiedades(ArrayList<Casilla> p) {this.propiedades = p;}
+    public void setDobles(int d) {this.dobles = d;}
 
     //Otros métodos:
     //Metodo para añadir una propiedad al jugador. Como parámetro, la casilla a añadir.
@@ -175,6 +178,47 @@ public class Jugador {
         }
         System.out.println("Jugador no encontrado");
         return null;
+    }
+
+    public int numeroDeTransportes() {
+        int contador = 0;
+        for (Casilla c : this.propiedades) {
+            if ("transporte".equalsIgnoreCase(c.getTipo())) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    public int numeroDeServicios() {
+        int contador = 0;
+        for (Casilla c : this.propiedades) { // Sustituye 'propiedades' por el nombre de tu ArrayList de propiedades
+            if ("servicio".equalsIgnoreCase(c.getTipo())) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    /* Metodo para declarar en bancarrota a un jugador usando un bucle for-each.
+     * Reasigna el dueño de cada propiedad al acreedor y deja la fortuna en 0. */
+    public void declararBancarrota(Jugador acreedor) {
+        System.out.println("¡El jugador " + this.nombre + " no tiene fondos suficientes y se declara en BANCARROTA!");
+
+        // Recorremos las propiedades del jugador con un for-each
+        for (Casilla c : this.propiedades) {
+            if (acreedor != null) {
+                acreedor.anhadirPropiedad(c);
+                c.setDuenho(acreedor);
+                System.out.println("  -> La propiedad " + c.getNombre().trim() + " pasa a ser de " + acreedor.getNombre());
+            }
+        }
+
+        // Vaciamos la lista completa del jugador de una sola vez al terminar el bucle
+        this.propiedades.clear();
+
+        // Se resetea la fortuna del jugador insolvente
+        this.fortuna = 0;
     }
 
     // Es el toString de listar jugadores y describir jugador turno

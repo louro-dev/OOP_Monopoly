@@ -157,6 +157,9 @@ public class Casilla {
                 solicitante.sumarGastos(this.getValor());
                 System.out.println("el jugador " + solicitante.getNombre() + " ha comprado la casilla " + this.getNombre().trim() + "\n");
             }
+            else {
+                System.out.println(solicitante.getNombre() + " no tiene suficiente dinero para comprar " + getNombre().trim() + ".");
+            }
         } else {System.out.println("Esa casilla ya tiene duenho");}
     }
 
@@ -220,17 +223,10 @@ public class Casilla {
             return false;
         }
 
-        if (this.grupo == null || this.duenho == null || this.duenho.getNombre().equalsIgnoreCase("banca")) {
+        if (this.grupo == null || this.duenho == null || this.duenho.getNombre().equalsIgnoreCase("banca") || !this.grupo.esDuenhoGrupo(this.duenho)) {
             return false;
         }
-        ArrayList<Casilla> casillasGrupo = this.grupo.getMiembros();
-        for (int i = 0; i < casillasGrupo.size(); i++) {
-            Casilla c = casillasGrupo.get(i);
-            // Si alguna casilla del grupo no la posee este mismo dueño, no puede edificar
-            if (c.getDuenho() == null || !c.getDuenho().equals(this.duenho)) {
-                return false;
-            }
-        }
+
         return switch (tipo.toLowerCase()) {
             case "casa" ->
                 // Se construyen si no hay hotel y hay menos de 4 casas
@@ -303,6 +299,26 @@ public class Casilla {
         return resultado.toString();
     }
 
+    public float alquilerPropiedad() {
+        float alquilerTotal = this.impuesto; // Alquiler básico
+
+        // Sumamos los alquileres de los edificios que tenga la casilla
+        if (this.numeroCasas > 0) {
+            alquilerTotal += this.numeroCasas * this.alquilerCasa;
+        }
+        if (this.numeroHoteles > 0) {
+            alquilerTotal += this.numeroHoteles * this.alquilerHotel;
+        }
+        if (this.numeroPiscinas > 0) {
+            alquilerTotal += this.numeroPiscinas * this.alquilerPiscina;
+        }
+        if (this.numeroPistas > 0) {
+            alquilerTotal += this.numeroPistas * this.alquilerPista;
+        }
+
+        return alquilerTotal;
+    }
+
     public void hipotecar(Jugador solicitante){
         String tipo;
         if(this.tipo==null){tipo="";}
@@ -357,6 +373,9 @@ public class Casilla {
             solicitante.sumarGastos(getHipoteca());
             setHipotecada(false);
             System.out.println(solicitante.getNombre() +" ha pagado "+getHipoteca()+" por deshipotecar la propiedad "+ getNombre());
+        }
+        else {
+            System.out.println(solicitante.getNombre() + " no dispone de suficiente dinero para deshipotecar " + getNombre().trim() + ".");
         }
     }
 

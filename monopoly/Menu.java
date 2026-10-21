@@ -68,7 +68,6 @@ public class Menu {
     public void setEnd(boolean end){this.end=end;}
     public void setCtrl(boolean ctrl) {this.ctrl = ctrl;}
 
-
     // Metodo para inciar una partida: crea los jugadores y avatares.
     //por ahora solo pedimos casilla de Salida, si hiciesen falta mas se pediria el tablero
     private void iniciarPartida(String[] args) {
@@ -166,7 +165,7 @@ public class Menu {
                     Acabar la partida: salir
                     """);
             if(!this.getJugadores().isEmpty() && this.getJugadores().get(this.getTurno()).getEnCarcel()){
-                System.out.println("Salir de la carcel: Salir Carcel\n");
+                System.out.println("Salir de la carcel: salir carcel\n");
             }
             String answ = sc.nextLine();
 
@@ -410,6 +409,28 @@ public class Menu {
                     }
                 }
 
+                // Mirar si los dados son dobles
+                boolean esDoble = (this.getDado1().getValor() == this.getDado2().getValor());
+
+                if (esDoble) {
+                    jugadorActual.setDobles(jugadorActual.getDobles() + 1);
+
+                    if (jugadorActual.getDobles() == 3) {
+                        System.out.println("¡" + jugadorActual.getNombre() + " ha sacado dobles 3 veces consecutivas! Vas directo a la cárcel.");
+                        jugadorActual.encarcelar(this.tablero); // Metodo para encarcelar al jugador
+                        jugadorActual.setDobles(0);
+                        tirado = true;
+                        return; // No se mueve ni evalúa casilla
+                    }
+
+                    System.out.println("¡Has sacado dobles (" + this.getDado1().getValor() + " y " + this.getDado2().getValor() + ")! Puedes volver a tirar.");
+                    tirado = false; // Permite ejecutar de nuevo 'lanzar dados' en este turno
+                }
+                else {
+                    jugadorActual.setDobles(0); // Reiniciamos contador si no saca dobles
+                    tirado = true;              // Finaliza su turno de tiradas
+                }
+
                 if(!jugadorActual.getEnCarcel()){
                     //invocamos a la funcion que mueve el avatar para
                     jugador.moverAvatar(this.getTablero().getPosiciones(), casillasMover);
@@ -423,10 +444,9 @@ public class Menu {
                 ctrl = false;
             }
         }
-        else{
+        else {
             System.out.println("\nNo hay jugadores creados\n");
         }
-        tirado=true;
     }
 
     /*Metodo que ejecuta todas las acciones realizadas con el comando 'comprar nombre_casilla'.
@@ -451,7 +471,9 @@ public class Menu {
         }
         if(!jug.sumarFortuna((-1)*Valor.COSTE_SALIR_CARCEL)){
             setSolvente(false);
+            return;
         }
+        jug.sumarGastos(Valor.COSTE_SALIR_CARCEL);
         this.getBanca().sumarFortuna(Valor.COSTE_SALIR_CARCEL);
         jug.setTiradasCarcel(0);
         jug.setEnCarcel(false);
@@ -549,26 +571,44 @@ public class Menu {
         switch (tipo) {
             case "solar":
                 Jugador duenhoSolar = destino.getDuenho();
-                // Comprobamos si tiene dueño, si no es el jugador actual y si no está hipotecada
-                if (duenhoSolar != null && !duenhoSolar.equals(this.banca) && !duenhoSolar.equals(actual)) {
-                    float alquiler = destino.getImpuesto(); //se pone el alquiler en el apartado impuesto
 
-                    // Si el dueño posee todo el grupo, el alquiler se duplica[cite: 3]
-                    if (destino.getGrupo() != null && destino.getDuenho().getAvatar() != null && destino.getGrupo().esDuenhoGrupo(destino.getDuenho())&& destino.getGrupo().esDuenhoGrupo(duenhoSolar)) {
-                        alquiler *= 2;
+                // Comprobamos si tiene dueño, no es la banca, no es el jugador actual y NO está hipotecada
+                if (duenhoSolar != null && !duenhoSolar.equals(this.banca) && !duenhoSolar.equals(actual) && !destino.getHipotecada()) {
+
+                    float alquiler;
+
+                    boolean tieneEdificios = (destino.getNumeroCasas() > 0
+                            || destino.getNumeroHoteles() > 0
+                            || destino.getNumeroPiscinas() > 0
+                            || destino.getNumeroPistas() > 0);
+
+                    if (tieneEdificios) {
+                        // Si tiene edificios, usamos el metodo de Casilla
+                        alquiler = destino.alquilerPropiedad();
+                    } else {
+                        // Si no tiene edificios, parte del alquiler base
+                        alquiler = destino.getImpuesto();
+
+                        // Si el dueño posee todo el grupo sin edificar, el alquiler se duplica
+                        if (destino.getGrupo() != null && destino.getGrupo().esDuenhoGrupo(duenhoSolar)) {
+                            alquiler *= 2;
+                        }
                     }
 
-                    // Le restamos el dinero al jugador actual (pasando el valor en negativo)
-                    if(!actual.sumarFortuna((-1) * alquiler)){
+                    // Pago e insolvencia
+                    if (!actual.sumarFortuna((-1) * alquiler)) {
                         setSolvente(false);
+                        actual.declararBancarrota(duenhoSolar);
                         break;
                     }
                     actual.sumarGastos(alquiler);
-
-                    // Le sumamos el dinero al dueño de la casilla
                     duenhoSolar.sumarFortuna(alquiler);
 
-                    System.out.printf("Se han pagado %.0f€ de alquiler a %s.\n", alquiler, destino.getDuenho().getNombre());
+                    System.out.printf("Se han pagado %.0f€ de alquiler a %s.\n", alquiler, duenhoSolar.getNombre());
+                }
+                // Si la casilla está hipotecada, se notifica y no se realiza cobro
+                else if (destino.getHipotecada() && duenhoSolar != null && !duenhoSolar.equals(actual) && !duenhoSolar.equals(this.banca)) {
+                    System.out.println("La casilla " + destino.getNombre().trim() + " está hipotecada. No se cobra alquiler.");
                 }
                 break;
 
@@ -576,42 +616,51 @@ public class Menu {
                 Jugador duenhoServicio = destino.getDuenho();
 
                 if (duenhoServicio != null && !duenhoServicio.equals(this.banca) && !duenhoServicio.equals(actual)) {
-                    float alquiler = 4.0f * sumaDados * Valor.FACTOR_SERVICIO;
+                    // Determinamos el multiplicador según el número de casillas de servicio del dueño (4 o 10)
+                    int numServicios = duenhoServicio.numeroDeServicios();
+                    float multiplicador = (numServicios >= 2) ? 10.0f : 4.0f;
+
+                    float alquiler = multiplicador * sumaDados * Valor.FACTOR_SERVICIO;
 
                     if(!actual.sumarFortuna(-alquiler)){
                         setSolvente(false);
+                        actual.declararBancarrota(duenhoServicio);
                         break;
                     }
                     actual.sumarGastos(alquiler);
 
                     duenhoServicio.sumarFortuna(alquiler);
-                    System.out.printf("Se han pagado %.0f€ de servicio a %s.\n", alquiler, duenhoServicio.getNombre());
-                }
+                    System.out.printf("Se han pagado %.0f€ de servicio a %s (Posee %d casilla/s de servicio).\n",
+                            alquiler, duenhoServicio.getNombre(), numServicios);                }
                 break;
 
             case "transporte":
                 Jugador duenhoTransporte = destino.getDuenho();
 
                 if (duenhoTransporte != null && !duenhoTransporte.equals(this.banca) && !duenhoTransporte.equals(actual)) {
-                    float alquiler = destino.getImpuesto();
+                    int numTransportes = duenhoTransporte.numeroDeTransportes();
+                    float alquiler = destino.getImpuesto() * numTransportes;
 
                     if(!actual.sumarFortuna((-1)*alquiler)){
                         setSolvente(false);
+                        actual.declararBancarrota(duenhoTransporte);
                         break;
                     }
                     actual.sumarGastos(alquiler);
 
                     duenhoTransporte.sumarFortuna(alquiler);
-                    System.out.printf("Se han pagado %.0f€ de transporte a %s.\n", alquiler, duenhoTransporte.getNombre());
-                }
+                    System.out.printf("Se han pagado %.0f€ de transporte a %s (posee %d transporte/s).\n",
+                            alquiler, duenhoTransporte.getNombre(), numTransportes);                }
                 break;
             //para tener un sitio donde almacenar los impuestos cree el boteParking como atributo
             case "impuesto":
 
                 if(!actual.sumarFortuna((-1)*Valor.IMPUESTO)){
                     setSolvente(false);
+                    actual.declararBancarrota(this.banca); // Las propiedades vuelven a la Banca
                     break;
                 }
+                actual.sumarGastos(Valor.IMPUESTO);
                 // Sumamos al bote usando el getter y setter
                 // Buscamos la casilla de parking en el tablero y le sumamos el valor
                 Casilla parking = this.getTablero().encontrar_casilla("parking");
@@ -642,8 +691,15 @@ public class Menu {
                 break;
 
             case "suerte":
+                // HAY QUE AÑADIRLO
+                break;
             case "caja":
-                // No realiza acción en esta primera entrega
+                // HAY QUE AÑADIRLO
+                break;
+            case "carcel": // No hace nada
+                break;
+            case "salida":
+                // El cobro por pasar o caer en la salida ya se procesa durante el movimiento
                 break;
         }
     }
