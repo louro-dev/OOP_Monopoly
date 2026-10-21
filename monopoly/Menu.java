@@ -148,19 +148,19 @@ public class Menu {
                     --------------------MENU--------------------
                     Lanzar los dados: lanzar dados
                     Lanzar los dados determinados: lanzar dados <x+y>
-                    Crear un jugador: crear jugador <nombre> <tipo_avatar>
+                    Crear un jugador: crear jugador <nombre_jugador> <tipo_avatar>
                     Jugador al que le toca: jugador
                     Listar los jugadores: listar Jugadores
-                    Describir una casilla: describir <casilla>
-                    Describir a un jugador: describir jugador <nombre>
+                    Describir una casilla: describir <nombre_casilla>
+                    Describir a un jugador: describir jugador <nombre_jugador>
                     Acabar el turno: acabar turno
                     Ver el tablero: ver tablero
                     Comprar una casilla: comprar casilla
                     Edificar un edificio: edificar <nombre_edificio>
                     Listar los edificios: listar edificios
                     Listar los edificios de un grupo: listar edificios <color_grupo>
-                    Hipotecar una casilla: hipotecar <casilla>
-                    Deshipotecar una casilla: deshipotecar <casilla>
+                    Hipotecar una casilla: hipotecar <nombre_casilla>
+                    Deshipotecar una casilla: deshipotecar <nombre_casilla>
                     Listar las casillas en venta: listar enventa
                     Acabar la partida: salir
                     """);
@@ -297,6 +297,7 @@ public class Menu {
         ctrl=false;
         if(this.getJugadores().isEmpty()){
             System.out.println("\nNo hay jugadores creados\n");
+            return;
         }
         Jugador ply = Jugador.encontrarJugador(nombre,this.getJugadores());
         if(ply != null) {
@@ -453,7 +454,10 @@ public class Menu {
     * Parámetro: cadena de caracteres con el nombre de la casilla.
      */
     private void comprar() {
-        if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");}
+        if(this.getJugadores().isEmpty()){
+            System.out.println("\nNo hay jugadores creados\n");
+            return;
+        }
         ctrl=false;
         Casilla c=this.getAvatares().get(this.getTurno()).getLugar();
         c.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
@@ -463,11 +467,13 @@ public class Menu {
     private void salirCarcel() {
         if(this.getJugadores().isEmpty()){
             System.out.println("\nNo hay jugadores creados\n");
+            return;
         }
         Jugador jug=this.getJugadores().get(this.getTurno());
         ctrl=false;
         if(!jug.getEnCarcel()){
             System.out.println("Comando invalido");
+            return;
         }
         if(!jug.sumarFortuna((-1)*Valor.COSTE_SALIR_CARCEL)){
             setSolvente(false);
@@ -543,7 +549,10 @@ public class Menu {
     }
 
     private void hipotecar(String nombreCasilla) {
-        if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");}
+        if(this.getJugadores().isEmpty()){
+            System.out.println("\nNo hay jugadores creados\n");
+            return;
+        }
         ctrl=false;
         Jugador actual = this.getJugadores().get(this.getTurno());
         Casilla c= this.getTablero().encontrar_casilla(nombreCasilla);
@@ -554,7 +563,10 @@ public class Menu {
         c.hipotecar(actual);
     }
     private void deshipotecar(String nombreCasilla) {
-        if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");}
+        if(this.getJugadores().isEmpty()){
+            System.out.println("\nNo hay jugadores creados\n");
+            return;
+        }
         ctrl=false;
         Jugador actual = this.getJugadores().get(this.getTurno());
         Casilla c= this.getTablero().encontrar_casilla(nombreCasilla);
@@ -706,7 +718,10 @@ public class Menu {
 
     // Funcion para construir un edificio
     private void construirEdificio(String tipoEdificio, Jugador jugadorActual) {
-        if(this.getJugadores().isEmpty()){System.out.println("\nNo hay jugadores creados\n");}
+        if(this.getJugadores().isEmpty()){
+            System.out.println("\nNo hay jugadores creados\n");
+            return;
+        }
         // Obtener la casilla donde está ubicado el avatar del jugador
         Casilla casillaActual = jugadorActual.getAvatar().getLugar();
 

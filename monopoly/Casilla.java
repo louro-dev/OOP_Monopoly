@@ -406,7 +406,6 @@ public class Casilla {
 
     public String toString(String tipo) {
         tipo = tipo.trim().toLowerCase();
-        //acabar de implementar os
         switch (tipo) {
             case "solar":
                 return ("tipo: solar\ngrupo: " + getGrupo() + "\npropietario: " + getDuenho().getNombre() + "\nvalor: " + getValor() +
