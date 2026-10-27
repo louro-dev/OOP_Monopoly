@@ -28,7 +28,6 @@ public class Casilla {
     private float alquilerPiscina;
     private float alquilerPista;
     private boolean hipotecada; //atributo que dice si una casilla esta hipotecada o no
-
     // Atributos adicionales para saber el numero de edificios y su ID
     private int numeroCasas = 0;
     private int numeroHoteles = 0;
@@ -154,7 +153,7 @@ public class Casilla {
                 banca.eliminarPropiedad(this);
                 solicitante.anhadirPropiedad(this);
                 this.setDuenho(solicitante);
-                solicitante.sumarGastos(this.getValor());
+                solicitante.sumarInversionPropiedades(this.getValor());
                 System.out.println("el jugador " + solicitante.getNombre() + " ha comprado la casilla " + this.getNombre().trim() + "\n");
             }
             else {
@@ -272,6 +271,103 @@ public class Casilla {
         edificios.add(idEdificio);
     }
 
+    // Metodo auxiliar para pasar cualquier plural a singular ("casas" -> "casa", "hoteles" -> "hotel")
+    private String normalizarTipoEdificio(String tipo) {
+        String t = tipo.toLowerCase().trim();
+        if (t.endsWith("es")) {
+            return t.substring(0, t.length() - 2);
+        } else if (t.endsWith("s")) {
+            return t.substring(0, t.length() - 1);
+        }
+        return t;
+    }
+
+    // Metodo para eliminar de la lista 'edificios' y decrementar los contadores
+    private void eliminarEdificiosCasilla(String tipoEdificio, int cantidad) {
+        switch (tipoEdificio) {
+            case "casa":
+                for (int i = 0; i < cantidad; i++) {
+                    edificios.remove("casa-" + (this.getNumeroCasas() - i));
+                }
+                this.setNumeroCasas(this.getNumeroCasas() - cantidad);
+                break;
+
+            case "hotel":
+                for (int i = 0; i < cantidad; i++) {
+                    edificios.remove("hotel-" + (this.getNumeroHoteles() - i));
+                }
+                this.setNumeroHoteles(this.getNumeroHoteles() - cantidad);
+                break;
+
+            case "piscina":
+                for (int i = 0; i < cantidad; i++) {
+                    edificios.remove("piscina-" + (this.getNumeroPiscinas() - i));
+                }
+                this.setNumeroPiscinas(this.getNumeroPiscinas() - cantidad);
+                break;
+
+            case "pista":
+                for (int i = 0; i < cantidad; i++) {
+                    edificios.remove("pista-" + (this.getNumeroPistas() - i));
+                }
+                this.setNumeroPistas(this.getNumeroPistas() - cantidad);
+                break;
+        }
+    }
+
+    public void venderEdificios(String tipo, int cantidad, Jugador jugador) {
+        String tipoEdificio = normalizarTipoEdificio(tipo);
+        int disponibles = 0;
+        float precioUnidad = 0;
+
+        switch (tipoEdificio) {
+            case "casa":
+                disponibles = this.getNumeroCasas();
+                precioUnidad = this.getPrecioCasa();
+                break;
+            case "hotel":
+                disponibles = this.getNumeroHoteles();
+                precioUnidad = this.getPrecioHotel();
+                break;
+            case "piscina":
+                disponibles = this.getNumeroPiscinas();
+                precioUnidad = this.getPrecioPiscina();
+                break;
+            case "pista":
+                disponibles = this.getNumeroPistas();
+                precioUnidad = this.getPrecioPista();
+                break;
+            default:
+                System.out.println("El tipo de edificio '" + tipo + "' no es válido.");
+                return;
+        }
+
+        // Si no tiene ningún edificio del tipo indicado
+        if (disponibles == 0) {
+            System.out.println(jugador.getNombre() + " no tiene " + tipo + " en " + this.getNombre().trim() + ".");
+            return;
+        }
+
+        // Si la cantidad pedida supera las disponibles, mostramos el aviso y cancelamos la operación
+        if (cantidad > disponibles) {
+            System.out.println("Solamente se pueden vender " + disponibles + " " + tipo +
+                    ", recibiendo " + (disponibles * precioUnidad) + "€.");
+            return; // No vende nada y sale directamente
+        }
+
+        // Si la cantidad es válida (cantidad <= disponibles), ejecutamos la venta completa
+        eliminarEdificiosCasilla(tipoEdificio, cantidad);
+
+        float totalGanado = cantidad * precioUnidad;
+        jugador.sumarFortuna(totalGanado);
+
+        int restantes = disponibles - cantidad;
+
+        System.out.println(jugador.getNombre() + " ha vendido " + cantidad + " " + tipo +
+                " en " + this.getNombre().trim() + ", recibiendo " + totalGanado +
+                "€. En la propiedad queda " + restantes + " " + tipoEdificio + ".");
+    }
+
     public String infoEdificios() {
         StringBuilder resultado = new StringBuilder();
 
@@ -342,6 +438,8 @@ public class Casilla {
         }
         setHipotecada(true);
         solicitante.sumarFortuna(getHipoteca());
+        solicitante.sumarInversionPropiedades((-1)*getHipoteca());
+
         String mensaje= solicitante.getNombre() + " recibe " + (long) this.hipoteca +  "€ por la hipoteca de " + nombreCasilla + ".\n";
         if (tipo.equalsIgnoreCase("solar") && this.grupo != null) {
             mensaje += "No puede recibir alquileres ni edificar en el grupo " + this.grupo.getColorGrupo() + ".";
@@ -370,7 +468,7 @@ public class Casilla {
         }
 
         if(solicitante.sumarFortuna((-1)*getHipoteca())){
-            solicitante.sumarGastos(getHipoteca());
+            solicitante.sumarInversionPropiedades(getHipoteca());
             setHipotecada(false);
             System.out.println(solicitante.getNombre() +" ha pagado "+getHipoteca()+" por deshipotecar la propiedad "+ getNombre());
         }
@@ -442,8 +540,5 @@ public class Casilla {
             default:
                 return " ";
         }
-    }
+     }
 }
-
-
-

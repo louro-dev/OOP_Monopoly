@@ -325,7 +325,7 @@ public class Tablero {
     //Metodo usado para buscar la casilla con el nombre pasado como argumento:
     public Casilla encontrar_casilla(String nombre){
         ArrayList<Casilla> sur = posiciones.get(0);
-         ArrayList<Casilla> oeste = posiciones.get(1);
+        ArrayList<Casilla> oeste = posiciones.get(1);
         ArrayList<Casilla> norte = posiciones.get(2);
         ArrayList<Casilla> este = posiciones.get(3);
         int tamLat = oeste.size();

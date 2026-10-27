@@ -77,6 +77,36 @@ public class Avatar {
             if (this.jugador != null) {
                 this.jugador.setVueltas(this.jugador.getVueltas() + 1);
                 this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
+                this.jugador.sumarDineroSalida(Valor.SUMA_VUELTA);
+                System.out.println("Se ha pasado por la salida");
+            }
+        }
+
+        // Buscamos la casilla destino
+        for (ArrayList<Casilla> casilla : casillas) {
+            for (Casilla c : casilla) {
+                if (c.getPosicion() == nuevaPosicion) {
+                    this.lugar = c;
+                    this.lugar.anhadirAvatar(this);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void moverAvatarCarcel(ArrayList<ArrayList<Casilla>> casillas, int valorTirada) {
+        if (this.lugar == null) return;
+
+        // Nos quitamos de la casilla actual
+        this.lugar.eliminarAvatar(this);
+
+        // Calculamos la nueva posición (1 a 40)
+        int nuevaPosicion = this.lugar.getPosicion() + valorTirada;
+        if (nuevaPosicion > 40) {
+            nuevaPosicion = nuevaPosicion - 40;
+            if (this.jugador != null) {
+                this.jugador.setVueltas(this.jugador.getVueltas() + 1);
+                this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
             }
         }
 
