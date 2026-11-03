@@ -164,6 +164,7 @@ public class Menu {
                     Listar las casillas en venta: listar enventa
                     Vender edificios: vender <nombre_edificio> <nombre_casilla> <cantidad>
                     Mostrar estadisticas de un jugador: estadisticas <nombre_jugador>
+                    Mostrar estadisticas de juego: estadisticas
                     Acabar la partida: salir
                     """);
             if(!this.getJugadores().isEmpty() && this.getJugadores().get(this.getTurno()).getEnCarcel()){
@@ -180,12 +181,12 @@ public class Menu {
             else if (divEn.length == 2) {comand = divEn[0] + divEn[1];}
             else {comand = divEn[0];}
 
-            //pasamos el comando por el método analizarComand
+            //pasamos el comando por el metodo analizarComando
             this.analizarComando(comand,aux);
         }while(!end);
     }
 
-    
+
     /*Metodo que interpreta el comando introducido y toma la accion correspondiente.
     * Parámetros: cadena de caracteres (el comando).
     */
@@ -210,16 +211,19 @@ public class Menu {
                 ctrl = false;
             }
         }
+        else if(cmd.startsWith("describir")){
+            descCasilla(cmd.substring(9));}
         else if(cmd.startsWith("hipotecar")){
             hipotecar(cmd.substring(9));
         }
         else if(cmd.startsWith("deshipotecar")) {
             deshipotecar(cmd.substring(12));
         }
-        else if(cmd.startsWith("describir")){
-            descCasilla(cmd.substring(9));}
         else if(cmd.startsWith("edificar")){
             construirEdificio(cmd.substring(8),this.getJugadores().get(this.getTurno()));
+        }
+        else if(cmd.equals("estadisticas")) {
+            mostrarEstadisticasJuego();
         }
         else if(cmd.startsWith("estadisticas")){
             mostrarEstadisticasJugador(cmd.substring(12));
@@ -298,7 +302,6 @@ public class Menu {
                 case "salir":
                     this.setEnd(true);
                     this.setCtrl(true);
-                    System.out.println("\n"+this.getTablero());
                     System.out.println("Terminando partida...");
                     break;
                 default:
@@ -600,7 +603,7 @@ public class Menu {
     //metodo que evalua el tipo de casilla en el que cae el jugador y lo que ocurre en cada caso
     public void evaluarCasillaDestino(Jugador actual, Casilla destino, int sumaDados) {
         String tipo = destino.getTipo().toLowerCase();
-
+        destino.sumarVecesVisitada();
         switch (tipo) {
             case "solar":
                 Jugador duenhoSolar = destino.getDuenho();
@@ -637,6 +640,7 @@ public class Menu {
                     actual.sumarAlquilerPagado(alquiler);
                     duenhoSolar.sumarFortuna(alquiler);
                     duenhoSolar.sumarAlquilerCobrado(alquiler);
+                    destino.sumarRentabilidadAcumulada(alquiler);
 
                     System.out.printf("Se han pagado %.0f€ de alquiler a %s.\n", alquiler, duenhoSolar.getNombre());
                 }
@@ -665,6 +669,7 @@ public class Menu {
 
                     duenhoServicio.sumarFortuna(alquiler);
                     duenhoServicio.sumarAlquilerCobrado(alquiler);
+                    destino.sumarRentabilidadAcumulada(alquiler);
 
                     System.out.printf("Se han pagado %.0f€ de servicio a %s (Posee %d casilla/s de servicio).\n",
                             alquiler, duenhoServicio.getNombre(), numServicios);                }
@@ -686,6 +691,7 @@ public class Menu {
 
                     duenhoTransporte.sumarFortuna(alquiler);
                     duenhoTransporte.sumarAlquilerCobrado(alquiler);
+                    destino.sumarRentabilidadAcumulada(alquiler);
                     System.out.printf("Se han pagado %.0f€ de transporte a %s (posee %d transporte/s).\n",
                             alquiler, duenhoTransporte.getNombre(), numTransportes);                }
                 break;
@@ -730,10 +736,10 @@ public class Menu {
                 break;
 
             case "suerte":
-                this.getJugadores().get(this.getTurno()).Suerte(this);
+                actual.Suerte(this);
                 break;
-            case "caja":
-                // HAY QUE AÑADIRLO
+            case "comunidad":
+                actual.CajaComunidad(this);
                 break;
             case "carcel": // No hace nada
                 break;
@@ -915,6 +921,96 @@ public class Menu {
             System.out.println("- Veces que ha caído en la cárcel: " + jugador.getVecesCarcel());
             System.out.println("==================================================");
         }
+        ctrl = false;
+    }
+
+    private Jugador jugadorMasVueltas() {
+        Jugador jugadorMasVueltas = this.getJugadores().get(0);
+        for(Jugador j: this.getJugadores()) {
+            if(j.getVueltas() > jugadorMasVueltas.getVueltas()) {
+                jugadorMasVueltas = j;
+            }
+        }
+        return jugadorMasVueltas;
+    }
+
+    private Jugador jugadorEnCabeza() {
+        Jugador enCabeza = null;
+        float maxFortuna = -1;
+
+        for(Jugador j: this.getJugadores()) {
+            float fortunaCalculada = (float) (j.getFortuna() + j.getDineroInvertidoPropiedades());
+
+            if (fortunaCalculada > maxFortuna) {
+                maxFortuna = fortunaCalculada;
+                enCabeza = j;
+            }
+        }
+        return enCabeza;
+    }
+
+    private Casilla casillaMasRentable(){
+        Casilla casillaRentable= null;
+        float maxRentabilidadCasilla = -1;
+        for(ArrayList<Casilla> lado : tablero.getPosiciones()){
+            for (Casilla c : lado) {
+                if (c.getRentabilidadAcumulada() > maxRentabilidadCasilla) {
+                    maxRentabilidadCasilla = c.getRentabilidadAcumulada();
+                    casillaRentable = c;
+                }
+            }
+        }
+        return casillaRentable;
+    }
+    private Casilla casillaMasVisitada(){
+        Casilla casillaMasVisitada = null;
+        int maxVisitas = -1;
+        for(ArrayList<Casilla> lado : tablero.getPosiciones()){
+            for (Casilla c : lado) {
+                if (c.getVecesVisitada() > maxVisitas) {
+                    maxVisitas = c.getVecesVisitada();
+                    casillaMasVisitada = c;
+                }
+            }
+        }
+        return casillaMasVisitada;
+    }
+
+    private Grupo grupoMasRentable(){
+        Grupo grupoMasRentable = null;
+        float maxRentabilidad = -1;
+        for (Grupo g : tablero.getGrupos().values()) {
+            float rentabilidadGrupo = 0;
+            for (Casilla c : g.getMiembros()) {
+                rentabilidadGrupo += c.getRentabilidadAcumulada();
+            }
+            if (rentabilidadGrupo > maxRentabilidad) {
+                maxRentabilidad = rentabilidadGrupo;
+                grupoMasRentable = g;
+            }
+        }
+        return grupoMasRentable;
+    }
+
+    public void mostrarEstadisticasJuego() {
+        if (this.getJugadores() == null || this.getJugadores().isEmpty()) {
+            System.out.println("\nNo hay jugadores creados\n");
+            ctrl=false;
+            return;
+        }
+        Casilla casillaRentable = casillaMasRentable();
+        Grupo grupoRentable = grupoMasRentable();
+        Casilla casillaFrecuente = casillaMasVisitada();
+        Jugador masVueltas = jugadorMasVueltas();
+        Jugador enCabeza = jugadorEnCabeza();
+
+        System.out.println("=== ESTADÍSTICAS DE JUEGO ===");
+        System.out.println("- Casilla mas rentable: " + casillaRentable.getNombre().trim());
+        System.out.println("- Grupo mas rentable: " + grupoRentable.getColorGrupo());
+        System.out.println("- Casilla mas frecuentada: " + casillaFrecuente.getNombre().trim());
+        System.out.println("- Jugador con mas vueltas: " + masVueltas.getNombre());
+        System.out.println("- Jugador en cabeza: " + enCabeza.getNombre());
+
         ctrl = false;
     }
 }

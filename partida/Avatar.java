@@ -78,7 +78,7 @@ public class Avatar {
                 this.jugador.setVueltas(this.jugador.getVueltas() + 1);
                 this.jugador.sumarFortuna(Valor.SUMA_VUELTA);
                 this.jugador.sumarDineroSalida(Valor.SUMA_VUELTA);
-                System.out.println("Se ha pasado por la salida");
+                System.out.println("Se ha pasado por la salida\n");
             }
         }
 
@@ -152,6 +152,14 @@ public class Avatar {
     public static boolean esTipoValido(String tId){
         String tipoId=tId.toLowerCase(Locale.ROOT);
         return tipoId.equals("coche") || tipoId.equals("esfinge") || tipoId.equals("sombrero") || tipoId.equals("pelota");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Avatar otro = (Avatar) o;
+        return this.getId() != null && this.getId().equals(otro.getId());
     }
 
     @Override

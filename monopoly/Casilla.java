@@ -28,12 +28,17 @@ public class Casilla {
     private float alquilerPiscina;
     private float alquilerPista;
     private boolean hipotecada; //atributo que dice si una casilla esta hipotecada o no
+
     // Atributos adicionales para saber el numero de edificios y su ID
     private int numeroCasas = 0;
     private int numeroHoteles = 0;
     private int numeroPiscinas = 0;
     private int numeroPistas = 0;
     private ArrayList<String> edificios = new ArrayList<>();
+
+    //Atributo para las estadisticas de la partida
+    private float RentabilidadAcumulada;
+    private int vecesVisitada = 0;
 
     //Constructores:
     public Casilla() {
@@ -98,6 +103,8 @@ public class Casilla {
     public int getNumeroPiscinas() {return numeroPiscinas;}
     public int getNumeroPistas() {return numeroPistas;}
     public ArrayList<String> getEdificios() {return edificios;}
+    public float getRentabilidadAcumulada(){return RentabilidadAcumulada;}
+    public int getVecesVisitada() {return vecesVisitada;}
 
     // SETTERS
     public void setNombre(String n) {this.nombre = n;}
@@ -123,6 +130,16 @@ public class Casilla {
     public void setNumeroPiscinas(int p) {this.numeroPiscinas = p;}
     public void setNumeroPistas(int p) {this.numeroPistas = p;}
     public void setEdificios(ArrayList<String> e) {this.edificios = e;}
+    public void setRentabilidadAcumulada(float r){this.RentabilidadAcumulada = r;}
+    public void setVecesVisitada(int v) {this.vecesVisitada = v;}
+
+    // Metodo para sumar la rentabilidad acumulada
+    public void sumarRentabilidadAcumulada(float cantidad){this.RentabilidadAcumulada += cantidad;}
+
+    // Metodo para sumar las veces que se ha visitado una casilla
+    public void sumarVecesVisitada() {
+        setVecesVisitada(getVecesVisitada()+1);
+    }
 
     //Metodo utilizado para añadir un avatar al array de avatares en casilla.
     public void anhadirAvatar(Avatar av) {
