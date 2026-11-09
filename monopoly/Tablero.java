@@ -28,7 +28,7 @@ public class Tablero {
     public void setPosiciones(ArrayList<ArrayList<Casilla>> p) {this.posiciones = p;}
     public void setGrupos(HashMap<String, Grupo> g) {this.grupos = g;}
     public void setBanca(Jugador b) {this.banca = b;}
-    
+
     //Metodo para crear todas las casillas del tablero. Formado a su vez por cuatro métodos (1/lado).
     private void generarCasillas() {
         this.insertarLadoSur();
@@ -70,7 +70,7 @@ public class Tablero {
         banca.anhadirPropiedad(casilla);
         return casilla;
     }
-    
+
     //Metodo para insertar las casillas del lado norte.
     private void insertarLadoNorte() {
         ArrayList<Casilla> norte = new ArrayList<>();
@@ -325,7 +325,7 @@ public class Tablero {
 
         return tablero;
     }
-    
+
     //Metodo usado para buscar la casilla con el nombre pasado como argumento:
     public Casilla encontrar_casilla(String nombre){
         ArrayList<Casilla> sur = posiciones.get(0);
@@ -363,4 +363,3 @@ public class Tablero {
     }
 
 }
-

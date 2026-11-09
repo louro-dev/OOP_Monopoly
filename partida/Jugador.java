@@ -1,6 +1,7 @@
 package partida;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import monopoly.*;
 
@@ -15,11 +16,21 @@ public class Jugador {
     private boolean enCarcel; //Será true si el jugador está en la carcel
     private int tiradasCarcel; //Cuando está en la carcel, contará las tiradas sin éxito que ha hecho allí para intentar salir (se usa para limitar el numero de intentos).
     private int vueltas; //Cuenta las vueltas dadas al tablero.
-    private ArrayList<Casilla> propiedades; //Propiedades que posee el jugador.
+    private ArrayList<Casilla> propiedades;//Propiedades que posee el jugador.
+    private int dobles = 0; // Entero para saber cuántas veces ha sacado dobles en los dados.
+
+    //Atributos Gastos
+    private double dineroInvertidoPropiedades;
+    private double tasasImpuestosPagados;
+    private double alquileresPagados;
+    private double alquileresCobrados;
+    private double dineroSalida;
+    private double dineroPremiosInversionesParking;
+    private int vecesCarcel;
 
     //Constructor vacío. Se usará para crear la banca.
     public Jugador() {
-        this.nombre = "Banca";
+        this.nombre = "banca";
         this.fortuna = Valor.FORTUNA_BANCA; // Se puede hacer porque FORTUNA_BANCA es público.
         this.gastos = 0;
         this.enCarcel = false;
@@ -30,9 +41,9 @@ public class Jugador {
     }
 
     /*Constructor principal. Requiere parámetros:
-    * Nombre del jugador, tipo del avatar que tendrá, casilla en la que empezará y ArrayList de
-    * avatares creados (usado para dos propósitos: evitar que dos jugadores tengan el mismo nombre y
-    * que dos avatares tengan mismo ID). Desde este constructor también se crea el avatar.
+     * Nombre del jugador, tipo del avatar que tendrá, casilla en la que empezará y ArrayList de
+     * avatares creados (usado para dos propósitos: evitar que dos jugadores tengan el mismo nombre y
+     * que dos avatares tengan mismo ID). Desde este constructor también se crea el avatar.
      */
     private Jugador(String nombre, String tipoAvatar, Casilla inicio, ArrayList<Avatar> avCreados) {
         this.nombre = nombre;
@@ -44,6 +55,7 @@ public class Jugador {
         this.tiradasCarcel = 0;
         this.vueltas = 0;
         this.propiedades = new ArrayList<>();
+
     }
 
     //Creamos un metodo que llame al constructor para poder tener control sobre los jugadores, ya que el constructor
@@ -63,18 +75,10 @@ public class Jugador {
     }
 
     // GETTERS
-    public String getNombre() {
-        return this.nombre;
-    }
-    public Avatar getAvatar() {
-        return this.avatar;
-    }
-    public float getFortuna() {
-        return this.fortuna;
-    }
-    public float getGastos() {
-        return this.gastos;
-    }
+    public String getNombre() {return this.nombre;}
+    public Avatar getAvatar() {return this.avatar;}
+    public float getFortuna() {return this.fortuna;}
+    public float getGastos() {return this.gastos;}
     public boolean getEnCarcel() {
         return this.enCarcel;
     }
@@ -87,6 +91,16 @@ public class Jugador {
     public ArrayList<Casilla> getPropiedades() {
         return this.propiedades;
     }
+    public int getDobles() {return dobles;}
+
+    //GETTERS Gastos
+    public double getDineroInvertidoPropiedades() {return dineroInvertidoPropiedades;}
+    public double getTasasImpuestosPagados() {return tasasImpuestosPagados;}
+    public double getAlquileresPagados() {return alquileresPagados;}
+    public double getAlquileresCobrados() {return alquileresCobrados;}
+    public double getDineroSalida() {return dineroSalida;}
+    public double getDineroPremiosInversionesParking() {return dineroPremiosInversionesParking;}
+    public int getVecesCarcel() {return vecesCarcel;}
 
     // SETTERS
     public void setNombre(String n) {
@@ -110,9 +124,26 @@ public class Jugador {
     public void setVueltas(int v) {
         this.vueltas = v;
     }
-    public void setPropiedades(ArrayList<Casilla> p) {
-        this.propiedades = p;
-    }
+    public void setPropiedades(ArrayList<Casilla> p) {this.propiedades = p;}
+    public void setDobles(int d) {this.dobles = d;}
+
+    //SETTERS Gastos
+    public void setDineroInvertidoPropiedades(double dineroInvertidoPropiedades) {this.dineroInvertidoPropiedades = dineroInvertidoPropiedades;}
+    public void setTasasImpuestosPagados(double tasasImpuestosPagados) {this.tasasImpuestosPagados = tasasImpuestosPagados;}
+    public void setAlquileresPagados(double alquileresPagados) {this.alquileresPagados = alquileresPagados;}
+    public void setAlquileresCobrados(double alquileresCobrados) {this.alquileresCobrados = alquileresCobrados;}
+    public void setDineroSalida(double dineroSalida) {this.dineroSalida = dineroSalida;}
+    public void setDineroPremiosInversionesParking(double dineroPremiosInversionesParking) {this.dineroPremiosInversionesParking = dineroPremiosInversionesParking;}
+    public void setVecesCarcel(int vecesCarcel) {this.vecesCarcel = vecesCarcel;}
+
+    //Métodos gastos
+    public void sumarInversionPropiedades(double cantidad) {this.dineroInvertidoPropiedades += cantidad;}
+    public void sumarTasasImpuestos(double cantidad) {this.tasasImpuestosPagados += cantidad;}
+    public void sumarAlquilerPagado(double cantidad) {this.alquileresPagados += cantidad;}
+    public void sumarAlquilerCobrado(double cantidad) {this.alquileresCobrados += cantidad;}
+    public void sumarDineroSalida(double cantidad) {this.dineroSalida += cantidad;}
+    public void sumarPremiosInversionesParking(double cantidad) {this.dineroPremiosInversionesParking += cantidad;}
+    public void incrementarVecesCarcel() {this.vecesCarcel++;}
 
     //Otros métodos:
     //Metodo para añadir una propiedad al jugador. Como parámetro, la casilla a añadir.
@@ -139,7 +170,29 @@ public class Jugador {
     public boolean sumarFortuna(float valor) {
         if (valor<0){
             if(!this.esSolvente(valor)){
-                return false;
+                Scanner lector = new Scanner(System.in);
+                int i=0;
+                do{
+                    System.out.println("""
+                            No tienes dinero suficiente, debes hipotecar una propiedad.
+                            Propiedades disponibles:
+                            """);
+
+                    if(this.getPropiedades().size()==0) {
+                        System.out.println("No te quedan propiedades. BANCARROTA!!");
+                        return false;
+                    }
+
+                    for(int j=0;j<this.getPropiedades().size();j++){
+                        System.out.println((j+1)+". "+ this.getPropiedades().get(j).getNombre().trim()+ " --> "+this.getPropiedades().get(j).getValor()/2.0);
+                    }
+
+                    System.out.println("De el numero de la propiedad que desea hipotecar");
+                    int nP = lector.nextInt();
+                    this.getPropiedades().get(nP-1).hipotecar(this);
+
+                }while(!this.esSolvente(valor));
+                lector.close();
             }
         }
         fortuna+=valor;
@@ -148,12 +201,10 @@ public class Jugador {
 
     //Metodo para sumar gastos a un jugador.
     //Parámetro: valor a añadir a los gastos del jugador (será el precio de un solar, impuestos pagados...).
-    public void sumarGastos(float valor) {
-        gastos+=valor;
-    }
+    //public void sumarGastos(float valor) {gastos+=Math.abs(valor);}
 
     /*Metodo para establecer al jugador en la cárcel.
-    * Se requiere disponer de las casillas del tablero para ello (por eso se pasan como parámetro).*/
+     * Se requiere disponer de las casillas del tablero para ello (por eso se pasan como parámetro).*/
     public void encarcelar(Tablero tab) {
         this.enCarcel = true;
         this.tiradasCarcel=0;
@@ -173,69 +224,351 @@ public class Jugador {
             distancia = prison.getPosicion()-actual;
         }
 
-        this.avatar.moverAvatar(tab.getPosiciones(), distancia);
+        this.avatar.moverAvatarCarcel(tab.getPosiciones(), distancia);
+        incrementarVecesCarcel();
     }
 
     public static Jugador encontrarJugador(String nombre,ArrayList<Jugador> jugadores){
-        for(int j=0;j<jugadores.size();j++){
-            if(jugadores.get(j).getNombre().equals(nombre)){
-                return jugadores.get(j);
+        for (Jugador jugadore : jugadores) {
+            if (jugadore.getNombre().equals(nombre)) {
+                return jugadore;
             }
         }
         System.out.println("Jugador no encontrado");
         return null;
     }
 
-    @Override
-    public String toString(){
-        String str= "nombre del jugador: "+this.getNombre()+"\nAvatar del jugador: "+
-                this.getAvatar()+"\nFortuna del jugador: "+
-                String.format(java.util.Locale.of("es","ES"), "%,.0f", this.getFortuna())+
-                "\nGastos totales: "+
-                String.format(java.util.Locale.of("es", "ES"), "%,.0f", this.getGastos())+
-                "\nEsta encarcelado?: "+this.getEnCarcel()+"\nVueltas al tablero: "+this.getVueltas()+"\nLista de pro" +
-                "piedades: [";
-
-        //bucle para imprimir propiedades
-        for (int i = 0; i < getPropiedades().size(); i++) {
-            str += this.getPropiedades().get(i).getNombre().trim();
-            //solo añadimos la coma si hay siguiente elemento
-            if (i < getPropiedades().size() - 1) {
-                str += ", ";
+    public int numeroDeTransportes() {
+        int contador = 0;
+        for (Casilla c : this.propiedades) {
+            if ("transporte".equalsIgnoreCase(c.getTipo())) {
+                contador++;
             }
         }
-        str += "]";
-
-        return str;
+        return contador;
     }
 
-    public String toString(String nombre) {
-        String st="nombre: "+nombre+"\nAvatar: "+this.getAvatar().getId()+"\nfortuna: "+
-                String.format(java.util.Locale.of("es","ES"), "%,.0f", this.getFortuna())
-                +"\npropiedades: [";
-
-        //bucle para imprimir propiedades
-        for (int i = 0; i < getPropiedades().size(); i++) {
-            st += this.getPropiedades().get(i).getNombre().trim();
-            //solo añadimos la coma si hay siguiente elemento
-            if (i < getPropiedades().size() - 1) {
-                st += ", ";
+    public int numeroDeServicios() {
+        int contador = 0;
+        for (Casilla c : this.propiedades) { // Sustituye 'propiedades' por el nombre de tu ArrayList de propiedades
+            if ("servicio".equalsIgnoreCase(c.getTipo())) {
+                contador++;
             }
         }
-        st += "]\nhipotecadas: [";
+        return contador;
+    }
 
-        //propiedades hipotecadas
+    /* Metodo para declarar en bancarrota a un jugador usando un bucle for-each.
+     * Reasigna el dueño de cada propiedad al acreedor y deja la fortuna en 0. */
+    public void declararBancarrota(Jugador acreedor) {
+        System.out.println("¡El jugador " + this.nombre + " no tiene fondos suficientes y se declara en BANCARROTA!");
+
+        // Recorremos las propiedades del jugador con un for-each
+        for (Casilla c : this.propiedades) {
+            if (acreedor != null) {
+                acreedor.anhadirPropiedad(c);
+                c.setDuenho(acreedor);
+                System.out.println("  -> La propiedad " + c.getNombre().trim() + " pasa a ser de " + acreedor.getNombre());
+            }
+        }
+
+        // Vaciamos la lista completa del jugador de una sola vez al terminar el bucle
+        this.propiedades.clear();
+
+        // Se resetea la fortuna del jugador insolvente
+        this.fortuna = 0;
+    }
+
+
+    public void Suerte(Menu m) {
+        int id=((int)(Math.random()*7))+1;
+
+        switch(id){
+            case 1:
+                System.out.println("""
+                Decides hacer un viaje de placer.
+                Avanza hasta Solar19.
+                Si pasas por la salida, cobra 2.000.000€.
+                """);
+                Casilla solar = m.getTablero().encontrar_casilla("Solar19");
+                int actual = this.avatar.getLugar().getPosicion();
+                int distancia;
+                if(actual>solar.getPosicion()){
+                    distancia = 40+(solar.getPosicion()-actual);
+                }
+                else {
+                    distancia = solar.getPosicion() - actual;
+                }
+                this.getAvatar().moverAvatar(m.getTablero().getPosiciones(),distancia);
+                m.evaluarCasillaDestino(this, getAvatar().getLugar(),0);
+                break;
+
+            case 2:
+                System.out.println("""
+                        Los acreedores te persiguen por impago.
+                        Ve a la Carcel.
+                        Ve directamente sin pasar por la casilla de salida y sin cobrar los 2.000.000€.
+                        """);
+                this.encarcelar(m.getTablero());
+                break;
+
+            case 3:
+                System.out.println("""
+                        !Has ganado el bote de la loteria!
+                        Recibe 1.000.000€.
+                        """);
+                sumarFortuna(1000000);
+                sumarPremiosInversionesParking(1000000);
+                break;
+
+            case 4:
+                System.out.println("""
+                        Has sido elegido presidente de la junta directiva.
+                        Paga a cada jugador 250.000€
+                        """);
+                float valorTotal=250000*m.getJugadores().size();
+
+                sumarFortuna((-1)*valorTotal);
+                sumarTasasImpuestos(valorTotal);
+
+                for(int i=0;i<m.getJugadores().size();i++){
+                    m.getJugadores().get(i).sumarFortuna(250000);
+                    m.getJugadores().get(i).sumarPremiosInversionesParking(250000);
+                }
+                break;
+
+            case 5:
+                System.out.println("""
+                        ¡Hora punta de trafico!
+                        Retrocede 3 casillas
+                        """);
+                this.getAvatar().moverAvatar(m.getTablero().getPosiciones(),-3);
+                m.evaluarCasillaDestino(this, getAvatar().getLugar(),0);
+                break;
+
+            case 6:
+                System.out.println("""
+                        Te multan por usar el movil mientras conduces.
+                        Paga 150.000€.
+                        """);
+                sumarFortuna((-1)*150000);
+                sumarTasasImpuestos(150000);
+                break;
+
+            case 7:
+                System.out.println("""
+                        Avanza hasta la casilla de transporte mas cercana.
+                        Si no tiene duenho, puedes comprarla.
+                        Si tiene duenho, paga al duenho el doble del precio normal.
+                        """);
+                while(!this.getAvatar().getLugar().getTipo().equals("transporte"))
+                {
+                    this.getAvatar().moverAvatar(m.getTablero().getPosiciones(),1);
+                }
+
+                Jugador duenhoTransporte=getAvatar().getLugar().getDuenho();
+                if (duenhoTransporte != null && !duenhoTransporte.equals(m.getBanca()) && !duenhoTransporte.equals(this)) {
+                    int numTransportes = duenhoTransporte.numeroDeTransportes();
+                    float alquiler = getAvatar().getLugar().getImpuesto() * numTransportes;
+
+                    if(!this.sumarFortuna((-2)*alquiler)){
+                        m.setSolvente(false);
+                        this.declararBancarrota(duenhoTransporte);
+                        break;
+                    }
+                    this.sumarAlquilerPagado(alquiler);
+
+                    duenhoTransporte.sumarFortuna(alquiler);
+
+                    duenhoTransporte.sumarAlquilerCobrado(alquiler);
+                    System.out.printf("""
+                                    Se han pagado %.0f€ de transporte a %s (posee %d transporte/s).
+                                    Se ha pagado el doble del alquiler.
+                                    """,
+                            alquiler*2, duenhoTransporte.getNombre(), numTransportes);
+                }
+                break;
+
+            default:
+                System.out.println("Error");
+                break;
+        }
+    }
+
+    public void CajaComunidad(Menu m){
+        int id=((int)(Math.random()*5))+1;
+        switch (id){
+            case 1:
+                System.out.println("Paga 500.000 por un balneario de 5 estrellas");
+                sumarFortuna((-1)*500000);
+                sumarTasasImpuestos(500000);
+                break;
+            case 2:
+                System.out.println("""
+                        Te investigan por fraude de identidad
+                        Ve a la carcel.
+                        Ve directamente sin pasar por la casilla de salida y sin cobrar los 2.000.000
+                        """);
+                encarcelar(m.getTablero());
+                break;
+            case 3:
+                System.out.println("Colocate en la salida.\nCobra 2.000.000");
+                int po=0;
+                for(int i=0; i<m.getTablero().getPosiciones().size(); i++){
+                    for(int j=0; j<m.getTablero().getPosiciones().get(i).size(); j++){
+                        for(int k=0; k<m.getTablero().getPosiciones().get(i).get(j).getAvatares().size();k++){
+                            if(m.getTablero().getPosiciones().get(i).get(j).getAvatares().get(k).getJugador().equals(this)){
+                                po = m.getTablero().getPosiciones().get(i).get(j).getPosicion();
+                            }
+                        }
+                    }
+                }
+                getAvatar().moverAvatar(m.getTablero().getPosiciones(),-(po-1));
+                break;
+
+            case 4:
+                System.out.println("Devolución de hacienda\nCobra 500.000");
+                sumarFortuna(500000);
+                sumarTasasImpuestos(500000);
+                break;
+            case 5:
+                System.out.println("Retrocede a Solar1 para comprar antigüedades exoticas");
+                int p1=0;
+                for(int i=0; i<m.getTablero().getPosiciones().size(); i++){
+                    for(int j=0; j<m.getTablero().getPosiciones().get(i).size(); j++){
+                        for(int k=0; k<m.getTablero().getPosiciones().get(i).get(j).getAvatares().size();k++){
+                            if(m.getTablero().getPosiciones().get(i).get(j).getAvatares().get(k).getJugador().equals(this)){
+                                p1 = m.getTablero().getPosiciones().get(i).get(j).getPosicion();
+                            }
+                        }
+                    }
+                }
+                getAvatar().moverAvatar(m.getTablero().getPosiciones(), -(p1-2));
+                m.evaluarCasillaDestino(this,getAvatar().getLugar(),0);
+                break;
+
+            case 6:
+                System.out.println("Ve a Solar20 para disfrutar del San Fermín. Si pasas por la casilla de salida, cobra 2.000.000");
+                System.out.println("Retrocede a Solar1 para comprar antigüedades exoticas");
+                int p2=0;
+                for(int i=0; i<m.getTablero().getPosiciones().size(); i++){
+                    for(int j=0; j<m.getTablero().getPosiciones().get(i).size(); j++)
+                        for(int k=0; k<m.getTablero().getPosiciones().get(i).get(j).getAvatares().size();k++){
+                            if(m.getTablero().getPosiciones().get(i).get(j).getAvatares().get(k).getJugador().equals(this)){
+                                p2 = m.getTablero().getPosiciones().get(i).get(j).getPosicion();
+                            }
+                        }
+                }
+                getAvatar().moverAvatar(m.getTablero().getPosiciones(), 35-p2);
+                m.evaluarCasillaDestino(this,getAvatar().getLugar(),0);
+                break;
+        }
+    }
+
+    // Es el toString de listar jugadores y describir jugador turno
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Nombre del jugador: ").append(this.getNombre())
+                .append("\nAvatar del jugador: ").append(this.getAvatar())
+                .append("\nFortuna del jugador: ").append(String.format(java.util.Locale.of("es", "ES"), "%,.0f", this.getFortuna()))
+                .append("\nGastos totales: ").append(String.format(java.util.Locale.of("es", "ES"), "%,.0f", this.getGastos()))
+                .append("\nEsta encarcelado?: ").append(this.getEnCarcel())
+                .append("\nVueltas al tablero: ").append(this.getVueltas())
+                .append("\nLista de propiedades: [");
+
+        // Bucle para imprimir propiedades con StringBuilder
+        for (int i = 0; i < getPropiedades().size(); i++) {
+            sb.append(this.getPropiedades().get(i).getNombre().trim());
+            if (i < getPropiedades().size() - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+
+        // Listar edificios del jugador
+        sb.append("\nLista de edificios: [");
+        boolean primerEdificio = true;
+
+        // Recorremos la lista de casillas (propiedades)
+        for (int i = 0; i < getPropiedades().size(); i++) {
+            Casilla c = getPropiedades().get(i);
+
+            // Comprobamos si la casilla actual tiene edificios
+            if (c.getEdificios() != null && !c.getEdificios().isEmpty()) {
+                // Recorremos la lista de edificios de esta casilla
+                for (int j = 0; j < c.getEdificios().size(); j++) {
+                    if (!primerEdificio) {
+                        sb.append(", ");
+                    }
+                    sb.append(c.getEdificios().get(j)).append(" (").append(c.getNombre().trim()).append(")");                    primerEdificio = false;
+                }
+            }
+        }
+        sb.append("]");
+
+
+        return sb.toString();
+    }
+
+    // Es el toString de describir jugador
+    public String toString(String nombre) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Nombre: ").append(nombre)
+                .append("\nAvatar: ").append(this.getAvatar().getId())
+                .append("\nFortuna: ").append(String.format(java.util.Locale.of("es", "ES"), "%,.0f", this.getFortuna()))
+                .append("\nPropiedades: [");
+
+        // Bucle para imprimir propiedades
+        for (int i = 0; i < getPropiedades().size(); i++) {
+            sb.append(this.getPropiedades().get(i).getNombre().trim());
+            if (i < getPropiedades().size() - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]\nhipotecadas: [");
+
+        // Propiedades hipotecadas
+        boolean primerHipotecada = true;
         for (int i = 0; i < getPropiedades().size(); i++) {
             if (this.getPropiedades().get(i).getHipotecada()) {
-                if (i>0) {
-                    st += ", ";
+                if (!primerHipotecada) {
+                    sb.append(", ");
                 }
-                st += this.getPropiedades().get(i).getNombre().trim();
+                sb.append(this.getPropiedades().get(i).getNombre().trim());
+                primerHipotecada = false;
             }
         }
-        st += "]\n\n";
+        sb.append("]\n");
 
-        return st;
+        // Listar edificios del jugador
+        sb.append("edificios: [");
+        boolean primerEdificio = true;
+
+        for (int i = 0; i < this.getPropiedades().size(); i++) {
+            Casilla c = this.getPropiedades().get(i);
+            if (c.getEdificios() != null && !c.getEdificios().isEmpty()) {
+                for (int j = 0; j < c.getEdificios().size(); j++) {
+                    if (!primerEdificio) {
+                        sb.append(", ");
+                    }
+                    sb.append(c.getEdificios().get(j));
+                    primerEdificio = false;
+                }
+            }
+        }
+        sb.append("]\n\n");
+
+        return sb.toString();
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Jugador otro = (Jugador) o;
+        return this.getAvatar().getId() != null && this.getAvatar().getId().equals(otro.getAvatar().getId());
     }
 
 }
