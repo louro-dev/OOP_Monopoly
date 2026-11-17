@@ -66,7 +66,7 @@ public class Jugador {
             return null;
         }
         if(!Avatar.esTipoValido(tipoAvatar)){
-            System.out.println("\ntipo de avatar invalido\n");
+            System.out.println("\nTipo de avatar invalido.\n Avatares posibles: \n Coche\n Esfinge\n Sombrero\n Pelota\n");
             return null;
         }
         Jugador j=new Jugador(nombre,tipoAvatar,inicio,avCreados);
@@ -178,7 +178,7 @@ public class Jugador {
                             Propiedades disponibles:
                             """);
 
-                    if(this.getPropiedades().size()==0) {
+                    if(this.getPropiedades().isEmpty()) {
                         System.out.println("No te quedan propiedades. BANCARROTA!!");
                         return false;
                     }
@@ -280,7 +280,7 @@ public class Jugador {
     }
 
 
-    public void Suerte(Menu m) {
+    public void Suerte(Juego m) {
         int id=((int)(Math.random()*7))+1;
 
         switch(id){
@@ -395,7 +395,7 @@ public class Jugador {
         }
     }
 
-    public void CajaComunidad(Menu m){
+    public void CajaComunidad(Juego m){
         int id=((int)(Math.random()*5))+1;
         switch (id){
             case 1:

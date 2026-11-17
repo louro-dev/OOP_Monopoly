@@ -42,9 +42,8 @@ public class Tablero {
      * 22 veces. Los valores se corresponden EXACTAMENTE con los indicados en el Apéndice I.
      * Además, registra el solar como propiedad inicial de la banca.
      */
-    private Casilla crearSolar(String nombre, int posicion, float precio, float hipoteca, float alquiler,
-                               float precioCasa, float precioPiscina, float precioPista,
-                               float alquilerCasa, float alquilerHotel, float alquilerPiscina, float alquilerPista) {
+    private Casilla crearSolar(String nombre, int posicion, float precio, float hipoteca, float alquiler, float precioCasa, float precioPiscina,
+                               float precioPista, float alquilerCasa, float alquilerHotel, float alquilerPiscina, float alquilerPista) {
         Casilla solar = new Casilla(nombre, "Solar", posicion, precio, banca);
         solar.setHipoteca(hipoteca);
         solar.setImpuesto(alquiler); // Reutilizamos el atributo 'impuesto' de Casilla como alquiler base sin edificar.

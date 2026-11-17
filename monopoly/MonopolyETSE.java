@@ -4,6 +4,6 @@ public class MonopolyETSE {
 
     static void main(String[] args) {
         //creamos menu nuevo
-        Menu menu = new Menu(args);
+        Juego juego = new Juego(args);
     }
 }
