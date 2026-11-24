@@ -1,5 +1,7 @@
 package partida;
 
+import Casillas.Casilla;
+import Casillas.Solar;
 import monopoly.*;
 
 import java.util.ArrayList;

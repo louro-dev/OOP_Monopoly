@@ -1,5 +1,6 @@
-package monopoly;
+package Casillas;
 
+import monopoly.Valor;
 import partida.Jugador;
 
 public class Servicio extends Propiedad {
@@ -9,7 +10,7 @@ public class Servicio extends Propiedad {
      * más adelante (en evaluarCasilla), según el valor de los dados, así que aquí no se fija.
      */
     public Servicio(String nombre, int posicion, Jugador banca) {
-        setValor((int)Valor.PRECIO_TRANSPORTE_SERVICIO);
+        setValor((int) Valor.PRECIO_TRANSPORTE_SERVICIO);
         setNombre(nombre);
         setPosicion(posicion);
         banca.anhadirPropiedad(this);

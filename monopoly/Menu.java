@@ -3,6 +3,7 @@ package monopoly;
 import java.io.File;
 import java.util.Locale;
 
+import Casillas.Casilla;
 import partida.*;
 
 public class Menu {

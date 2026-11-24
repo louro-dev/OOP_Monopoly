@@ -1,5 +1,6 @@
-package monopoly;
+package Casillas;
 
+import monopoly.Valor;
 import partida.*;
 import java.util.ArrayList;
 
@@ -21,23 +22,16 @@ public abstract class Casilla {
     public Casilla() {
     }//Parámetros vacíos
 
+    //xuntamos ambos pq son o mismo
     /*Constructor para casillas tipo Solar, Servicios o Transporte:
      * Parámetros: nombre casilla, tipo (debe ser solar, serv. o transporte), posición en el tablero, valor y dueño.
+     */
+    /*Constructor utilizado para inicializar las casillas de tipo IMPUESTOS.
+     * Parámetros: nombre, posición en el tablero, impuesto establecido y dueño.
      */
     public Casilla(String nombre, int posicion, float valor, Jugador duenho) {
         this.nombre = nombre;
         this.posicion = posicion;
-        this.duenho = duenho;
-        this.avatares = new ArrayList<>();
-    }
-
-    /*Constructor utilizado para inicializar las casillas de tipo IMPUESTOS.
-     * Parámetros: nombre, posición en el tablero, impuesto establecido y dueño.
-     */
-    public Casilla(String nombre, int posicion, float impuesto, Jugador duenho) {
-        this.nombre = nombre;
-        this.posicion = posicion;
-        this.impuesto = impuesto;
         this.duenho = duenho;
         this.avatares = new ArrayList<>();
     }
@@ -87,6 +81,11 @@ public abstract class Casilla {
         if (this.avatares != null) {this.avatares.remove(av);}
     }
 
+    // Método por defecto para cualquier casilla sin grupo
+    public String obtenerCodigoColor() {
+        return Valor.RESET;
+    }
+
     /*Metodo para evaluar qué hacer en una casilla concreta. Parámetros:
     * - Jugador cuyo avatar está en esa casilla.
     * - La banca (para ciertas comprobaciones).
@@ -101,7 +100,8 @@ public abstract class Casilla {
      * Devuelve una cadena con información específica de cada tipo de casilla.*/
     /*Está pensado para devolver la información general e identificativa
      * de cualquier casilla (nombre, tipo, propietario, valor actual, etc.).*/
-    public String infoCasilla() {return this.toString(this.tipo);}
+    //se comenta porque no se que hace
+    //public String infoCasilla() {return this.toString(this.tipo);}
 
     @Override
     public String toString() { // Para imprimir los nombres e ID de las casillas

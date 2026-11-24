@@ -1,4 +1,4 @@
-package monopoly;
+package Casillas;
 
 import partida.*;
 import java.util.ArrayList;

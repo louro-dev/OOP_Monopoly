@@ -1,4 +1,4 @@
-package monopoly;
+package Casillas;
 
 import partida.Jugador;
 

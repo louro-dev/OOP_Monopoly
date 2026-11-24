@@ -3,11 +3,11 @@ package monopoly;
 import java.io.File;
 import java.util.ArrayList;
 import java.io.IOException;
-import java.util.Locale;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import Casillas.*;
 import partida.*;
 
 public class Juego {
@@ -522,32 +522,31 @@ public class Juego {
     }
 
     //metodo que evalua el tipo de casilla en el que cae el jugador y lo que ocurre en cada caso
-    public static void evaluarCasillaDestino(Jugador actual, Casilla destino, int sumaDados) {
-        String tipo = destino.getTipo().toLowerCase();
+    public void evaluarCasillaDestino(Jugador actual, Casilla destino, int sumaDados) {
         destino.sumarVecesVisitada();
-        switch (tipo) {
-            case "solar":
+            if(destino instanceof Solar) {
                 Jugador duenhoSolar = destino.getDuenho();
+                Solar dest = (Solar)destino;
 
                 // Comprobamos si tiene dueño, no es la banca, no es el jugador actual y NO está hipotecada
                 if (duenhoSolar != null && !duenhoSolar.equals(this.getBanca()) && !duenhoSolar.equals(actual) && !destino.getHipotecada()) {
 
                     float alquiler;
 
-                    boolean tieneEdificios = (destino.getNumeroCasas() > 0
-                            || destino.getNumeroHoteles() > 0
-                            || destino.getNumeroPiscinas() > 0
-                            || destino.getNumeroPistas() > 0);
+                    boolean tieneEdificios = (dest.getNumeroCasas() > 0
+                            || dest.getNumeroHoteles() > 0
+                            || dest.getNumeroPiscinas() > 0
+                            || dest.getNumeroPistas() > 0);
 
                     if (tieneEdificios) {
                         // Si tiene edificios, usamos el metodo de Casilla
-                        alquiler = destino.alquilerPropiedad();
+                        alquiler = dest.alquilerPropiedad();
                     } else {
                         // Si no tiene edificios, parte del alquiler base
                         alquiler = destino.getImpuesto();
 
                         // Si el dueño posee todo el grupo sin edificar, el alquiler se duplica
-                        if (destino.getGrupo() != null && destino.getGrupo().esDuenhoGrupo(duenhoSolar)) {
+                        if (dest.getGrupo() != null && dest.getGrupo().esDuenhoGrupo(duenhoSolar)) {
                             alquiler *= 2;
                         }
                     }
@@ -556,7 +555,7 @@ public class Juego {
                     if (!actual.sumarFortuna((-1) * alquiler)) {
                         this.setSolvente(false);
                         actual.declararBancarrota(duenhoSolar);
-                        break;
+                        return;
                     }
                     actual.sumarAlquilerPagado(alquiler);
                     duenhoSolar.sumarFortuna(alquiler);
@@ -566,12 +565,13 @@ public class Juego {
                     System.out.printf("Se han pagado %.0f€ de alquiler a %s.\n", alquiler, duenhoSolar.getNombre());
                 }
                 // Si la casilla está hipotecada, se notifica y no se realiza cobro
-                else if (destino.getHipotecada() && duenhoSolar != null && !duenhoSolar.equals(actual) && !duenhoSolar.equals(this.getBanca())) {
+                else if (dest.getHipotecada() && duenhoSolar != null && !duenhoSolar.equals(actual) && !duenhoSolar.equals(this.getBanca())) {
                     System.out.println("La casilla " + destino.getNombre().trim() + " está hipotecada. No se cobra alquiler.");
                 }
-                break;
+                return;
+            }
 
-            case "servicio":
+            else if(destino instanceof Servicio) {
                 Jugador duenhoServicio = destino.getDuenho();
 
                 if (duenhoServicio != null && !duenhoServicio.equals(this.getBanca()) && !duenhoServicio.equals(actual)) {
@@ -581,10 +581,10 @@ public class Juego {
 
                     float alquiler = multiplicador * sumaDados * Valor.FACTOR_SERVICIO;
 
-                    if(!actual.sumarFortuna(-alquiler)){
+                    if (!actual.sumarFortuna(-alquiler)) {
                         this.setSolvente(false);
                         actual.declararBancarrota(duenhoServicio);
-                        break;
+                        return;
                     }
                     actual.sumarAlquilerPagado(alquiler);
 
@@ -592,21 +592,21 @@ public class Juego {
                     duenhoServicio.sumarAlquilerCobrado(alquiler);
                     destino.sumarRentabilidadAcumulada(alquiler);
 
-                    System.out.printf("Se han pagado %.0f€ de servicio a %s (Posee %d casilla/s de servicio).\n",
-                            alquiler, duenhoServicio.getNombre(), numServicios);                }
-                break;
+                    System.out.printf("Se han pagado %.0f€ de servicio a %s (Posee %d casilla/s de servicio).\n",alquiler, duenhoServicio.getNombre(), numServicios);
+                    }
+            }
 
-            case "transporte":
+            else if(destino instanceof Transporte) {
                 Jugador duenhoTransporte = destino.getDuenho();
 
                 if (duenhoTransporte != null && !duenhoTransporte.equals(this.getBanca()) && !duenhoTransporte.equals(actual)) {
                     int numTransportes = duenhoTransporte.numeroDeTransportes();
                     float alquiler = destino.getImpuesto() * numTransportes;
 
-                    if(!actual.sumarFortuna((-1)*alquiler)){
+                    if (!actual.sumarFortuna((-1) * alquiler)) {
                         this.setSolvente(false);
                         actual.declararBancarrota(duenhoTransporte);
-                        break;
+                        return;
                     }
                     actual.sumarAlquilerPagado(alquiler);
 
@@ -614,15 +614,18 @@ public class Juego {
                     duenhoTransporte.sumarAlquilerCobrado(alquiler);
                     destino.sumarRentabilidadAcumulada(alquiler);
                     System.out.printf("Se han pagado %.0f€ de transporte a %s (posee %d transporte/s).\n",
-                            alquiler, duenhoTransporte.getNombre(), numTransportes);                }
-                break;
-            //para tener un sitio donde almacenar los impuestos cree el boteParking como atributo
-            case "impuesto":
+                            alquiler, duenhoTransporte.getNombre(), numTransportes);
+                }
+            }
 
-                if(!actual.sumarFortuna((-1)*Valor.IMPUESTO)){
+            //para tener un sitio donde almacenar los impuestos cree el boteParking como atributo
+            //como ta por ver que e impuesto queda asi pa que de o fallo
+            else if (destino instanceof impuesto){
+
+                if (!actual.sumarFortuna((-1) * Valor.IMPUESTO)) {
                     this.setSolvente(false);
                     actual.declararBancarrota(this.getBanca()); // Las propiedades vuelven a la Banca
-                    break;
+                    return;
                 }
                 actual.sumarTasasImpuestos(Valor.IMPUESTO);
                 // Sumamos al bote usando el getter y setter
@@ -631,10 +634,11 @@ public class Juego {
                 if (parking != null) {
                     parking.sumarValor(Valor.IMPUESTO);
                 }
-                System.out.printf("El jugador %s paga %.0f€ de impuestos que se depositan en el Parking.\n", actual.getNombre(),Valor.IMPUESTO);
-                break;
+                System.out.printf("El jugador %s paga %.0f€ de impuestos que se depositan en el Parking.\n", actual.getNombre(), Valor.IMPUESTO);
+                return;
+            }
 
-            case "parking":
+            else if(destino instanceof Parking) {
                 if (destino.getValor() > 0) {
                     actual.sumarFortuna(destino.getValor());
                     actual.sumarPremiosInversionesParking(destino.getValor());
@@ -643,12 +647,14 @@ public class Juego {
                             actual.getNombre(), destino.getValor());
 
                     // Reiniciamos el bote a 0 usando el setter
-                    destino.sumarValor((-1)*destino.getValor());
+                    destino.sumarValor((-1) * destino.getValor());
                 } else {
                     System.out.println("El Parking no tiene bote acumulado.");
                 }
-                break;
+                return;
+            }
 
+            //falta todo esto, pero estas son as de tipo especial, e ainda nn sabemos nin como se diferencian nin como se definen
             case "ircarcel":
                 Jugador jugador = getJugadores().get(getTurno());
                 jugador.encarcelar(getTablero());
@@ -657,7 +663,7 @@ public class Juego {
                 break;
 
             case "suerte":
-                actual.Suerte(this);
+                ()Suerte(this);
                 break;
             case "comunidad":
                 actual.CajaComunidad(this);
@@ -666,8 +672,7 @@ public class Juego {
                 break;
             case "salida":
                 // El cobro por pasar o caer en la salida ya se procesa durante el movimiento
-                break;
-        }
+
     }
 
     //Metodo que ejecuta todas las acciones relacionadas con el comando 'salir carcel'.

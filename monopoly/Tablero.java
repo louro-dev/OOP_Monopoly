@@ -1,5 +1,6 @@
 package monopoly;
 
+import Casillas.*;
 import partida.*;
 import java.util.ArrayList;
 import java.util.HashMap;

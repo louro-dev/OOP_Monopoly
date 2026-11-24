@@ -3,6 +3,8 @@ package partida;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Casillas.Casilla;
+import Casillas.Propiedad;
 import monopoly.*;
 
 

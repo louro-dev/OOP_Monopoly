@@ -1,5 +1,6 @@
-package monopoly;
+package Casillas;
 
+import monopoly.*;
 import partida.Jugador;
 
 import java.util.ArrayList;
@@ -29,10 +30,12 @@ public class Suerte extends Accion {
         setValor((int)(Math.random()*7)+1);
     }
 
-    public void Suerte(Tablero tab, ArrayList<Jugador> jugadores, int nActual) {
+    public void Suerte(Juego j) {
 
         actualizarValor();
-        Jugador actual=jugadores.get(nActual);
+        ArrayList<Jugador> jugadores = j.getJugadores();
+        Jugador actual=jugadores.get(j.getTurno());
+        Tablero tab=j.getTablero();
 
 
         switch(getValor()){
@@ -51,7 +54,7 @@ public class Suerte extends Accion {
                     distancia = solar.getPosicion() - actual.getAvatar().getLugar().getPosicion();
                 }
                 actual.getAvatar().moverAvatar(tab.getPosiciones(),distancia);
-                Juego.evaluarCasillaDestino(actual, actual.getAvatar().getLugar(),0);
+                j.evaluarCasillaDestino(actual, actual.getAvatar().getLugar(),0);
                 break;
 
             case 2:
@@ -68,8 +71,8 @@ public class Suerte extends Accion {
                         !Has ganado el bote de la loteria!
                         Recibe 1.000.000€.
                         """);
-                sumarFortuna(1000000);
-                sumarPremiosInversionesParking(1000000);
+                actual.sumarFortuna(1000000);
+                actual.sumarPremiosInversionesParking(1000000);
                 break;
 
             case 4:
@@ -77,14 +80,14 @@ public class Suerte extends Accion {
                         Has sido elegido presidente de la junta directiva.
                         Paga a cada jugador 250.000€
                         """);
-                float valorTotal=250000*m.getJugadores().size();
+                float valorTotal=250000*jugadores.size();
 
-                sumarFortuna((-1)*valorTotal);
-                sumarTasasImpuestos(valorTotal);
+                actual.sumarFortuna((-1)*valorTotal);
+                actual.sumarTasasImpuestos(valorTotal);
 
-                for(int i=0;i<m.getJugadores().size();i++){
-                    m.getJugadores().get(i).sumarFortuna(250000);
-                    m.getJugadores().get(i).sumarPremiosInversionesParking(250000);
+                for (Jugador jug : jugadores) {
+                    jug.sumarFortuna(250000);
+                    jug.sumarPremiosInversionesParking(250000);
                 }
                 break;
 
@@ -93,8 +96,8 @@ public class Suerte extends Accion {
                         ¡Hora punta de trafico!
                         Retrocede 3 casillas
                         """);
-                this.getAvatar().moverAvatar(m.getTablero().getPosiciones(),-3);
-                m.evaluarCasillaDestino(this, getAvatar().getLugar(),0);
+                actual.getAvatar().moverAvatar(tab.getPosiciones(),-3);
+                j.evaluarCasillaDestino(actual, actual.getAvatar().getLugar(),0);
                 break;
 
             case 6:
@@ -102,8 +105,8 @@ public class Suerte extends Accion {
                         Te multan por usar el movil mientras conduces.
                         Paga 150.000€.
                         """);
-                sumarFortuna((-1)*150000);
-                sumarTasasImpuestos(150000);
+                actual.sumarFortuna((-1)*150000);
+                actual.sumarTasasImpuestos(150000);
                 break;
 
             case 7:
@@ -112,22 +115,23 @@ public class Suerte extends Accion {
                         Si no tiene duenho, puedes comprarla.
                         Si tiene duenho, paga al duenho el doble del precio normal.
                         """);
-                while(!this.getAvatar().getLugar().getTipo().equals("transporte"))
+                //revisar que funciona bien, getLugar devuelve tipo Casillam ves si funciona pedir clase y que devuelva la clase derivada que es
+                while(!actual.getAvatar().getLugar().getClass().getSimpleName().equals("Transporte"))
                 {
-                    this.getAvatar().moverAvatar(m.getTablero().getPosiciones(),1);
+                    actual.getAvatar().moverAvatar(tab.getPosiciones(),1);
                 }
 
-                Jugador duenhoTransporte=getAvatar().getLugar().getDuenho();
-                if (duenhoTransporte != null && !duenhoTransporte.equals(m.getBanca()) && !duenhoTransporte.equals(this)) {
+                Jugador duenhoTransporte=actual.getAvatar().getLugar().getDuenho();
+                if (duenhoTransporte != null && !duenhoTransporte.equals(j.getBanca()) && !duenhoTransporte.equals(actual)) {
                     int numTransportes = duenhoTransporte.numeroDeTransportes();
-                    float alquiler = getAvatar().getLugar().getImpuesto() * numTransportes;
+                    float alquiler = actual.getAvatar().getLugar().getImpuesto() * numTransportes;
 
-                    if(!this.sumarFortuna((-2)*alquiler)){
-                        m.setSolvente(false);
-                        this.declararBancarrota(duenhoTransporte);
+                    if(!actual.sumarFortuna((-2)*alquiler)){
+                        j.setSolvente(false);
+                        actual.declararBancarrota(duenhoTransporte);
                         break;
                     }
-                    this.sumarAlquilerPagado(alquiler);
+                    actual.sumarAlquilerPagado(alquiler);
 
                     duenhoTransporte.sumarFortuna(alquiler);
 

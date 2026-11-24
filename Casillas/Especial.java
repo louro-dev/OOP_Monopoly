@@ -1,6 +1,11 @@
-package monopoly;
+package Casillas;
+
+import monopoly.Valor;
 
 public class Especial extends Casilla {
+
+    private int Tipo;          //se mete un int de identificador, sino es imposible distinguir entre carcel, irCarcel e impuestos.
+
 
     @Override
     public String toString() {

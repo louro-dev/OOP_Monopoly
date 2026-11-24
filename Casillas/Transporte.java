@@ -1,5 +1,6 @@
-package monopoly;
+package Casillas;
 
+import monopoly.Valor;
 import partida.Jugador;
 
 public class Transporte extends Propiedad {
@@ -7,7 +8,7 @@ public class Transporte extends Propiedad {
     /*Constructor para crear una casilla de Transporte (mismo precio de compra:
      * 500.000€). El alquiler de transporte es fijo; */
     public Transporte(String nombre, int posicion, Jugador banca) {
-        setValor((int)Valor.PRECIO_TRANSPORTE_SERVICIO);
+        setValor((int) Valor.PRECIO_TRANSPORTE_SERVICIO);
         setNombre(nombre);
         setPosicion(posicion);
         setImpuesto(Valor.ALQUILER_TRANSPORTE);

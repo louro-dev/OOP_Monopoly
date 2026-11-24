@@ -1,5 +1,7 @@
-package monopoly;
+package Casillas;
 
+import monopoly.Tablero;
+import monopoly.Valor;
 import partida.Jugador;
 
 import java.util.ArrayList;
@@ -346,6 +348,7 @@ public class Solar extends Propiedad {
     public String casEnVenta() {return "tipo: solar\ngrupo: " + getGrupo() + "\nvalor: " + getValor() ;}
 
     // Metodo para obtener los colores de cada grupo para luego poder imprimirlos
+    @Override
     public String obtenerCodigoColor() {
         // Si la casilla no pertenece a ningún grupo (por ejemplo, Salida, Cárcel, etc.)
         if (this.grupo == null || this.grupo.getColorGrupo() == null) {return Valor.RESET;}

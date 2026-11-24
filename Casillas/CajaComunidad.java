@@ -1,4 +1,4 @@
-package monopoly;
+package Casillas;
 
 public class CajaComunidad extends Accion {
 
