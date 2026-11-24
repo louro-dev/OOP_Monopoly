@@ -16,7 +16,7 @@ public class Jugador {
     private boolean enCarcel; //Será true si el jugador está en la carcel
     private int tiradasCarcel; //Cuando está en la carcel, contará las tiradas sin éxito que ha hecho allí para intentar salir (se usa para limitar el numero de intentos).
     private int vueltas; //Cuenta las vueltas dadas al tablero.
-    private ArrayList<Casilla> propiedades;//Propiedades que posee el jugador.
+    private ArrayList<Propiedad> propiedades;//Propiedades que posee el jugador.
     private int dobles = 0; // Entero para saber cuántas veces ha sacado dobles en los dados.
 
     //Atributos Gastos
@@ -88,7 +88,7 @@ public class Jugador {
     public int getVueltas() {
         return this.vueltas;
     }
-    public ArrayList<Casilla> getPropiedades() {
+    public ArrayList<Propiedad> getPropiedades() {
         return this.propiedades;
     }
     public int getDobles() {return dobles;}
@@ -124,7 +124,7 @@ public class Jugador {
     public void setVueltas(int v) {
         this.vueltas = v;
     }
-    public void setPropiedades(ArrayList<Casilla> p) {this.propiedades = p;}
+    public void setPropiedades(ArrayList<Propiedad> p) {this.propiedades = p;}
     public void setDobles(int d) {this.dobles = d;}
 
     //SETTERS Gastos
@@ -147,13 +147,13 @@ public class Jugador {
 
     //Otros métodos:
     //Metodo para añadir una propiedad al jugador. Como parámetro, la casilla a añadir.
-    public void anhadirPropiedad(Casilla casilla) {
-        propiedades.add(casilla);
+    public void anhadirPropiedad(Propiedad propiedad) {
+        propiedades.add(propiedad);
     }
 
     //Metodo para eliminar una propiedad del arraylist de propiedades de jugador.
-    public void eliminarPropiedad(Casilla casilla) {
-        propiedades.remove(casilla);
+    public void eliminarPropiedad(Propiedad propiedad) {
+        propiedades.remove(propiedad);
     }
 
     //Metodo que comprueba si un jugador es solvente a la hora de realizar cambios en su fortuna
@@ -205,7 +205,7 @@ public class Jugador {
 
     /*Metodo para establecer al jugador en la cárcel.
      * Se requiere disponer de las casillas del tablero para ello (por eso se pasan como parámetro).*/
-    public void encarcelar(Tablero tab) {
+    public static void encarcelar(Tablero tab) {
         this.enCarcel = true;
         this.tiradasCarcel=0;
 
@@ -277,122 +277,6 @@ public class Jugador {
 
         // Se resetea la fortuna del jugador insolvente
         this.fortuna = 0;
-    }
-
-
-    public void Suerte(Juego m) {
-        int id=((int)(Math.random()*7))+1;
-
-        switch(id){
-            case 1:
-                System.out.println("""
-                Decides hacer un viaje de placer.
-                Avanza hasta Solar19.
-                Si pasas por la salida, cobra 2.000.000€.
-                """);
-                Casilla solar = m.getTablero().encontrar_casilla("Solar19");
-                int actual = this.avatar.getLugar().getPosicion();
-                int distancia;
-                if(actual>solar.getPosicion()){
-                    distancia = 40+(solar.getPosicion()-actual);
-                }
-                else {
-                    distancia = solar.getPosicion() - actual;
-                }
-                this.getAvatar().moverAvatar(m.getTablero().getPosiciones(),distancia);
-                m.evaluarCasillaDestino(this, getAvatar().getLugar(),0);
-                break;
-
-            case 2:
-                System.out.println("""
-                        Los acreedores te persiguen por impago.
-                        Ve a la Carcel.
-                        Ve directamente sin pasar por la casilla de salida y sin cobrar los 2.000.000€.
-                        """);
-                this.encarcelar(m.getTablero());
-                break;
-
-            case 3:
-                System.out.println("""
-                        !Has ganado el bote de la loteria!
-                        Recibe 1.000.000€.
-                        """);
-                sumarFortuna(1000000);
-                sumarPremiosInversionesParking(1000000);
-                break;
-
-            case 4:
-                System.out.println("""
-                        Has sido elegido presidente de la junta directiva.
-                        Paga a cada jugador 250.000€
-                        """);
-                float valorTotal=250000*m.getJugadores().size();
-
-                sumarFortuna((-1)*valorTotal);
-                sumarTasasImpuestos(valorTotal);
-
-                for(int i=0;i<m.getJugadores().size();i++){
-                    m.getJugadores().get(i).sumarFortuna(250000);
-                    m.getJugadores().get(i).sumarPremiosInversionesParking(250000);
-                }
-                break;
-
-            case 5:
-                System.out.println("""
-                        ¡Hora punta de trafico!
-                        Retrocede 3 casillas
-                        """);
-                this.getAvatar().moverAvatar(m.getTablero().getPosiciones(),-3);
-                m.evaluarCasillaDestino(this, getAvatar().getLugar(),0);
-                break;
-
-            case 6:
-                System.out.println("""
-                        Te multan por usar el movil mientras conduces.
-                        Paga 150.000€.
-                        """);
-                sumarFortuna((-1)*150000);
-                sumarTasasImpuestos(150000);
-                break;
-
-            case 7:
-                System.out.println("""
-                        Avanza hasta la casilla de transporte mas cercana.
-                        Si no tiene duenho, puedes comprarla.
-                        Si tiene duenho, paga al duenho el doble del precio normal.
-                        """);
-                while(!this.getAvatar().getLugar().getTipo().equals("transporte"))
-                {
-                    this.getAvatar().moverAvatar(m.getTablero().getPosiciones(),1);
-                }
-
-                Jugador duenhoTransporte=getAvatar().getLugar().getDuenho();
-                if (duenhoTransporte != null && !duenhoTransporte.equals(m.getBanca()) && !duenhoTransporte.equals(this)) {
-                    int numTransportes = duenhoTransporte.numeroDeTransportes();
-                    float alquiler = getAvatar().getLugar().getImpuesto() * numTransportes;
-
-                    if(!this.sumarFortuna((-2)*alquiler)){
-                        m.setSolvente(false);
-                        this.declararBancarrota(duenhoTransporte);
-                        break;
-                    }
-                    this.sumarAlquilerPagado(alquiler);
-
-                    duenhoTransporte.sumarFortuna(alquiler);
-
-                    duenhoTransporte.sumarAlquilerCobrado(alquiler);
-                    System.out.printf("""
-                                    Se han pagado %.0f€ de transporte a %s (posee %d transporte/s).
-                                    Se ha pagado el doble del alquiler.
-                                    """,
-                            alquiler*2, duenhoTransporte.getNombre(), numTransportes);
-                }
-                break;
-
-            default:
-                System.out.println("Error");
-                break;
-        }
     }
 
     public void CajaComunidad(Juego m){

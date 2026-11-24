@@ -306,7 +306,7 @@ public class Juego {
         return casillaMasVisitada;
     }
 
-    private Grupo grupoMasRentable(){
+    private Grupo grupoMasRentable() {
         Grupo grupoMasRentable = null;
         float maxRentabilidad = -1;
         for (Grupo g : tablero.getGrupos().values()) {
@@ -322,22 +322,6 @@ public class Juego {
         return grupoMasRentable;
     }
 
-    // Metodo que realiza las acciones asociadas al comando 'listar enventa'.
-    public void listarVenta() {
-        System.out.println("\n----------CASILLAS EN VENTA----------\n");
-        for(int i = 0; i < this.getBanca().getPropiedades().size(); i++){
-            Casilla cas = this.getBanca().getPropiedades().get(i);
-            String tipo = cas.getTipo().trim().toLowerCase(Locale.ROOT);
-
-            // Solo imprimimos si es Solar, Transporte o Servicio
-            if(tipo.equals("solar") || tipo.equals("transporte") || tipo.equals("servicio")){
-                // Imprimimos la información de la casilla y un salto de línea para separarlas
-                System.out.println(cas.casEnVenta(tipo) + "\n");
-            }
-        }
-        this.setCtrl(false);
-    }
-
     /*Metodo que ejecuta todas las acciones realizadas con el comando 'comprar nombre_casilla'.
      * Parámetro: cadena de caracteres con el nombre de la casilla.
      */
@@ -347,8 +331,8 @@ public class Juego {
             return;
         }
         this.setCtrl(false);
-        Casilla c=this.getAvatares().get(this.getTurno()).getLugar();
-        c.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
+        Propiedad p=this.getAvatares().get(this.getTurno()).getLugar();
+        p.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
     }
 
     public void hipotecar(String nombreCasilla) {
@@ -428,107 +412,6 @@ public class Juego {
         if (!hayEdificios) {
             System.out.println("\nNo hay edificios creados en el grupo " + grupo + "\n");
         }
-    }
-
-    // Funcion para construir un edificio
-    public void construirEdificio(String tipoEdificio, Jugador jugadorActual) {
-        if(this.getJugadores().isEmpty()){
-            System.out.println("\nNo hay jugadores creados\n");
-            return;
-        }
-        // Obtener la casilla donde está ubicado el avatar del jugador
-        Casilla casillaActual = jugadorActual.getAvatar().getLugar();
-
-        // Validar que la casilla sea de tipo Solar
-        if (!casillaActual.getTipo().equalsIgnoreCase("solar")) {
-            System.out.println("No se puede edificar en una casilla de tipo " + casillaActual.getTipo());
-            return;
-        }
-
-        // Validar que el solar pertenezca al jugador actual
-        if (casillaActual.getDuenho() == null || !casillaActual.getDuenho().equals(jugadorActual)) {
-            System.out.println("No puedes edificar en " + casillaActual.getNombre().trim() + " porque no eres el propietario.");
-            return;
-        }
-
-        // Validar las reglas de edificacion
-        if (!casillaActual.puedoEdificar(tipoEdificio)) {
-            System.out.println("No se cumplen los requisitos para edificar un/a " + tipoEdificio + " en " + casillaActual.getNombre().trim() + ".");
-            return;
-        }
-
-        // Determinar el precio del edificio según su tipo
-        float precioEdificio = 0;
-        switch (tipoEdificio.toLowerCase()) {
-            case "casa":
-                precioEdificio = casillaActual.getPrecioCasa();
-                break;
-            case "hotel":
-                precioEdificio = casillaActual.getPrecioHotel();
-                break;
-            case "piscina":
-                precioEdificio = casillaActual.getPrecioPiscina();
-                break;
-            case "pista":
-                precioEdificio = casillaActual.getPrecioPista();
-                break;
-            default:
-                System.out.println("Tipo de edificio no válido.");
-                return;
-        }
-
-        // Actualizar fortuna del jugador
-        if(!jugadorActual.sumarFortuna((-1)*precioEdificio)){
-            System.out.println("La fortuna de " + jugadorActual.getNombre() +
-                    " no es suficiente para edificar un/a " + tipoEdificio +
-                    " en la casilla " + casillaActual.getNombre().trim() + ".");
-            return;
-        }
-
-        // Efectuar la edificación
-        casillaActual.anhadirEdificio(tipoEdificio);
-
-        // Actualizar gastos del jugador
-        jugadorActual.sumarInversionPropiedades(precioEdificio);
-
-        // Mensaje
-        System.out.println("Se ha edificado un/a " + tipoEdificio + " en " + casillaActual.getNombre().trim() +
-                ". La fortuna de " + jugadorActual.getNombre() +
-                " se reduce en " + precioEdificio + "€.");
-    }
-
-    public void venderEdificios(String tipoEdificio, String nombreCasilla, int cantidad) {
-        // Obtener el jugador del turno actual
-        if(this.getJugadores().isEmpty()) {
-            System.out.println("No hay jugadores creados");
-            return;
-        }
-        Jugador jugadorActual = this.getJugadores().get(this.getTurno());
-
-        // Buscar la casilla en el tablero usando tu metodo encontrar_casilla
-        Casilla casilla = this.getTablero().encontrar_casilla(nombreCasilla);
-
-        // La casilla debe existir
-        if (casilla == null) {
-            System.out.println("La casilla " + nombreCasilla + " no existe.");
-            return;
-        }
-
-        // Comprobar que la casilla sea de tipo Solar
-        if (!casilla.getTipo().equalsIgnoreCase("solar")) {
-            System.out.println("No se pueden realizar ventas en propiedades que no sean de tipo Solar.");
-            return;
-        }
-
-        // Comprobar que la casilla pertenezca al jugador actual
-        if (!jugadorActual.equals(casilla.getDuenho())) {
-            System.out.println("No se pueden vender " + tipoEdificio + " en " + casilla.getNombre().trim() +
-                    ". Esta propiedad no pertenece a " + jugadorActual.getNombre() + ".");
-            return;
-        }
-
-        // Delegar la venta en la casilla
-        casilla.venderEdificios(tipoEdificio, cantidad, jugadorActual);
     }
 
     //Metodo que ejecuta todas las acciones relacionadas con el comando 'lanzar dados'.
@@ -639,7 +522,7 @@ public class Juego {
     }
 
     //metodo que evalua el tipo de casilla en el que cae el jugador y lo que ocurre en cada caso
-    public void evaluarCasillaDestino(Jugador actual, Casilla destino, int sumaDados) {
+    public static void evaluarCasillaDestino(Jugador actual, Casilla destino, int sumaDados) {
         String tipo = destino.getTipo().toLowerCase();
         destino.sumarVecesVisitada();
         switch (tipo) {

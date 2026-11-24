@@ -36,77 +36,47 @@ public class Tablero {
         this.insertarLadoNorte();
         this.insertarLadoEste();
     }
-
-    /*Metodo auxiliar para crear una casilla de tipo Solar con todos sus valores (precio, hipoteca,
-     * alquiler base y costes/alquileres de edificación), evitando repetir el mismo bloque de código
-     * 22 veces. Los valores se corresponden EXACTAMENTE con los indicados en el Apéndice I.
-     * Además, registra el solar como propiedad inicial de la banca.
-     */
-    private Casilla crearSolar(String nombre, int posicion, float precio, float hipoteca, float alquiler, float precioCasa, float precioPiscina,
-                               float precioPista, float alquilerCasa, float alquilerHotel, float alquilerPiscina, float alquilerPista) {
-        Casilla solar = new Casilla(nombre, "Solar", posicion, precio, banca);
-        solar.setHipoteca(hipoteca);
-        solar.setImpuesto(alquiler); // Reutilizamos el atributo 'impuesto' de Casilla como alquiler base sin edificar.
-        solar.setPrecioCasa(precioCasa);
-        solar.setPrecioHotel(precioCasa); // En el Apéndice I, precio de hotel == precio de casa en todos los solares.
-        solar.setPrecioPiscina(precioPiscina);
-        solar.setPrecioPista(precioPista);
-        solar.setAlquilerCasa(alquilerCasa);
-        solar.setAlquilerHotel(alquilerHotel);
-        solar.setAlquilerPiscina(alquilerPiscina);
-        solar.setAlquilerPista(alquilerPista);
-        banca.anhadirPropiedad(solar);
-        return solar;
-    }
-
-    /*Metodo auxiliar para crear una casilla de Transporte o Servicio (mismo precio de compra:
-     * 500.000€). El alquiler de transporte es fijo; el de servicio se calculará dinámicamente
-     * más adelante (en evaluarCasilla), según el valor de los dados, así que aquí no se fija.
-     */
-    private Casilla crearTransporteServicio(String nombre, String tipo, int posicion) {
-        Casilla casilla = new Casilla(nombre, tipo, posicion, Valor.PRECIO_TRANSPORTE_SERVICIO, banca);
-        if (tipo.equals("Transporte")) {casilla.setImpuesto(Valor.ALQUILER_TRANSPORTE);}
-        banca.anhadirPropiedad(casilla);
-        return casilla;
-    }
     
     //Metodo para insertar las casillas del lado norte.
     private void insertarLadoNorte() {
         ArrayList<Casilla> norte = new ArrayList<>();
 
-        norte.add(new Casilla("Parking       ", "Especial", 21, banca));
+        Parking parking = new Parking();
+        norte.add(parking);
 
-        Casilla solar12 = crearSolar("Solar12       ", 22, 2200000, 1100000, 180000,
+        Solar solar12 = new Solar("Solar12       ", 22, 2200000, 1100000, 180000,
                 1500000, 300000, 600000, 2200000, 10500000, 2100000, 2100000);
         norte.add(solar12);
 
-        norte.add(new Casilla("Suerte        ", "Suerte", 23, banca));
+        norte.add(new Suerte("Suerte        ", 23));
 
-        Casilla solar13 = crearSolar("Solar13       ", 24, 2200000, 1100000, 180000,
+        Solar solar13 = new Solar("Solar13       ", 24, 2200000, 1100000, 180000,
                 1500000, 300000, 600000, 2200000, 10500000, 2100000, 2100000);
         norte.add(solar13);
 
-        Casilla solar14 = crearSolar("Solar14       ", 25, 2400000, 1200000, 200000,
+        Solar solar14 = new Solar("Solar14       ", 25, 2400000, 1200000, 200000,
                 1500000, 300000, 600000, 2325000, 11000000, 2200000, 2200000);
         norte.add(solar14);
 
-        norte.add(crearTransporteServicio("Trans3        ", "Transporte", 26));
+        Transporte trans3 = new Transporte("Trans3        ", 26, banca);
+        norte.add(trans3);
 
-        Casilla solar15 = crearSolar("Solar15       ", 27, 2600000, 1300000, 220000,
+        Solar solar15 = new Solar("Solar15       ", 27, 2600000, 1300000, 220000,
                 1500000, 300000, 600000, 2450000, 11500000, 2300000, 2300000);
         norte.add(solar15);
 
-        Casilla solar16 = crearSolar("Solar16       ", 28, 2600000, 1300000, 220000,
+        Solar solar16 = new Solar("Solar16       ", 28, 2600000, 1300000, 220000,
                 1500000, 300000, 600000, 2450000, 11500000, 2300000, 2300000);
         norte.add(solar16);
 
-        norte.add(crearTransporteServicio("Serv2         ", "Servicio", 29));
+        norte.add(new Servicio("Serv2         ", 29, banca));
 
-        Casilla solar17 = crearSolar("Solar17       ", 30, 2800000, 1400000, 240000,
+        Solar solar17 = new Solar("Solar17       ", 30, 2800000, 1400000, 240000,
                 1500000, 300000, 600000, 2600000, 12000000, 2400000, 2400000);
         norte.add(solar17);
 
-        norte.add(new Casilla("IrCarcel      ", "IrCarcel", 31, banca));
+        Especial irCarcel = new Especial();
+        norte.add(irCarcel);
 
         // Grupos del lado norte.
         Grupo rojo = new Grupo(solar12, solar13, solar14, "Rojo");
@@ -128,37 +98,41 @@ public class Tablero {
     private void insertarLadoSur() {
         ArrayList<Casilla> sur = new ArrayList<>();
 
-        sur.add(new Casilla("Salida        ", "Especial", 1, banca));
+        Especial salida = new Especial();
+        sur.add(salida);
 
-        Casilla solar1 = crearSolar("Solar1        ", 2, 600000, 300000, 20000,
+        Solar solar1 = new Solar("Solar1        ", 2, 600000, 300000, 20000,
                 500000, 100000, 200000, 400000, 2500000, 500000, 500000);
         sur.add(solar1);
 
-        sur.add(new Casilla("Caja          ", "Comunidad", 3, banca));
+        sur.add(new CajaComunidad("Caja          ", "Comunidad", 3, banca));
 
-        Casilla solar2 = crearSolar("Solar2        ", 4, 600000, 300000, 40000,
+        Solar solar2 = new Solar("Solar2        ", 4, 600000, 300000, 40000,
                 500000, 100000, 200000, 800000, 4500000, 900000, 900000);
         sur.add(solar2);
 
-        sur.add(new Casilla("Imp1          ", 5, Valor.IMPUESTO, banca));
+        sur.add(new Especial("Imp1          ", 5, Valor.IMPUESTO, banca));
 
-        sur.add(crearTransporteServicio("Trans1        ", "Transporte", 6));
 
-        Casilla solar3 = crearSolar("Solar3        ", 7, 1000000, 500000, 60000,
+        Transporte trans1 = new Transporte("Trans1        ", 6, banca);
+        sur.add(trans1);
+
+        Solar solar3 = new Solar("Solar3        ", 7, 1000000, 500000, 60000,
                 500000, 100000, 200000, 1000000, 5500000, 1100000, 1100000);
         sur.add(solar3);
 
-        sur.add(new Casilla("Suerte        ", "Suerte", 8, banca));
+        sur.add(new Suerte("Suerte        ", 8));
 
-        Casilla solar4 = crearSolar("Solar4        ", 9, 1000000, 500000, 60000,
+        Solar solar4 = new Solar("Solar4        ", 9, 1000000, 500000, 60000,
                 500000, 100000, 200000, 1000000, 5500000, 1100000, 1100000);
         sur.add(solar4);
 
-        Casilla solar5 = crearSolar("Solar5        ", 10, 1200000, 600000, 80000,
+        Solar solar5 = new Solar("Solar5        ", 10, 1200000, 600000, 80000,
                 500000, 100000, 200000, 1250000, 6000000, 1200000, 1200000);
         sur.add(solar5);
 
-        sur.add(new Casilla("Carcel        ", "Carcel", 11, banca));
+        Especial carcel= new Especial;
+        sur.add(carcel);
 
         // Grupos del lado sur.
         Grupo marron = new Grupo(solar1, solar2, "Marron");
@@ -179,33 +153,35 @@ public class Tablero {
     private void insertarLadoOeste() {
         ArrayList<Casilla> oeste = new ArrayList<>();
 
-        Casilla solar6 = crearSolar("Solar6        ", 12, 1400000, 700000, 100000,
+        Solar solar6 = new Solar("Solar6        ", 12, 1400000, 700000, 100000,
                 1000000, 200000, 400000, 1500000, 7500000, 1500000, 1500000);
         oeste.add(solar6);
 
-        oeste.add(crearTransporteServicio("Serv1         ", "Servicio", 13));
+        oeste.add(new Servicio("Serv1         ", 13, banca));
 
-        Casilla solar7 = crearSolar("Solar7        ", 14, 1400000, 700000, 100000,
+        Solar solar7 = new Solar("Solar7        ", 14, 1400000, 700000, 100000,
                 1000000, 200000, 400000, 1500000, 7500000, 1500000, 1500000);
         oeste.add(solar7);
 
-        Casilla solar8 = crearSolar("Solar8        ", 15, 1600000, 800000, 120000,
+        Solar solar8 = new Solar("Solar8        ", 15, 1600000, 800000, 120000,
                 1000000, 200000, 400000, 1750000, 9000000, 1800000, 1800000);
         oeste.add(solar8);
 
-        oeste.add(crearTransporteServicio("Trans2        ", "Transporte", 16));
 
-        Casilla solar9 = crearSolar("Solar9        ", 17, 1800000, 900000, 140000,
+        Transporte trans2 = new Transporte("Trans2        ", 16, banca);
+        oeste.add(trans2);
+
+        Solar solar9 = new Solar("Solar9        ", 17, 1800000, 900000, 140000,
                 1000000, 200000, 400000, 1850000, 9500000, 1900000, 1900000);
         oeste.add(solar9);
 
-        oeste.add(new Casilla("Caja          ", "Comunidad", 18, banca));
+        oeste.add(new CajaComunidad("Caja          ", 18, banca));
 
-        Casilla solar10 = crearSolar("Solar10       ", 19, 1800000, 900000, 140000,
+        Solar solar10 = new Solar("Solar10       ", 19, 1800000, 900000, 140000,
                 1000000, 200000, 400000, 1850000, 9500000, 1900000, 1900000);
         oeste.add(solar10);
 
-        Casilla solar11 = crearSolar("Solar11       ", 20, 2200000, 1000000, 160000,
+        Solar solar11 = new Solar("Solar11       ", 20, 2200000, 1000000, 160000,
                 1000000, 200000, 400000, 2000000, 10000000, 2000000, 2000000);
         oeste.add(solar11);
 
@@ -229,31 +205,32 @@ public class Tablero {
     private void insertarLadoEste() {
         ArrayList<Casilla> este = new ArrayList<>();
 
-        Casilla solar18 = crearSolar("Solar18       ", 32, 3000000, 1500000, 260000,
+        Solar solar18 = new Solar("Solar18       ", 32, 3000000, 1500000, 260000,
                 2000000, 400000, 800000, 2750000, 12750000, 2550000, 2550000);
         este.add(solar18);
 
-        Casilla solar19 = crearSolar("Solar19       ", 33, 3000000, 1500000, 260000,
+        Solar solar19 = new Solar("Solar19       ", 33, 3000000, 1500000, 260000,
                 2000000, 400000, 800000, 2750000, 12750000, 2550000, 2550000);
         este.add(solar19);
 
-        este.add(new Casilla("Caja          ", "Comunidad", 34, banca));
+        este.add(new CajaComunidad("Caja          ", 34, banca));
 
-        Casilla solar20 = crearSolar("Solar20       ", 35, 3200000, 1600000, 280000,
+        Solar solar20 = new Solar("Solar20       ", 35, 3200000, 1600000, 280000,
                 2000000, 400000, 800000, 3000000, 14000000, 2800000, 2800000);
         este.add(solar20);
 
-        este.add(crearTransporteServicio("Trans4        ", "Transporte", 36));
+        Transporte trans4 = new Transporte("Trans4        ", 36, banca);
+        este.add(trans4);
 
-        este.add(new Casilla("Suerte        ", "Suerte", 37, banca));
+        este.add(new Suerte("Suerte        ", 37));
 
-        Casilla solar21 = crearSolar("Solar21       ", 38, 3500000, 1750000, 350000,
+        Solar solar21 = new Solar("Solar21       ", 38, 3500000, 1750000, 350000,
                 2000000, 400000, 800000, 3250000, 17000000, 3400000, 3400000);
         este.add(solar21);
 
-        este.add(new Casilla("Imp2          ", 39, Valor.IMPUESTO, banca));
+        este.add(new Especial("Imp2          ", 39, Valor.IMPUESTO, banca));
 
-        Casilla solar22 = crearSolar("Solar22       ", 40, 4000000, 2000000, 500000,
+        Solar solar22 = new Solar("Solar22       ", 40, 4000000, 2000000, 500000,
                 2000000, 400000, 800000, 4250000, 20000000, 4000000, 4000000);
         este.add(solar22);
 

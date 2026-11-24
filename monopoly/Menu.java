@@ -58,7 +58,7 @@ public class Menu {
             juego.deshipotecar(cmd.substring(12));
         }
         else if(cmd.startsWith("edificar")){
-            juego.construirEdificio(cmd.substring(8),this.juego.getJugadores().get(this.juego.getTurno()));
+          juego  .construirEdificio(cmd.substring(8),this.juego.getJugadores().get(this.juego.getTurno()));
         }
         else if(cmd.equals("estadisticas")) {
             juego.mostrarEstadisticasJuego();

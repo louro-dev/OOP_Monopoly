@@ -152,6 +152,17 @@ public class Avatar {
         return tipoId.equals("coche") || tipoId.equals("esfinge") || tipoId.equals("sombrero") || tipoId.equals("pelota");
     }
 
+    //hecho para diferenciar casillas normales de solares cuando se necesite
+    public Solar SolarActual(){
+        //si la casilla actual es un Solar, devuelve casillaActual casteado a Solar, por lo que devuelve un Soalr
+        if(getLugar() instanceof Solar){
+            return (Solar)this.getLugar();
+        }
+        //si no es un Solar devuelve nulo
+        System.out.println("La casilla en la que estas no es un Solar");
+        return null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

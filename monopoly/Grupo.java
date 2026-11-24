@@ -4,12 +4,13 @@ import partida.*;
 import java.util.ArrayList;
 
 
-public class Grupo {
+public class Grupo extends Casilla {
 
     //Atributos
     private ArrayList<Casilla> miembros; //Casillas miembros del grupo.
     private String colorGrupo; //Color del grupo
     private int numCasillas; //Número de casillas del grupo.
+    Propiedad propiedad;
 
     //Constructor vacío.
     public Grupo() {
@@ -45,11 +46,13 @@ public class Grupo {
     public ArrayList<Casilla> getMiembros() {return miembros;}
     public String getColorGrupo() {return colorGrupo;}
     public int getNumCasillas() {return numCasillas;}
+    public Propiedad getPropiedad() {return propiedad;}
 
     // SETTERS
     public void setMiembros(ArrayList<Casilla> m) {this.miembros = m;}
     public void setColorGrupo(String c) {this.colorGrupo = c;}
     public void setNumCasillas(int n) {this.numCasillas = n;}
+    public void setPropiedad(Propiedad p) {this.propiedad = p;}
 
     /* Metodo que añade una casilla al array de casillas miembro de un grupo.
     * Parámetro: casilla que se quiere añadir.
