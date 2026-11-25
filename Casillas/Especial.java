@@ -32,7 +32,7 @@ public class Especial extends Casilla {
 
 
     @Override
-    public String toString() {
+    public String infoCasilla() {
         //carcel
         if(getTipo()==2) {
             StringBuilder rt = new StringBuilder(("salir: " + Valor.COSTE_SALIR_CARCEL + "\n"));

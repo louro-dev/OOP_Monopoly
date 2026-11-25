@@ -271,7 +271,7 @@ public class Juego {
      * Parámetros: nombre de la casilla a describir.
      */
     //MAL estan as dependencias mal dos toString
-    ublic void descCasilla(String nombre) {
+    public void descCasilla(String nombre) {
         if(nombre!=null) {
             setCtrl(false);
             Casilla atc = this.getTablero().encontrar_casilla(nombre);
@@ -726,7 +726,7 @@ public class Juego {
                 luck.suerte(this);
                 return;
             }
-            case CajaComunidad caj -> caj.CajaComunidad(this);
+            case CajaComunidad caj -> caj.cajaComunidad(this);
             default -> {
             }
         }

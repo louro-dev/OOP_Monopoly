@@ -11,7 +11,7 @@ public class CajaComunidad extends Accion {
         super(nombre,posicion,dueno);
     }
 
-    public void CajaComunidad(Juego j){
+    public void cajaComunidad(Juego j){
 
         ArrayList<Jugador> jugadores = j.getJugadores();
         Jugador actual=jugadores.get(j.getTurno());
@@ -34,17 +34,7 @@ public class CajaComunidad extends Accion {
                 break;
             case 3:
                 System.out.println("Colocate en la salida.\nCobra 2.000.000");
-                int po=0;
-                for(int i=0; i<j.getTablero().getPosiciones().size(); i++){
-                    for(int l = 0; l < j.getTablero().getPosiciones().get(i).size(); l++){
-                        for(int k = 0; k<j.getTablero().getPosiciones().get(i).get(l).getAvatares().size(); k++){
-                            if (j.getTablero().getPosiciones().get(i).get(l).getAvatares().get(k).getJugador().equals(actual)) {
-                                po = j.getTablero().getPosiciones().get(i).get(l).getPosicion();
-                                break;
-                            }
-                        }
-                    }
-                }
+                int po = getPo(j, actual);
                 actual.getAvatar().moverAvatar(j.getTablero().getPosiciones(),-(po-1));
                 break;
 
@@ -55,17 +45,7 @@ public class CajaComunidad extends Accion {
                 break;
             case 5:
                 System.out.println("Retrocede a Solar1 para comprar antigüedades exoticas");
-                int p1=0;
-                for(int i=0; i<j.getTablero().getPosiciones().size(); i++){
-                    for(int l = 0; l <j.getTablero().getPosiciones().get(i).size(); l++){
-                        for(int k = 0; k<j.getTablero().getPosiciones().get(i).get(l).getAvatares().size(); k++){
-                            if (j.getTablero().getPosiciones().get(i).get(l).getAvatares().get(k).getJugador().equals(actual)) {
-                                p1 = j.getTablero().getPosiciones().get(i).get(l).getPosicion();
-                                break;
-                            }
-                        }
-                    }
-                }
+                int p1 = getPo(j, actual);
                 actual.getAvatar().moverAvatar(j.getTablero().getPosiciones(), -(p1-2));
                 j.evaluarCasillaDestino(actual,actual.getAvatar().getLugar(),0);
                 break;
@@ -73,19 +53,30 @@ public class CajaComunidad extends Accion {
             case 6:
                 System.out.println("Ve a Solar20 para disfrutar del San Fermín. Si pasas por la casilla de salida, cobra 2.000.000");
                 System.out.println("Retrocede a Solar1 para comprar antigüedades exoticas");
-                int p2=0;
-                for(int i=0; i<j.getTablero().getPosiciones().size(); i++){
-                    for(int l = 0; l <j.getTablero().getPosiciones().get(i).size(); l++)
-                        for(int k = 0; k<j.getTablero().getPosiciones().get(i).get(l).getAvatares().size(); k++){
-                            if (j.getTablero().getPosiciones().get(i).get(l).getAvatares().get(k).getJugador().equals(actual)) {
-                                p2 = j.getTablero().getPosiciones().get(i).get(l).getPosicion();
-                                break;
-                            }
-                        }
-                }
+                int p2= getPo(j,actual);
                 actual.getAvatar().moverAvatar(j.getTablero().getPosiciones(), 35-p2);
                 j.evaluarCasillaDestino(actual,actual.getAvatar().getLugar(),0);
                 break;
         }
+    }
+
+    private static int getPo(Juego j, Jugador actual) {
+        int po=0;
+        for(int i = 0; i< j.getTablero().getPosiciones().size(); i++){
+            for(int l = 0; l < j.getTablero().getPosiciones().get(i).size(); l++){
+                for(int k = 0; k< j.getTablero().getPosiciones().get(i).get(l).getAvatares().size(); k++){
+                    if (j.getTablero().getPosiciones().get(i).get(l).getAvatares().get(k).getJugador().equals(actual)) {
+                        po = j.getTablero().getPosiciones().get(i).get(l).getPosicion();
+                        break;
+                    }
+                }
+            }
+        }
+        return po;
+    }
+
+    @Override
+    public String infoCasilla() {
+        return "Tipo: Caja de Comunidad\nRealzia una accion de entre las definidas";
     }
 }

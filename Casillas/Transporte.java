@@ -36,5 +36,8 @@ public class Transporte extends Propiedad {
         System.out.println(mensaje);
     }
 
-    public String toString() {return ("tipo: transporte\nvalor: " + getValor() + "\n");}
+    @Override
+    public String infoCasilla() {
+        return ("tipo: transporte\nvalor: " + getValor() + "\n");
+    }
 }

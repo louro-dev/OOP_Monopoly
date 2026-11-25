@@ -37,5 +37,8 @@ public class Servicio extends Propiedad {
         System.out.println(mensaje);
     }
 
-    public String toString() {return "tipo: servicio\nvalor: " + getValor() + "\n";}
+    @Override
+    public String infoCasilla() {
+        return "tipo: servicio\nvalor: " + getValor() + "\n";
+    }
 }

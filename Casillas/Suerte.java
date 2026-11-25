@@ -131,4 +131,8 @@ public class Suerte extends Accion {
         }
     }
 
+    @Override
+    public String infoCasilla() {
+        return "Tipo: suerte\nREaliza una accion aleatoria dentro de las acciones definidas\n";
+    }
 }

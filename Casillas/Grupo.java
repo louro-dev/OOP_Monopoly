@@ -12,13 +12,6 @@ public class Grupo extends Casilla {
     private int numCasillas; //Número de casillas del grupo.
     Propiedad propiedad;
 
-    //Constructor vacío.
-    public Grupo() {
-        this.miembros = new ArrayList<>();
-        this.colorGrupo = "";
-        this.numCasillas = 0;
-    }
-
     /*Constructor para cuando el grupo está formado por DOS CASILLAS:
     * Requiere como parámetros las dos casillas miembro y el color del grupo.
      */
@@ -75,6 +68,11 @@ public class Grupo extends Casilla {
             }
         }
         return true;
+    }
+
+    @Override
+    public String infoCasilla() {
+        return "";
     }
 
     @Override

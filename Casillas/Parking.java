@@ -21,7 +21,8 @@ public class Parking extends Accion {
         setValorAcumulado(0);
     }
 
-    public String toString() {
+    @Override
+    public String infoCasilla() {
         StringBuilder ret = new StringBuilder(("bote: " + getValorAcumulado() + "\n["));
         for (int i = 0; i < getAvatares().size(); i++) {
             ret.append(this.getAvatares().get(i).getJugador().getNombre());}

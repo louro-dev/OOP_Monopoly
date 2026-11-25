@@ -399,11 +399,20 @@ public class Solar extends Propiedad {
     }
 
     @Override
-    public String toString() {
-        return ("tipo: solar\ngrupo: " + getGrupo() + "\npropietario: " + getDuenho().getNombre() + "\nvalor: " + getValor() + "\nalquiler: " + getImpuesto() +
-                "\nvalor hotel: " + getPrecioHotel() + "\nvalor casa: " + getPrecioCasa() + "\nvalor piscina: " + getPrecioPiscina() + "\nvalor pista de deporte: "
-                + getPrecioPista() + "\nalquiler casa: " + getAlquilerCasa() + "\nalquiler hotel: " + getPrecioHotel() + "\nalquiler piscina: " +
-                getAlquilerPista() + "\nalquiler pista de deporte: " + this.getAlquilerPista() + "\n\n");
-
+    public String infoCasilla() {
+        return ("tipo: solar\n" +
+                "grupo: " + getGrupo() + "\n" +
+                "propietario: " + getDuenho().getNombre() + "\n" +
+                "valor: " + getValor() + "\n" +
+                "alquiler: " + getImpuesto() +
+                "\nvalor hotel: " + getPrecioHotel() + "\n" +
+                "valor casa: " + getPrecioCasa() + "\n" +
+                "valor piscina: " + getPrecioPiscina() + "\n" +
+                "valor pista de deporte: "
+                + getPrecioPista() + "\n" +
+                "alquiler casa: " + getAlquilerCasa() + "\n" +
+                "alquiler hotel: " + getPrecioHotel() + "\n" +
+                "alquiler piscina: " + getAlquilerPista() + "\n" +
+                "alquiler pista de deporte: " + this.getAlquilerPista() + "\n\n");
     }
 }

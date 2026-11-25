@@ -103,8 +103,8 @@ public abstract class Casilla {
      * Devuelve una cadena con información específica de cada tipo de casilla.*/
     /*Está pensado para devolver la información general e identificativa
      * de cualquier casilla (nombre, tipo, propietario, valor actual, etc.).*/
-    //se comenta porque no se que hace
-    public String infoCasilla() {return this.toString();}
+    // abstract (el compilador te obliga a ponerlo en TODAS las clases finales)
+    public abstract String infoCasilla();
 
     @Override
     public String toString() { // Para imprimir los nombres e ID de las casillas
