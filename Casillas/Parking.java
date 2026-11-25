@@ -1,5 +1,7 @@
 package Casillas;
 
+import partida.Jugador;
+
 public class Parking extends Accion {
 
     private float valorAcumulado; //guarda el valor acumulado por los impuestos
@@ -8,7 +10,14 @@ public class Parking extends Accion {
 
     public void setValorAcumulado(float valorAcumulado) {this.valorAcumulado = valorAcumulado;}
 
-    public Parking(){
+    public void sumarValorParking(float val){
+        if(val>0){
+            setValorAcumulado(getValorAcumulado()+val);
+        }
+    }
+
+    public Parking(String nombre, int posicion, Jugador duen){
+        super(nombre, posicion, duen);
         setValorAcumulado(0);
     }
 

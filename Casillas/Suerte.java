@@ -7,30 +7,11 @@ import java.util.ArrayList;
 
 public class Suerte extends Accion {
 
-    int valor;
-
-    public Suerte(String nombre, int posicion){
-        setNombre(nombre);
-        setPosicion(posicion);
+    public Suerte(String nombre, int posicion,Jugador dueno){
+        super(nombre,posicion,dueno);
     }
 
-    //SETTERS
-    void setValor(int val){
-        if(val>0 && val<7){
-            valor=val;
-        }
-    }
-
-    //GETTERS
-    int getValor(){
-        return valor;
-    }
-
-    void actualizarValor(){
-        setValor((int)(Math.random()*7)+1);
-    }
-
-    public void Suerte(Juego j) {
+    public void suerte(Juego j) {
 
         actualizarValor();
         ArrayList<Jugador> jugadores = j.getJugadores();

@@ -3,8 +3,7 @@ package partida;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Casillas.Casilla;
-import Casillas.Propiedad;
+import Casillas.*;
 import monopoly.*;
 
 
@@ -207,7 +206,7 @@ public class Jugador {
 
     /*Metodo para establecer al jugador en la cárcel.
      * Se requiere disponer de las casillas del tablero para ello (por eso se pasan como parámetro).*/
-    public static void encarcelar(Tablero tab) {
+    public void encarcelar(Tablero tab) {
         this.enCarcel = true;
         this.tiradasCarcel=0;
 
@@ -243,7 +242,7 @@ public class Jugador {
     public int numeroDeTransportes() {
         int contador = 0;
         for (Casilla c : this.propiedades) {
-            if ("transporte".equalsIgnoreCase(c.getTipo())) {
+            if(c instanceof Transporte){
                 contador++;
             }
         }
@@ -253,7 +252,7 @@ public class Jugador {
     public int numeroDeServicios() {
         int contador = 0;
         for (Casilla c : this.propiedades) { // Sustituye 'propiedades' por el nombre de tu ArrayList de propiedades
-            if ("servicio".equalsIgnoreCase(c.getTipo())) {
+            if(c instanceof Servicio){
                 contador++;
             }
         }
@@ -266,7 +265,7 @@ public class Jugador {
         System.out.println("¡El jugador " + this.nombre + " no tiene fondos suficientes y se declara en BANCARROTA!");
 
         // Recorremos las propiedades del jugador con un for-each
-        for (Casilla c : this.propiedades) {
+        for (Propiedad c : this.propiedades) {
             if (acreedor != null) {
                 acreedor.anhadirPropiedad(c);
                 c.setDuenho(acreedor);
@@ -279,76 +278,6 @@ public class Jugador {
 
         // Se resetea la fortuna del jugador insolvente
         this.fortuna = 0;
-    }
-
-    public void CajaComunidad(Juego m){
-        int id=((int)(Math.random()*5))+1;
-        switch (id){
-            case 1:
-                System.out.println("Paga 500.000 por un balneario de 5 estrellas");
-                sumarFortuna((-1)*500000);
-                sumarTasasImpuestos(500000);
-                break;
-            case 2:
-                System.out.println("""
-                        Te investigan por fraude de identidad
-                        Ve a la carcel.
-                        Ve directamente sin pasar por la casilla de salida y sin cobrar los 2.000.000
-                        """);
-                encarcelar(m.getTablero());
-                break;
-            case 3:
-                System.out.println("Colocate en la salida.\nCobra 2.000.000");
-                int po=0;
-                for(int i=0; i<m.getTablero().getPosiciones().size(); i++){
-                    for(int j=0; j<m.getTablero().getPosiciones().get(i).size(); j++){
-                        for(int k=0; k<m.getTablero().getPosiciones().get(i).get(j).getAvatares().size();k++){
-                            if(m.getTablero().getPosiciones().get(i).get(j).getAvatares().get(k).getJugador().equals(this)){
-                                po = m.getTablero().getPosiciones().get(i).get(j).getPosicion();
-                            }
-                        }
-                    }
-                }
-                getAvatar().moverAvatar(m.getTablero().getPosiciones(),-(po-1));
-                break;
-
-            case 4:
-                System.out.println("Devolución de hacienda\nCobra 500.000");
-                sumarFortuna(500000);
-                sumarTasasImpuestos(500000);
-                break;
-            case 5:
-                System.out.println("Retrocede a Solar1 para comprar antigüedades exoticas");
-                int p1=0;
-                for(int i=0; i<m.getTablero().getPosiciones().size(); i++){
-                    for(int j=0; j<m.getTablero().getPosiciones().get(i).size(); j++){
-                        for(int k=0; k<m.getTablero().getPosiciones().get(i).get(j).getAvatares().size();k++){
-                            if(m.getTablero().getPosiciones().get(i).get(j).getAvatares().get(k).getJugador().equals(this)){
-                                p1 = m.getTablero().getPosiciones().get(i).get(j).getPosicion();
-                            }
-                        }
-                    }
-                }
-                getAvatar().moverAvatar(m.getTablero().getPosiciones(), -(p1-2));
-                m.evaluarCasillaDestino(this,getAvatar().getLugar(),0);
-                break;
-
-            case 6:
-                System.out.println("Ve a Solar20 para disfrutar del San Fermín. Si pasas por la casilla de salida, cobra 2.000.000");
-                System.out.println("Retrocede a Solar1 para comprar antigüedades exoticas");
-                int p2=0;
-                for(int i=0; i<m.getTablero().getPosiciones().size(); i++){
-                    for(int j=0; j<m.getTablero().getPosiciones().get(i).size(); j++)
-                        for(int k=0; k<m.getTablero().getPosiciones().get(i).get(j).getAvatares().size();k++){
-                            if(m.getTablero().getPosiciones().get(i).get(j).getAvatares().get(k).getJugador().equals(this)){
-                                p2 = m.getTablero().getPosiciones().get(i).get(j).getPosicion();
-                            }
-                        }
-                }
-                getAvatar().moverAvatar(m.getTablero().getPosiciones(), 35-p2);
-                m.evaluarCasillaDestino(this,getAvatar().getLugar(),0);
-                break;
-        }
     }
 
     // Es el toString de listar jugadores y describir jugador turno
@@ -376,19 +305,18 @@ public class Jugador {
         // Listar edificios del jugador
         sb.append("\nLista de edificios: [");
         boolean primerEdificio = true;
-
         // Recorremos la lista de casillas (propiedades)
-        for (int i = 0; i < getPropiedades().size(); i++) {
-            Casilla c = getPropiedades().get(i);
-
-            // Comprobamos si la casilla actual tiene edificios
-            if (c.getEdificios() != null && !c.getEdificios().isEmpty()) {
-                // Recorremos la lista de edificios de esta casilla
-                for (int j = 0; j < c.getEdificios().size(); j++) {
-                    if (!primerEdificio) {
-                        sb.append(", ");
+        for (Propiedad c : this.propiedades) {
+            if(c instanceof Solar sol){
+                if (sol.getEdificios() != null && !sol.getEdificios().isEmpty()) {
+                    // Recorremos la lista de edificios de esta casilla
+                    for (int j = 0; j < sol.getEdificios().size(); j++) {
+                        if (!primerEdificio) {
+                            sb.append(", ");
+                        }
+                        sb.append(sol.getEdificios().get(j)).append(" (").append(c.getNombre().trim()).append(")");
+                        primerEdificio = false;
                     }
-                    sb.append(c.getEdificios().get(j)).append(" (").append(c.getNombre().trim()).append(")");                    primerEdificio = false;
                 }
             }
         }
@@ -432,16 +360,17 @@ public class Jugador {
         // Listar edificios del jugador
         sb.append("edificios: [");
         boolean primerEdificio = true;
-
-        for (int i = 0; i < this.getPropiedades().size(); i++) {
-            Casilla c = this.getPropiedades().get(i);
-            if (c.getEdificios() != null && !c.getEdificios().isEmpty()) {
-                for (int j = 0; j < c.getEdificios().size(); j++) {
-                    if (!primerEdificio) {
-                        sb.append(", ");
+        for (Propiedad c : this.propiedades) {
+            if(c instanceof Solar sol){
+                if (sol.getEdificios() != null && !sol.getEdificios().isEmpty()) {
+                    // Recorremos la lista de edificios de esta casilla
+                    for (int j = 0; j < sol.getEdificios().size(); j++) {
+                        if (!primerEdificio) {
+                            sb.append(", ");
+                        }
+                        sb.append(sol.getEdificios().get(j)).append(" (").append(c.getNombre().trim()).append(")");
+                        primerEdificio = false;
                     }
-                    sb.append(c.getEdificios().get(j));
-                    primerEdificio = false;
                 }
             }
         }

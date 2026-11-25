@@ -29,16 +29,19 @@ public abstract class Casilla {
     /*Constructor utilizado para inicializar las casillas de tipo IMPUESTOS.
      * Parámetros: nombre, posición en el tablero, impuesto establecido y dueño.
      */
+    //usado para impusto en especial
     public Casilla(String nombre, int posicion, float valor, Jugador duenho) {
         this.nombre = nombre;
         this.posicion = posicion;
         this.duenho = duenho;
+        this.impuesto=valor;
         this.avatares = new ArrayList<>();
     }
 
     /*Constructor utilizado para crear las otras casillas (Suerte, Caja de comunidad y Especiales):
      * Parámetros: nombre, tipo de la casilla (será uno de los que queda), posición en el tablero y dueño.
      */
+    //usado para carcel+irCarcel en especial
     public Casilla(String nombre, int posicion, Jugador duenho) {
         this.nombre = nombre;
         this.posicion = posicion;

@@ -42,14 +42,16 @@ public class Tablero {
     private void insertarLadoNorte() {
         ArrayList<Casilla> norte = new ArrayList<>();
 
-        Parking parking = new Parking();
+        Parking parking = new Parking("Parking       ",21,banca);
         norte.add(parking);
 
         Solar solar12 = new Solar("Solar12       ", 22, 2200000, 1100000, 180000,
                 1500000, 300000, 600000, 2200000, 10500000, 2100000, 2100000);
         norte.add(solar12);
 
-        norte.add(new Suerte("Suerte        ", 23));
+        Suerte suerte3=new Suerte("Suerte        ",23,banca);
+        norte.add(suerte3);
+
 
         Solar solar13 = new Solar("Solar13       ", 24, 2200000, 1100000, 180000,
                 1500000, 300000, 600000, 2200000, 10500000, 2100000, 2100000);
@@ -76,7 +78,7 @@ public class Tablero {
                 1500000, 300000, 600000, 2600000, 12000000, 2400000, 2400000);
         norte.add(solar17);
 
-        Especial irCarcel = new Especial();
+        Especial irCarcel = new Especial(3,"IrCarcel      ",31,banca);
         norte.add(irCarcel);
 
         // Grupos del lado norte.
@@ -99,21 +101,22 @@ public class Tablero {
     private void insertarLadoSur() {
         ArrayList<Casilla> sur = new ArrayList<>();
 
-        Especial salida = new Especial();
+        Especial salida = new Especial(1,"Salida        ",1,banca);
         sur.add(salida);
 
         Solar solar1 = new Solar("Solar1        ", 2, 600000, 300000, 20000,
                 500000, 100000, 200000, 400000, 2500000, 500000, 500000);
         sur.add(solar1);
 
-        sur.add(new CajaComunidad("Caja          ", "Comunidad", 3, banca));
+        CajaComunidad caja3 = new CajaComunidad("Caja          ",3,banca);
+        sur.add(caja3);
 
         Solar solar2 = new Solar("Solar2        ", 4, 600000, 300000, 40000,
                 500000, 100000, 200000, 800000, 4500000, 900000, 900000);
         sur.add(solar2);
 
-        sur.add(new Especial("Imp1          ", 5, Valor.IMPUESTO, banca));
-
+        Especial Imp1= new Especial(4,"Imp1          ",5,Valor.IMPUESTO,banca);
+        sur.add(Imp1);
 
         Transporte trans1 = new Transporte("Trans1        ", 6, banca);
         sur.add(trans1);
@@ -122,7 +125,8 @@ public class Tablero {
                 500000, 100000, 200000, 1000000, 5500000, 1100000, 1100000);
         sur.add(solar3);
 
-        sur.add(new Suerte("Suerte        ", 8));
+        Suerte suerte1=new Suerte("Suerte        ",8,banca);
+        sur.add(suerte1);
 
         Solar solar4 = new Solar("Solar4        ", 9, 1000000, 500000, 60000,
                 500000, 100000, 200000, 1000000, 5500000, 1100000, 1100000);
@@ -132,7 +136,7 @@ public class Tablero {
                 500000, 100000, 200000, 1250000, 6000000, 1200000, 1200000);
         sur.add(solar5);
 
-        Especial carcel= new Especial;
+        Especial carcel= new Especial(2,"Carcel        ",11,banca);
         sur.add(carcel);
 
         // Grupos del lado sur.
@@ -168,7 +172,6 @@ public class Tablero {
                 1000000, 200000, 400000, 1750000, 9000000, 1800000, 1800000);
         oeste.add(solar8);
 
-
         Transporte trans2 = new Transporte("Trans2        ", 16, banca);
         oeste.add(trans2);
 
@@ -176,7 +179,8 @@ public class Tablero {
                 1000000, 200000, 400000, 1850000, 9500000, 1900000, 1900000);
         oeste.add(solar9);
 
-        oeste.add(new CajaComunidad("Caja          ", 18, banca));
+        CajaComunidad caja1 = new CajaComunidad("Caja          ",18,banca);
+        oeste.add(caja1);
 
         Solar solar10 = new Solar("Solar10       ", 19, 1800000, 900000, 140000,
                 1000000, 200000, 400000, 1850000, 9500000, 1900000, 1900000);
@@ -214,7 +218,8 @@ public class Tablero {
                 2000000, 400000, 800000, 2750000, 12750000, 2550000, 2550000);
         este.add(solar19);
 
-        este.add(new CajaComunidad("Caja          ", 34, banca));
+        CajaComunidad caja2 = new CajaComunidad("Caja          ",34,banca);
+        este.add(caja2);
 
         Solar solar20 = new Solar("Solar20       ", 35, 3200000, 1600000, 280000,
                 2000000, 400000, 800000, 3000000, 14000000, 2800000, 2800000);
@@ -223,13 +228,15 @@ public class Tablero {
         Transporte trans4 = new Transporte("Trans4        ", 36, banca);
         este.add(trans4);
 
-        este.add(new Suerte("Suerte        ", 37));
+        Suerte suerte2=new Suerte("Suerte        ",37,banca);
+        este.add(suerte2);
 
         Solar solar21 = new Solar("Solar21       ", 38, 3500000, 1750000, 350000,
                 2000000, 400000, 800000, 3250000, 17000000, 3400000, 3400000);
         este.add(solar21);
 
-        este.add(new Especial("Imp2          ", 39, Valor.IMPUESTO, banca));
+        Especial Imp2= new Especial(4,"Imp2          ",39,Valor.IMPUESTO,banca);
+        este.add(Imp2);
 
         Solar solar22 = new Solar("Solar22       ", 40, 4000000, 2000000, 500000,
                 2000000, 400000, 800000, 4250000, 20000000, 4000000, 4000000);

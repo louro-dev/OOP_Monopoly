@@ -618,61 +618,65 @@ public class Juego {
                 }
             }
 
-            //para tener un sitio donde almacenar los impuestos cree el boteParking como atributo
-            //como ta por ver que e impuesto queda asi pa que de o fallo
-            else if (destino instanceof impuesto){
+            else if(destino instanceof Parking park) {
+                if (park.getValorAcumulado() > 0) {
+                    actual.sumarFortuna(park.getValorAcumulado());
+                    actual.sumarPremiosInversionesParking(park.getValorAcumulado());
 
-                if (!actual.sumarFortuna((-1) * Valor.IMPUESTO)) {
-                    this.setSolvente(false);
-                    actual.declararBancarrota(this.getBanca()); // Las propiedades vuelven a la Banca
-                    return;
-                }
-                actual.sumarTasasImpuestos(Valor.IMPUESTO);
-                // Sumamos al bote usando el getter y setter
-                // Buscamos la casilla de parking en el tablero y le sumamos el valor
-                Casilla parking = this.getTablero().encontrar_casilla("parking");
-                if (parking != null) {
-                    parking.sumarValor(Valor.IMPUESTO);
-                }
-                System.out.printf("El jugador %s paga %.0f€ de impuestos que se depositan en el Parking.\n", actual.getNombre(), Valor.IMPUESTO);
-                return;
-            }
-
-            else if(destino instanceof Parking) {
-                if (destino.getValor() > 0) {
-                    actual.sumarFortuna(destino.getValor());
-                    actual.sumarPremiosInversionesParking(destino.getValor());
-
-                    System.out.printf("El jugador %s recibe %.0f€ del bote del Parking.\n",
-                            actual.getNombre(), destino.getValor());
+                    System.out.printf("El jugador %s recibe %.0f€ del bote del Parking.\n", actual.getNombre(), park.getValorAcumulado());
 
                     // Reiniciamos el bote a 0 usando el setter
-                    destino.sumarValor((-1) * destino.getValor());
+                    ((Parking) destino).sumarValorParking((-1) * park.getValorAcumulado());
                 } else {
                     System.out.println("El Parking no tiene bote acumulado.");
                 }
                 return;
             }
 
-            //falta todo esto, pero estas son as de tipo especial, e ainda nn sabemos nin como se diferencian nin como se definen
-            case "ircarcel":
-                Jugador jugador = getJugadores().get(getTurno());
-                jugador.encarcelar(getTablero());
+            else if(destino instanceof Especial esp) {
+                //sei q da error, este é dos que esta ben
+                int type=esp.getTipo();
+                switch (type) {
+                    //para tener un sitio donde almacenar los impuestos cree el boteParking como atributo
+                    //como ta por ver que e impuesto queda asi pa que de o fallo
+                    case 4:
 
-                System.out.println("El avatar se ha movido directamente a la casilla de Cárcel.");
-                break;
+                        if (!actual.sumarFortuna((-1) * Valor.IMPUESTO)) {
+                            this.setSolvente(false);
+                            actual.declararBancarrota(this.getBanca()); // Las propiedades vuelven a la Banca
+                            return;
+                        }
+                        actual.sumarTasasImpuestos(Valor.IMPUESTO);
+                        // Sumamos al bote usando el getter y setter
+                        // Buscamos la casilla de parking en el tablero y le sumamos el valor
+                        Casilla parking = this.getTablero().encontrar_casilla("parking");
+                        Parking park=(Parking) parking; //downcasting
+                        if (parking != null) {
+                            park.sumarValorParking(Valor.IMPUESTO);
+                        }
+                        System.out.printf("El jugador %s paga %.0f€ de impuestos que se depositan en el Parking.\n", actual.getNombre(), Valor.IMPUESTO);
+                        return;
 
-            case "suerte":
-                ()Suerte(this);
-                break;
-            case "comunidad":
-                actual.CajaComunidad(this);
-                break;
-            case "carcel": // No hace nada
-                break;
-            case "salida":
-                // El cobro por pasar o caer en la salida ya se procesa durante el movimiento
+                    case 3:
+                        Jugador jugador = getJugadores().get(getTurno());
+                        jugador.encarcelar(getTablero());
 
+                        System.out.println("El avatar se ha movido directamente a la casilla de Cárcel.");
+                        break;
+                    break;
+                    case 2: // No hace nada
+                    case 1:// El cobro por pasar o caer en la salida ya se procesa durante el movimiento
+                        return;
+                }
+            }
+            else if(destino instanceof Suerte luck){
+                luck.suerte(this);
+                return;
+            }
+
+            else if(destino instanceof CajaComunidad caj){
+                caj.CajaComunidad(this);
+            }
     }
 
     //Metodo que ejecuta todas las acciones relacionadas con el comando 'salir carcel'.
