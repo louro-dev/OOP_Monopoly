@@ -59,7 +59,7 @@ public class Menu {
             juego.deshipotecar(cmd.substring(12));
         }
         else if(cmd.startsWith("edificar")){
-          juego  .construirEdificio(cmd.substring(8),this.juego.getJugadores().get(this.juego.getTurno()));
+            juego.construirEdificio(cmd.substring(8));
         }
         else if(cmd.equals("estadisticas")) {
             juego.mostrarEstadisticasJuego();
@@ -71,7 +71,7 @@ public class Menu {
             if(auxiliar!=null) {
                 String[] partes= auxiliar.split(",");
                 if(partes.length == 2) {
-                    juego.venderEdificios(cmd.substring(6),partes[0],Integer.parseInt(partes[1]));
+                    juego.venderEdificios(cmd.substring(6),Integer.parseInt(partes[1]),partes[0]);
                 }
                 else {
                     System.out.println("Error. Uso: vender <nombre_edificio> <nombre_casilla> <cantidad>");

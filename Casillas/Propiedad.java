@@ -1,8 +1,7 @@
 package Casillas;
 
 import partida.Jugador;
-
-import java.util.Locale;
+import monopoly.*;
 
 public abstract class Propiedad extends Casilla {
 
@@ -78,29 +77,5 @@ public abstract class Propiedad extends Casilla {
             case "servicio" -> ("tipo: servicio\nvalor: " + getValor());
             default -> ""; // Por seguridad, aunque con el filtro del menú nunca entrará aquí
         };
-    }
-
-    // Metodo que realiza las acciones asociadas al comando 'listar enventa'.
-    public void listarVenta() {
-        System.out.println("\n----------CASILLAS EN VENTA----------\n");
-        for(int i = 0; i < j.getBanca().getPropiedades().size(); i++){
-            Propiedad prop = j.getBanca().getPropiedades().get(i);
-            String tipo;
-            if(prop instanceof Solar){
-                tipo = "Solar".trim().toLowerCase(Locale.ROOT);;
-            }
-            if(prop instanceof Transporte){
-                tipo = "Transporte".trim().toLowerCase(Locale.ROOT);;
-            }
-            if(prop instanceof Servicio){
-                tipo = "Servicio".trim().toLowerCase(Locale.ROOT);;
-            }
-
-            // Solo imprimimos si es Solar, Transporte o Servicio
-            if(tipo.equals("solar") || tipo.equals("transporte") || tipo.equals("servicio")){
-                // Imprimimos la información de la casilla y un salto de línea para separarlas
-                System.out.println(prop.casEnVenta(tipo) + "\n");
-            }
-        }
     }
 }

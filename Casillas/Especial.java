@@ -8,7 +8,7 @@ public class Especial extends Casilla {
     private int tipo;          //se mete un int de identificador, sino es imposible distinguir entre carcel, irCarcel e impuestos.
     //error=0 - Salida=1 - Carcel=2 - irCercel=3 - Impuestos=4
 
-    //public int getTipo() {return tipo;}        //esta ben, comentase pa que den os errores os getTipo antiguos de casilla
+    public int getTipo() {return tipo;}
 
     public void setTipo(int val){
         if(val<5 && val>0){

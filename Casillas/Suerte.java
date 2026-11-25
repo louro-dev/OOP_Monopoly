@@ -44,7 +44,7 @@ public class Suerte extends Accion {
                         Ve a la Carcel.
                         Ve directamente sin pasar por la casilla de salida y sin cobrar los 2.000.000€.
                         """);
-                Jugador.encarcelar(tab);
+                actual.encarcelar(tab);
                 break;
 
             case 3:

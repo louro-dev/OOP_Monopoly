@@ -3,6 +3,7 @@ package monopoly;
 import java.io.File;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -104,7 +105,10 @@ public class Juego {
         //setteamos las propiedades de la banca(todas)
         for (int i = 0; i < tablero.getPosiciones().size(); i++) {
             for (int j=0;j<tablero.getPosiciones().get(i).size();j++){
-                banca.anhadirPropiedad(tablero.getPosiciones().get(i).get(j));
+                if(tablero.getPosiciones().get(i).get(j) instanceof Propiedad prop)
+                {
+                    banca.anhadirPropiedad(prop);
+                }
             }
         }
 
@@ -266,7 +270,8 @@ public class Juego {
     /* Metodo que realiza las acciones asociadas al comando 'describir nombre_casilla'.
      * Parámetros: nombre de la casilla a describir.
      */
-    public void descCasilla(String nombre) {
+    //MAL estan as dependencias mal dos toString
+    ublic void descCasilla(String nombre) {
         if(nombre!=null) {
             setCtrl(false);
             Casilla atc = this.getTablero().encontrar_casilla(nombre);
@@ -331,8 +336,10 @@ public class Juego {
             return;
         }
         this.setCtrl(false);
-        Propiedad p=this.getAvatares().get(this.getTurno()).getLugar();
-        p.comprarCasilla(this.getJugadores().get(this.getTurno()),this.getBanca());
+        Casilla c= getAvatares().get(this.getTurno()).getLugar();
+        if(c instanceof Propiedad p){
+            p.comprarCasilla(this.getJugadores().get(this.getTurno()), this.getBanca());
+        }
     }
 
     public void hipotecar(String nombreCasilla) {
@@ -347,7 +354,12 @@ public class Juego {
             System.out.println("\nNo existe ninguna casilla llamada " + nombreCasilla + "\n");
             return;
         }
-        c.hipotecar(actual);
+        if(c instanceof Propiedad prop){
+            prop.hipotecar(actual);
+        }
+        else{
+            System.out.println("No se peude hipotecas esa casilla");
+        }
     }
 
     public void deshipotecar(String nombreCasilla) {
@@ -358,11 +370,16 @@ public class Juego {
         this.setCtrl(false);
         Jugador actual = this.getJugadores().get(this.getTurno());
         Casilla c= this.getTablero().encontrar_casilla(nombreCasilla);
-        if (c == null) {
-            System.out.println("\nNo existe ninguna casilla llamada " + nombreCasilla + "\n");
-            return;
+        if(c!=null){
+            if (c instanceof Propiedad prop) {
+                prop.deshipotecar(actual);
+            } else {
+                System.out.println("No es una casilla deshipotecable.\n");
+            }
         }
-        c.deshipotecar(actual);
+        else{
+            System.out.println("No existe esa casill.\n");
+        }
     }
 
     public void listarEdificios() {
@@ -373,17 +390,56 @@ public class Juego {
             ArrayList<Casilla> lado = this.getTablero().getPosiciones().get(i);
 
             for (Casilla casilla : lado) {
-                String textoEdificios = casilla.infoEdificios();
-                if (!textoEdificios.isEmpty()) {
-                    System.out.println("\n------------------------EDIFICIOS------------------------\n");
-                    System.out.print(textoEdificios);
-                    hayEdificios = true;
+                if(casilla instanceof Solar sol){
+                    String textoEdificios = sol.infoEdificios();
+                    if (!textoEdificios.isEmpty()) {
+                        System.out.println("\n------------------------EDIFICIOS------------------------\n");
+                        System.out.print(textoEdificios);
+                        hayEdificios = true;
+                    }
                 }
             }
         }
 
         if (!hayEdificios) {
             System.out.println("\nNo hay edificios creados\n");
+        }
+    }
+
+    //EN ESTAS 2 MIRAR COMO SE PASABA POR TERMINAL
+    public void construirEdificio(String tipo){
+        if(getJugadores().get(getTurno()).getAvatar().getLugar() instanceof Solar sol){
+            sol.construirEdificio(tipo,getTurno(),getJugadores());
+        }
+    }
+
+    public void venderEdificios(String tipo, int cantidad, String nose){
+        if(getJugadores().get(getTurno()).getAvatar().getLugar() instanceof Solar sol){
+            sol.venderEdificios(tipo,cantidad,getJugadores().get(getTurno()));
+        }
+    }
+
+    // Metodo que realiza las acciones asociadas al comando 'listar enventa'.
+    public void listarVenta() {
+        System.out.println("\n----------CASILLAS EN VENTA----------\n");
+        for(int i = 0; i < getBanca().getPropiedades().size(); i++){
+            Propiedad prop = getBanca().getPropiedades().get(i);
+            String tipo =  "";
+            if(prop instanceof Solar){
+                tipo = "Solar".trim().toLowerCase(Locale.ROOT);;
+            }
+            if(prop instanceof Transporte){
+                tipo = "Transporte".trim().toLowerCase(Locale.ROOT);;
+            }
+            if(prop instanceof Servicio){
+                tipo = "Servicio".trim().toLowerCase(Locale.ROOT);;
+            }
+
+            // Solo imprimimos si es Solar, Transporte o Servicio
+            if(tipo.equals("solar") || tipo.equals("transporte") || tipo.equals("servicio")){
+                // Imprimimos la información de la casilla y un salto de línea para separarlas
+                System.out.println(prop.casEnVenta(tipo) + "\n");
+            }
         }
     }
 
@@ -395,15 +451,17 @@ public class Juego {
             ArrayList<Casilla> lado = this.getTablero().getPosiciones().get(i);
 
             for (Casilla casilla : lado) {
-                if (casilla.getGrupo() != null && casilla.getGrupo().getColorGrupo().equalsIgnoreCase(grupo)) {
-                    String textoEdificios = casilla.infoEdificios();
-                    if (!textoEdificios.isEmpty()) {
-                        // Imprimimos la cabecera solo la primera vez que encontramos edificios
-                        if (!hayEdificios) {
-                            System.out.println("\n------------------------EDIFICIOS " + grupo.toUpperCase() + "------------------------\n");
-                            hayEdificios = true;
+                if(casilla instanceof Solar sol){
+                    if (sol.getGrupo() != null && sol.getGrupo().getColorGrupo().equalsIgnoreCase(grupo)) {
+                        String textoEdificios = sol.infoEdificios();
+                        if (!textoEdificios.isEmpty()) {
+                            // Imprimimos la cabecera solo la primera vez que encontramos edificios
+                            if (!hayEdificios) {
+                                System.out.println("\n------------------------EDIFICIOS " + grupo.toUpperCase() + "------------------------\n");
+                                hayEdificios = true;
+                            }
+                            System.out.print(textoEdificios);
                         }
-                        System.out.print(textoEdificios);
                     }
                 }
             }
@@ -524,12 +582,13 @@ public class Juego {
     //metodo que evalua el tipo de casilla en el que cae el jugador y lo que ocurre en cada caso
     public void evaluarCasillaDestino(Jugador actual, Casilla destino, int sumaDados) {
         destino.sumarVecesVisitada();
-            if(destino instanceof Solar) {
+        switch (destino) {
+            case Solar dest -> {
                 Jugador duenhoSolar = destino.getDuenho();
-                Solar dest = (Solar)destino;
+                Propiedad cas = (Propiedad) destino;
 
                 // Comprobamos si tiene dueño, no es la banca, no es el jugador actual y NO está hipotecada
-                if (duenhoSolar != null && !duenhoSolar.equals(this.getBanca()) && !duenhoSolar.equals(actual) && !destino.getHipotecada()) {
+                if (duenhoSolar != null && !duenhoSolar.equals(this.getBanca()) && !duenhoSolar.equals(actual) && !cas.getHipotecada()) {
 
                     float alquiler;
 
@@ -570,8 +629,7 @@ public class Juego {
                 }
                 return;
             }
-
-            else if(destino instanceof Servicio) {
+            case Servicio servicio -> {
                 Jugador duenhoServicio = destino.getDuenho();
 
                 if (duenhoServicio != null && !duenhoServicio.equals(this.getBanca()) && !duenhoServicio.equals(actual)) {
@@ -592,11 +650,10 @@ public class Juego {
                     duenhoServicio.sumarAlquilerCobrado(alquiler);
                     destino.sumarRentabilidadAcumulada(alquiler);
 
-                    System.out.printf("Se han pagado %.0f€ de servicio a %s (Posee %d casilla/s de servicio).\n",alquiler, duenhoServicio.getNombre(), numServicios);
-                    }
+                    System.out.printf("Se han pagado %.0f€ de servicio a %s (Posee %d casilla/s de servicio).\n", alquiler, duenhoServicio.getNombre(), numServicios);
+                }
             }
-
-            else if(destino instanceof Transporte) {
+            case Transporte transporte -> {
                 Jugador duenhoTransporte = destino.getDuenho();
 
                 if (duenhoTransporte != null && !duenhoTransporte.equals(this.getBanca()) && !duenhoTransporte.equals(actual)) {
@@ -617,8 +674,7 @@ public class Juego {
                             alquiler, duenhoTransporte.getNombre(), numTransportes);
                 }
             }
-
-            else if(destino instanceof Parking park) {
+            case Parking park -> {
                 if (park.getValorAcumulado() > 0) {
                     actual.sumarFortuna(park.getValorAcumulado());
                     actual.sumarPremiosInversionesParking(park.getValorAcumulado());
@@ -632,10 +688,9 @@ public class Juego {
                 }
                 return;
             }
-
-            else if(destino instanceof Especial esp) {
+            case Especial esp -> {
                 //sei q da error, este é dos que esta ben
-                int type=esp.getTipo();
+                int type = esp.getTipo();
                 switch (type) {
                     //para tener un sitio donde almacenar los impuestos cree el boteParking como atributo
                     //como ta por ver que e impuesto queda asi pa que de o fallo
@@ -650,7 +705,7 @@ public class Juego {
                         // Sumamos al bote usando el getter y setter
                         // Buscamos la casilla de parking en el tablero y le sumamos el valor
                         Casilla parking = this.getTablero().encontrar_casilla("parking");
-                        Parking park=(Parking) parking; //downcasting
+                        Parking park = (Parking) parking; //downcasting
                         if (parking != null) {
                             park.sumarValorParking(Valor.IMPUESTO);
                         }
@@ -662,21 +717,19 @@ public class Juego {
                         jugador.encarcelar(getTablero());
 
                         System.out.println("El avatar se ha movido directamente a la casilla de Cárcel.");
-                        break;
-                    break;
+                        return;
                     case 2: // No hace nada
                     case 1:// El cobro por pasar o caer en la salida ya se procesa durante el movimiento
-                        return;
                 }
             }
-            else if(destino instanceof Suerte luck){
+            case Suerte luck -> {
                 luck.suerte(this);
                 return;
             }
-
-            else if(destino instanceof CajaComunidad caj){
-                caj.CajaComunidad(this);
+            case CajaComunidad caj -> caj.CajaComunidad(this);
+            default -> {
             }
+        }
     }
 
     //Metodo que ejecuta todas las acciones relacionadas con el comando 'salir carcel'.
